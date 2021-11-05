@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Hacker1db.dev blog</title>
-    <link>https://hacker1db.dev/</link>
-    <description>Recent content on Hacker1db.dev blog</description>
+    <title>Posts on Hacker1db.dev blog</title>
+    <link>https://hacker1db.dev/posts/</link>
+    <description>Recent content in Posts on Hacker1db.dev blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 04 Nov 2021 21:09:42 -0700</lastBuildDate><atom:link href="https://hacker1db.dev/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 04 Nov 2021 21:09:42 -0700</lastBuildDate><atom:link href="https://hacker1db.dev/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Homepage</title>
       <link>https://hacker1db.dev/posts/homepage/</link>
