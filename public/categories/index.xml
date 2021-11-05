@@ -2,9 +2,9 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Hacker1db.dev blog</title>
-    <link>https://www.hacker1db.dev/categories/</link>
+    <link>https://hacker1db.github.io/web-hacker1db/categories/</link>
     <description>Recent content in Categories on Hacker1db.dev blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://www.hacker1db.dev/categories/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language><atom:link href="https://hacker1db.github.io/web-hacker1db/categories/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
