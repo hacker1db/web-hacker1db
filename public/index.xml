@@ -2,38 +2,9 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Hacker1db.dev blog</title>
-    <link>https://hacker1db.dev/</link>
+    <link>https://www.hacker1db.dev/</link>
     <description>Recent content on Hacker1db.dev blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Thu, 04 Nov 2021 21:09:42 -0700</lastBuildDate><atom:link href="https://hacker1db.dev/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Homepage</title>
-      <link>https://hacker1db.dev/posts/homepage/</link>
-      <pubDate>Thu, 04 Nov 2021 21:09:42 -0700</pubDate>
-      
-      <guid>https://hacker1db.dev/posts/homepage/</guid>
-      <description>Hello welcome to hacker1db.dev </description>
-    </item>
-    
-    <item>
-      <title>DevOps GettingStarted</title>
-      <link>https://hacker1db.dev/posts/devops/devops-gettingstarted/</link>
-      <pubDate>Sat, 15 May 2021 14:24:40 -0700</pubDate>
-      
-      <guid>https://hacker1db.dev/posts/devops/devops-gettingstarted/</guid>
-      <description>DevOps Getting Started </description>
-    </item>
-    
-    <item>
-      <title>About Me</title>
-      <link>https://hacker1db.dev/posts/about/</link>
-      <pubDate>Sat, 15 May 2021 13:28:03 -0700</pubDate>
-      
-      <guid>https://hacker1db.dev/posts/about/</guid>
-      <description>$WhoIs Cyber Security Professional, Software Engineer, Traveler, Music lover, Coffee Nerd.
- Cyber Security Software Engineer Travel Coffee Music Random Thoughts words of wisdom!  </description>
-    </item>
-    
+    <language>en-us</language><atom:link href="https://www.hacker1db.dev/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
