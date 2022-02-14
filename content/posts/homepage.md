@@ -1,7 +1,6 @@
 ---
 title: "Homepage"
-date: 2021-11-04T21:09:42-07:00
-draft: true
+date: 2021-11-04
 author: hacker1db
 slogan:  "Live, Learn, Travel, Never forget your hobbies!"
 ---
