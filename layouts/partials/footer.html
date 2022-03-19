@@ -1,0 +1,15 @@
+<div class="container-fluid bg-dark">
+    <div class="p-2 text-light">
+        {{ with .Site.Params.footer }}
+            {{ .  | markdownify }}
+        {{ else }}
+         <small class="text-start">
+            &copy <span id="js-year"></span><noscript> {{ now.Format "2006" }}</noscript> - {{ .Site.Copyright | default .Site.Title }}
+        </small>
+        {{ end }}
+    </div>
+</div>
+
+<script>
+    document.getElementById('js-year').innerHTML = new Date().getFullYear();
+</script>

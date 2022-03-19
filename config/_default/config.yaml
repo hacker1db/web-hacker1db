@@ -1,0 +1,14 @@
+Title: Hacker1db.dev blog
+baseURL: "https://www.hacker1db.dev"
+languageCode: "en-us"
+author: hacker1db
+twitter: https://twitter.com/hacker1db
+instagram: https://www.instagram.com/hacker1db
+copyright: hacker1db.dev
+paginate: 2
+summaryLength: 20
+
+Params:
+  slogan: Hack Your Life One Day At a Time
+
+
