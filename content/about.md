@@ -4,7 +4,6 @@ date: 2021-05-15
 type:
 - post
 - posts
-Cover: "images/road.png"
 ---
 
 
