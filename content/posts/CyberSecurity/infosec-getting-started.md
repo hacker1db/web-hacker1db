@@ -1,7 +1,7 @@
 ---
 title: "Getting started in the world of Infosec"
 date: 2019-02-09
-excerpt: "No sugar coating it!"
+description: "No sugar coating it!"
 tags:
   - CyberSecurity
   - Getting started

@@ -1,18 +1,36 @@
-{{ define "main"  }}
+{{ define "main" }}
+    {{ $paginator := .Paginate .Data.Pages }}
 
-<div class="container">
-</div>
+    <main class="posts">
+  
+        <h1>{{ .Title }}</h1>
 
-<h3 >{{ .Title }}</h3>
-{{ .Content }}
+        {{ if .Content }}
+            <div class="content">{{ .Content }}</div>
+        {{ end }}
 
-{{ range.Data.Pages }}
-<article class="post-snippet">
-  <h4>
-    <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-  </h4>
-	<time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
-    {{ .Date.Format "January 2, 2006" }}
-</article>
-{{ end }}
+        {{ range $paginator.Pages.GroupByDate "2006" }}
+            <div class="posts-group">
+                <div class="post-year">{{ .Key }}</div>
+
+                <ul class="posts-list">
+                    {{ range .Pages }}
+                        <li class="post-item">
+                            <a href="{{.Permalink}}">
+                                <span class="post-title">{{.Title}}</span>
+                                <span class="post-day">
+                                    {{ if .Site.Params.dateformShort }}
+                                        {{ .Date.Format .Site.Params.dateformShort }}
+                                    {{ else }}
+                                        {{ .Date.Format "Jan 2"}}
+                                    {{ end }}
+                                </span>
+                            </a>
+                        </li>
+                    {{ end }}
+                </ul>
+            </div>
+        {{ end }}
+    {{ partial "pagination.html" . }}
+    </main>
 {{ end }}

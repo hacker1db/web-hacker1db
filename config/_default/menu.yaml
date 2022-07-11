@@ -1,7 +1,7 @@
 main:
-- name: Posts
+- name: Worlds
   url: /posts
   weight: 90
-- name: "About me"
+- name: About
   url: /about
 

@@ -1,14 +1,100 @@
-Title: Hacker1db.dev blog
-baseURL: "https://www.hacker1db.dev"
+title: Hacker1db.dev blog
+baseURL: "hacker1db.dev"
 languageCode: "en-us"
 author: hacker1db
-twitter: https://twitter.com/hacker1db
-instagram: https://www.instagram.com/hacker1db
 copyright: hacker1db.dev
-paginate: 2
+paginate: 25
 summaryLength: 20
+enableRobotsTXT: true
+enableGitInfo: false
+enableEmoji: true
+enableSharingButtons: true
+enableMissingTranslationPlaceholders: false
+disableRSS: false
+disableSitemap: false
+disable404: false
+disableHugoGeneratorInject: false
+PygmentsCodeFences: true
+PygmentsStyle: monokai
+rssLimit: 100
+archetypeDir: archetypes
+contentDir: content
+dataDir: data
+layoutDir: layouts
+publishDir: public
+canonifyURLs: true
 
-Params:
-  slogan: Hack Your Life One Day At a Time
 
 
+
+
+params:
+  dateform: "Jan 2, 2006"
+  dateformShort: "Jan 2"
+  dateformNum: "2006-01-02"
+  dateformNumTime: "2006-01-02 15:04"
+
+  homeSubtitle: "Cyber Security Professional, Software Engineer, Traveler, Music lover, Coffee Nerd."
+
+
+  defaultTheme: "dark"
+  themeColor: "#1a1d21"
+
+  description: "Hack Your Life One Day At a Time"
+  keywords: "Homepage, Blog, Programming, Cyber Security, DevSecOps, Music, Travel, Coffee"
+  slogan:
+  images: ["profile.png"]
+
+  portrait:
+    path: "/images/profile.png"
+    alt: "work by me hacker1db"
+
+  disableReadOtherPosts: false
+  social:
+    - name: "twitter"
+      url: "https://www.twitter.com/hacker1db"
+    - name: "instagram"
+      url: https://www.instagram.com/hacker1db
+    - name: "twitch"
+      url: "https://www.twitch.tv/hacker1db"
+    - name: "github"
+      url: "https://www.github.com/hacker1db"
+    - name: "youtube"
+      url: "https://www.youtube.com/channel/UCApwUq9I-WDU_L2-Z4Tc1Aw"
+    - name: "tryhackme"
+      url: https://tryhackme.com/p/hacker1db
+
+ 
+  enableSharingButtons: true
+
+  logo:
+    logoText: $ cd /home/
+    logoHomeLink: "/"
+    logoCursorColor: "#6FC1FF"
+
+  footerLeft: "thoughts and ideas of hacker1db"
+  footerRight: "Powered by <a href='https://gohugo.io/'>Hugo</a>, and <a href='htts://github.com'>GitHub</a>"
+  footer:
+    trademark: true
+    rss: true
+    copyright: true
+    author: true
+    topText: []
+  favicon:
+    color:
+      mask: '#1b1c1d'
+      msapplication: '#1b1c1d'
+      theme: '#1b1c1d'
+
+
+imaging:
+  resampleFilter: "box"
+  quality: 75
+  anchor: "smart"
+
+
+
+taxonomies:
+  tag: tags
+  category: categories
+  series: series
