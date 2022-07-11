@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CyberSecurity on Hacker1db.dev blog</title>
+    <link>https://www.hacker1db.dev/tags/cybersecurity/</link>
+    <description>Recent content in CyberSecurity on Hacker1db.dev blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>hacker1db.dev</copyright>
+    <lastBuildDate>Sat, 09 Feb 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://www.hacker1db.dev/tags/cybersecurity/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Getting started in the world of Infosec</title>
+      <link>https://www.hacker1db.dev/posts/cybersecurity/content/2019-02-09-infosec-getting-started/</link>
+      <pubDate>Sat, 09 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.hacker1db.dev/posts/cybersecurity/content/2019-02-09-infosec-getting-started/</guid>
+      <description>Getting started - if you could hire me that would be great!  So let&amp;rsquo;s be honest, getting started is a bit of misnomer.</description>
+    </item>
+    
+  </channel>
+</rss>

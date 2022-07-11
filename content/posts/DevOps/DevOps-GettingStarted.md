@@ -1,7 +1,11 @@
 ---
-title: "DevOps GettingStarted"
+title: "DevOps for InfoSec"
 date: 2021-05-15
 author: hacker1db
-slogan: "Never Forget Your Hobbies"
+type:
+    - post
+    - posts
 ---
-## DevOps Getting Started
+# DevOps for InfoSec
+
+

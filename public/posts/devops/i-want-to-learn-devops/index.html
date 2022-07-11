@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/main.css">
+
+<head>
+       
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+   
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+   <link rel="stylesheet" href="/css/main.css">
+   <title>DevOps GettingStarted - Hacker1db.dev blog
+   </title>
+
+</head>
+<body>
+<header>
+    <div class="container-fluid bg-secondary">
+   <div class="row">
+   </div>
+    <div class="col p-1">
+        <div class="h2 text-center">Hacker1db.dev blog</div>
+    </div>
+</div>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-secondary">
+  <div class="container-fluid">
+    <a class="navbar-brand p-1" href="/">Hacker1db.dev blog</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        
+        <li class="nav-item">
+          <a class="nav-link" href="/posts">
+          <span>Posts</span></a>
+        </li>
+        
+        <li class="nav-item">
+          <a class="nav-link" href="/about">
+          <span>About me</span></a>
+        </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+</header>
+<main>
+    
+<div class="container">
+</div>
+    <div class="col">
+    <div class="text-center">
+        <h1 class="text-secondary h1 p-2"> DevOps GettingStarted 200 </h1> <br>
+        <ul>
+            
+            
+            
+            
+            
+        </ul>
+    </div>
+    
+<aside>
+    <ul>
+        
+        
+            
+                <li>
+                    <a href="/posts">
+                        
+                        <span>Posts</span>
+                    </a>
+                </li>
+            
+        
+            
+                <li>
+                    <a href="/about">
+                        
+                        <span>About me</span>
+                    </a>
+                </li>
+            
+        
+    </ul>
+</aside>
+    <h1 id="i-want-to-learn-devops">I Want to learn DevOps</h1>
+<h2 id="devops-manifesto"><strong>DevOps Manifesto</strong></h2>
+<p>DevOps is the union of people, process, and products to enable continuous delivery of value to our end users.</p>
+<h3 id="what-is-devops">What is DevOps</h3>
+<p><a href="https://github.blog/2020-10-07-devops-definition/">https://github.blog/2020-10-07-devops-definition/</a></p>
+<h3 id="areas--to-learn">Area’s  to learn</h3>
+<ul>
+<li>Commend line - most of the work I do is based on the fact that I am comfortable and fully understand the command line tools and parameters I can pass into these tools, said simply if you know how to use it locally you can use it in pipeline.</li>
+<li>Yaml syntax - <a href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema">https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema</a></li>
+<li>GitHub flow -  <a href="https://guides.github.com/introduction/flow/">https://guides.github.com/introduction/flow/</a></li>
+<li>CI VS CD -  <a href="https://lab.github.com/MSUSDEV/build-end-to-end-cicd-capabilities-directly-in-github">https://lab.github.com/MSUSDEV/build-end-to-end-cicd-capabilities-directly-in-github</a></li>
+<li>Conventional Commits - <a href="https://www.conventionalcommits.org/en/v1.0.0/">https://www.conventionalcommits.org/en/v1.0.0/</a></li>
+<li>IAC - <a href="https://alpacked.io/blog/infrastructure-as-code-for-devops">https://alpacked.io/blog/infrastructure-as-code-for-devops</a></li>
+<li>Branching Strategies - <a href="https://www.gitkraken.com/learn/git/best-practices/git-branch-strategy">https://www.gitkraken.com/learn/git/best-practices/git-branch-strategy</a></li>
+</ul>
+<h3 id="git-workflow">Git Workflow</h3>
+<p><a href="https://guides.github.com/introduction/flow/">https://guides.github.com/introduction/flow/</a></p>
+<h3 id="branching-patterns">Branching Patterns</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">feature
+bug
+chore
+
+<span style="color:#960050;background-color:#1e0010">{</span>story <span style="color:#66d9ef">type</span><span style="color:#960050;background-color:#1e0010">}</span><span style="color:#f92672">-</span><span style="color:#960050;background-color:#1e0010">{</span><span style="color:#ae81ff">2</span><span style="color:#f92672">-</span><span style="color:#ae81ff">3</span> word summary<span style="color:#960050;background-color:#1e0010">}</span><span style="color:#f92672">-</span><span style="color:#960050;background-color:#1e0010">{</span>pivotal tracker id<span style="color:#960050;background-color:#1e0010">}</span>
+
+</code></pre></div><p>Branching patterns dictate how your workflow will like, as is really the backbone for how you will build out your pipelines.</p>
+<h2 id="devops-books">Devops books</h2>
+<ul>
+<li><a href="https://www.amazon.com/DevOps-Handbook-World-Class-Reliability-Organizations/dp/1950508404/ref=sr_1_1?keywords=devops+handbook&amp;qid=1644814038&amp;s=books&amp;sprefix=DevOps+hand%2Cstripbooks%2C119&amp;sr=1-1">DevOps hand book</a></li>
+<li><a href="https://www.amazon.com/Securing-DevOps-Security-Julien-Vehent/dp/1617294136/ref=sr_1_3?keywords=securing+devops&amp;qid=1644814078&amp;s=books&amp;sprefix=Securing+d%2Cstripbooks%2C123&amp;sr=1-3">Securing DevOps</a></li>
+<li><a href="https://www.amazon.com/Alice-Bob-Learn-Application-Security/dp/1119687357">Alice and Bob Learn Application Security </a></li>
+</ul>
+<h2 id="helpful-inks">Helpful Inks</h2>
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/azure/devops/learn/what-is-devops">https://docs.microsoft.com/en-us/azure/devops/learn/what-is-devops</a></li>
+<li><a href="https://theagileadmin.com/2010/10/15/a-devops-manifesto/">https://theagileadmin.com/2010/10/15/a-devops-manifesto/</a></li>
+<li><a href="https://guides.github.com/introduction/flow/">https://guides.github.com/introduction/flow/</a></li>
+<li><a href="https://www.youtube.com/watch?v=yCf5tb6snFg&amp;list=WL&amp;index=87&amp;t=1381s">https://www.youtube.com/watch?v=yCf5tb6snFg&amp;list=WL&amp;index=87&amp;t=1381s</a></li>
+</ul>
+<h2 id="examples-and-training">Examples and training</h2>
+<ul>
+<li><a href="https://github.com/Azure/devops-governance">https://github.com/Azure/devops-governance</a></li>
+<li><a href="https://github.com/heoelri/adopac">https://github.com/heoelri/adopac</a></li>
+</ul>
+
+</div>
+
+</main>
+<footer>
+    <div class="container-fluid bg-dark">
+    <div class="p-2 text-light">
+        
+         <small class="text-start">
+            &copy <span id="js-year"></span><noscript> 2022</noscript> - hacker1db.dev
+        </small>
+        
+    </div>
+</div>
+
+<script>
+    document.getElementById('js-year').innerHTML = new Date().getFullYear();
+</script>
+
+</footer>
+</body>
+</html>

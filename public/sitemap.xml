@@ -2,23 +2,54 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://www.hacker1db.dev/</loc>
-    <lastmod>2021-11-04T21:09:42-07:00</lastmod>
+    <loc>https://www.hacker1db.dev/contact/</loc>
+    <lastmod>2022-03-05T19:45:07-08:00</lastmod>
   </url><url>
-    <loc>https://www.hacker1db.dev/posts/homepage/</loc>
-    <lastmod>2021-11-04T21:09:42-07:00</lastmod>
+    <loc>https://www.hacker1db.dev/posts/cybersecurity/</loc>
+    <lastmod>2022-03-05T18:10:14-08:00</lastmod>
+  </url><url>
+    <loc>https://www.hacker1db.dev/</loc>
+    <lastmod>2022-03-05T18:10:14-08:00</lastmod>
   </url><url>
     <loc>https://www.hacker1db.dev/posts/</loc>
-    <lastmod>2021-11-04T21:09:42-07:00</lastmod>
+    <lastmod>2022-03-05T18:10:14-08:00</lastmod>
   </url><url>
-    <loc>https://www.hacker1db.dev/posts/devops/devops-gettingstarted/</loc>
-    <lastmod>2021-05-15T14:24:40-07:00</lastmod>
+    <loc>https://www.hacker1db.dev/posts/devops/</loc>
+    <lastmod>2022-03-05T18:10:14-08:00</lastmod>
   </url><url>
-    <loc>https://www.hacker1db.dev/posts/about/</loc>
-    <lastmod>2021-05-15T13:28:03-07:00</lastmod>
+    <loc>https://www.hacker1db.dev/posts/devops/content/i-want-to-learn-devops/</loc>
+    <lastmod>2022-02-13T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://www.hacker1db.dev/categories/</loc>
+    <loc>https://www.hacker1db.dev/posts/programing/how-to-start-programming/</loc>
+    <lastmod>2022-02-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.hacker1db.dev/tags/learning/</loc>
+    <lastmod>2022-02-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.hacker1db.dev/tags/programming/</loc>
+    <lastmod>2022-02-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.hacker1db.dev/tags/software-engineering/</loc>
+    <lastmod>2022-02-13T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://www.hacker1db.dev/tags/</loc>
+    <lastmod>2022-02-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.hacker1db.dev/about/</loc>
+    <lastmod>2021-05-15T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.hacker1db.dev/posts/devops/content/devops-gettingstarted/</loc>
+    <lastmod>2021-05-15T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.hacker1db.dev/tags/cybersecurity/</loc>
+    <lastmod>2019-02-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.hacker1db.dev/tags/getting-started/</loc>
+    <lastmod>2019-02-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.hacker1db.dev/posts/cybersecurity/content/2019-02-09-infosec-getting-started/</loc>
+    <lastmod>2019-02-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.hacker1db.dev/categories/</loc>
   </url>
 </urlset>
