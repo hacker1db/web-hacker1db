@@ -1,0 +1,7 @@
+main:
+- name: Worlds
+  url: /posts
+  weight: 90
+- name: About
+  url: /about
+

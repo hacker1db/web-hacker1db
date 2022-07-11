@@ -2,7 +2,11 @@
 title: How To Start Programming
 date: 2022-02-13
 description: If your interested in learning programing
-tags: [Programming, Learn] # add tag
+
+tags: 
+  - Programming 
+  - Learning
+  - "Software Engineering"
 ---
 
 ## How To Start Programming
@@ -13,7 +17,7 @@ tags: [Programming, Learn] # add tag
   - Variables
   - Keywords
   - Basic Operators
-  - Decision Making
+  - Decision-Making
   - Loops
     - while loops
     - for loops
@@ -29,17 +33,17 @@ tags: [Programming, Learn] # add tag
 ## More Advanced but valuable
 
 - class's
-- inhertince
+- inheritance
 - interfaces
 - Unit Testing
-- Integration testing/End To End Testing (E2E Testing)
+- Integration testing/End-To-End Testing (E2E Testing)
 - abstract class and concrete
 - Learn how to understand the doc's for each language you work with.
-- Secrets mangement
+- Secrets management
 - Common Security issues with the language, simply put go read the docs on the security features that come with the language/framework.
 - Package management, Installing, Updating, and locking the packages you use so you know what versoin of things you are using.
 - [ Read I Want to learn DevOps]({{< ref "posts/DevOps/I-want-to-learn-DevOps" >}} "DevOps GettingStarted")
-- Learn Git, start with Github they have [laerning lab located here](https://lab.github.com/) this is free with an github account and its a great place to store your projects as you continue learning.
+- Learn Git, start with GitHub they have [learning lab located here](https://lab.github.com/) this is free with an github account and its a great place to store your projects as you continue learning.
 
 ## How/where to learn
 - Youtube! :) lots of free content

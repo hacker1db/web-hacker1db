@@ -1,8 +1,7 @@
 ---
-title: "DevOps GettingStarted"
+title: "DevOps GettingStarted - I want to learn DevOps"
 date: 2022-02-13
 author: hacker1db
-slogan: "Never Forget Your Hobbies"
 ---
 # I Want to learn DevOps
 
