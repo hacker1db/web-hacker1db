@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Learning on Hacker1db.dev blog</title>
+    <link>/tags/learning/</link>
+    <description>Recent content in Learning on Hacker1db.dev blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>hacker1db.dev</copyright>
+    <lastBuildDate>Sun, 13 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/learning/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How To Start Programming</title>
+      <link>/posts/programing/how-to-start-programming/</link>
+      <pubDate>Sun, 13 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/programing/how-to-start-programming/</guid>
+      <description>How To Start Programming Basic list of topics Basic Syntax Data Types Variables Keywords Basic Operators Decision-Making Loops while loops for loops Numbers Math Arrays Dictionay/key Value pairs think working with json data in its simplest form.</description>
+    </item>
+    
+  </channel>
+</rss>
