@@ -1,7 +1,10 @@
 main:
-- name: Worlds
-  url: /posts
-  weight: 90
-- name: About
-  url: /about
-
+  - name: Tags
+    url: tags
+    weight: 10
+  - name: Worlds
+    url: /posts
+    weight: 20
+  - name: About
+    url: /about
+    weight: 30

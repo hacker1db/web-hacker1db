@@ -1,9 +1,15 @@
 ---
-title: "DevOps GettingStarted - I want to learn DevOps"
+title: "DevOps Getting Started - I want to learn DevOps"
 date: 2022-02-13
 author: hacker1db
+toc: true
+Comments: true
+tags:
+  - Getting Started
+  - DevOps
 ---
-# I Want to learn DevOps
+
+# {{< param title >}}
 
 ## **DevOps Manifesto**
 
@@ -13,12 +19,12 @@ DevOps is the union of people, process, and products to enable continuous delive
 
 [https://github.blog/2020-10-07-devops-definition/](https://github.blog/2020-10-07-devops-definition/)
 
-### Area’s  to learn
+### Area’s to learn
 
 - Commend line - most of the work I do is based on the fact that I am comfortable and fully understand the command line tools and parameters I can pass into these tools, said simply if you know how to use it locally you can use it in pipeline.
 - Yaml syntax - [https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema](https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema)
-- GitHub flow -  [https://guides.github.com/introduction/flow/](https://guides.github.com/introduction/flow/)
-- CI VS CD -  [https://lab.github.com/MSUSDEV/build-end-to-end-cicd-capabilities-directly-in-github](https://lab.github.com/MSUSDEV/build-end-to-end-cicd-capabilities-directly-in-github)
+- GitHub flow - [https://guides.github.com/introduction/flow/](https://guides.github.com/introduction/flow/)
+- CI VS CD - [https://lab.github.com/MSUSDEV/build-end-to-end-cicd-capabilities-directly-in-github](https://lab.github.com/MSUSDEV/build-end-to-end-cicd-capabilities-directly-in-github)
 - Conventional Commits - [https://www.conventionalcommits.org/en/v1.0.0/](https://www.conventionalcommits.org/en/v1.0.0/)
 - IAC - [https://alpacked.io/blog/infrastructure-as-code-for-devops](https://alpacked.io/blog/infrastructure-as-code-for-devops)
 - Branching Strategies - [https://www.gitkraken.com/learn/git/best-practices/git-branch-strategy](https://www.gitkraken.com/learn/git/best-practices/git-branch-strategy)
@@ -29,16 +35,21 @@ DevOps is the union of people, process, and products to enable continuous delive
 
 ### Branching Patterns
 
-```sql
-feature
-bug
-chore
+`Example: feature/1-MyReallyAwesomeFeatureThatWillMakeUsLotsOfMoney`
 
-{story type}-{2-3 word summary}-{pivotal tracker id}
+Branch prefix types
 
-```
+- feature
+- bug
+- chore
 
-Branching patterns dictate how your workflow will like, as is really the backbone for how you will build out your pipelines.
+{{< highlight go >}}
+
+{story type}/{pivotal tracker id}-{summary that is descriptive of the Story i.e the title}
+
+{{< /highlight >}}
+
+Branching patterns dictate how your workflow will end up being like, as is really the backbone for how you will build out your pipelines.
 
 ## Devops books
 
