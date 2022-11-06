@@ -23,10 +23,7 @@ dataDir: data
 layoutDir: layouts
 publishDir: public
 canonifyURLs: true
-
-
-
-
+disqusShortname: hacker1db-dev
 
 params:
   dateform: "Jan 2, 2006"
@@ -35,7 +32,6 @@ params:
   dateformNumTime: "2006-01-02 15:04"
 
   homeSubtitle: "Cyber Security Professional, Software Engineer, Traveler, Music lover, Coffee Nerd."
-
 
   defaultTheme: "dark"
   themeColor: "#1a1d21"
@@ -64,7 +60,6 @@ params:
     - name: "tryhackme"
       url: https://tryhackme.com/p/hacker1db
 
- 
   enableSharingButtons: true
 
   logo:
@@ -82,19 +77,22 @@ params:
     topText: []
   favicon:
     color:
-      mask: '#1b1c1d'
-      msapplication: '#1b1c1d'
-      theme: '#1b1c1d'
-
+      mask: "#1b1c1d"
+      msapplication: "#1b1c1d"
+      theme: "#1b1c1d"
 
 imaging:
   resampleFilter: "box"
   quality: 75
   anchor: "smart"
 
-
-
 taxonomies:
   tag: tags
   category: categories
   series: series
+
+markup:
+  tableOfContents:
+    endLevel: 3
+    ordered: false
+    startLevel: 2
