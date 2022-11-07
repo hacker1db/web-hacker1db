@@ -1,5 +1,5 @@
 main:
-  - name: Tags
+  - name: Topics
     url: tags
     weight: 10
   - name: Worlds
