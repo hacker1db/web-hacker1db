@@ -20,19 +20,25 @@
     <loc>/tags/devops/</loc>
     <lastmod>2022-02-13T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/posts/devops/i-want-to-learn-devops/</loc>
-    <lastmod>2022-02-13T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>/tags/getting-started/</loc>
     <lastmod>2022-02-13T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>/series/getting-started/</loc>
+    <lastmod>2022-02-13T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>/posts/programing/how-to-start-programming/</loc>
+    <lastmod>2022-02-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/posts/devops/i-want-to-learn-devops/</loc>
     <lastmod>2022-02-13T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/learning/</loc>
     <lastmod>2022-02-13T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/programming/</loc>
+    <lastmod>2022-02-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/series/</loc>
     <lastmod>2022-02-13T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/software-engineering/</loc>
@@ -51,7 +57,5 @@
     <lastmod>2019-02-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/categories/</loc>
-  </url><url>
-    <loc>/series/</loc>
   </url>
 </urlset>
