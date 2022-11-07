@@ -1,14 +1,18 @@
 ---
-title: How To Start Programming
+title: Getting Started How To Start Programming
 date: 2022-02-13
-description: If your interested in learning programing
+subtitle: How to start programing
 comments: true
 toc: true
+series:
+  - Getting Started
 tags:
   - Programming
   - Learning
   - "Software Engineering"
 ---
+
+# {{< param subtitle >}}
 
 ## Basic list of topics
 

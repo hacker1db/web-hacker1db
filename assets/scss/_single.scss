@@ -1,6 +1,6 @@
 .post {
   width: 100%;
-  max-width: 800px;
+  max-width: 1000px;
   text-align: left;
   padding: 20px;
   margin: 20px auto;
@@ -10,7 +10,7 @@
 
   &-date {
     &:after {
-      content: '—';
+      content: "—";
     }
   }
 
@@ -86,7 +86,7 @@
 
     .feather {
       display: inline-block;
-      vertical-align: -.125em;
+      vertical-align: -0.125em;
       width: 1em;
       height: 1em;
     }
@@ -135,18 +135,18 @@
         background: $dark-background;
         color: $dark-color-secondary;
       }
-    
+
       @media (prefers-color-scheme: light) {
         background: $light-background;
         color: $light-color-secondary;
       }
-    
-      [data-theme=dark] & {
+
+      [data-theme="dark"] & {
         background: $dark-background;
         color: $dark-color-secondary;
       }
-    
-      [data-theme=light] & {
+
+      [data-theme="light"] & {
         background: $light-background;
         color: $light-color-secondary;
       }
@@ -197,11 +197,11 @@
     background: $light-background-secondary;
   }
 
-  [data-theme=dark] & {
+  [data-theme="dark"] & {
     background: $dark-background-secondary;
   }
 
-  [data-theme=light] & {
+  [data-theme="light"] & {
     background: $light-background-secondary;
   }
 

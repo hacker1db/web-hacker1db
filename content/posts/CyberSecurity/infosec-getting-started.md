@@ -1,15 +1,17 @@
 ---
 title: "Getting started in the world of Infosec"
 date: 2019-02-09
-description: "No sugar coating it!"
+subtitle: The world of Infosec "No sugar coating it!"
 Comments: true
 toc: true
+series:
+  - Getting Started
 tags:
   - CyberSecurity
   - Getting started
 ---
 
-# {{< param title >}}
+# {{< param subtitle >}}
 
 ## <center><strong> Getting started - if you could hire me that would be great! </strong><center>
 
