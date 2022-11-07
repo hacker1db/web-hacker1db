@@ -1,15 +1,18 @@
 ---
-title: "DevOps Getting Started - I want to learn DevOps"
+title: "Getting Started I want to learn DevOps"
 date: 2022-02-13
+subtitle: I want to learn DevOps
 author: hacker1db
 toc: true
 Comments: true
+series:
+  - Getting Started
 tags:
   - Getting Started
   - DevOps
 ---
 
-# {{< param title >}}
+# {{< param subtitle >}}
 
 ## **DevOps Manifesto**
 
