@@ -36,7 +36,7 @@ I have seen lots of engineers not understand the basics of common linux distro's
 
 If you do not have the proper foundation you will just wind up guessing and that is high likelihood of making things worse for yourself.
 
-#### common linux base images
+### common linux base images
 
 - Debian Linux
 - Alpine Linux
