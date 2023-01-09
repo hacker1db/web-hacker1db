@@ -18,3 +18,5 @@ Cyber Security Professional, Software Engineer, Traveler, Music lover, Coffee Ne
 - Random Thoughts words of wisdom
 
 > Live, Learn, Travel, Never forget your hobbies!
+
+{{< newsletter >}}
