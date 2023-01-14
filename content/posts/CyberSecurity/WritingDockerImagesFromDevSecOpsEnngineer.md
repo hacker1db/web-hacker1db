@@ -36,6 +36,7 @@ I have seen lots of engineers not understand the basics of common Linux distro's
 
 If you do not have the proper foundation you will just wind up guessing and that is a high likelihood of making things worse for yourself.
 
+
 ### Common Linux base images
 
 - Debian Linux
