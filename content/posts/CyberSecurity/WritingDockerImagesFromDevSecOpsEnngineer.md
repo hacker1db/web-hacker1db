@@ -8,7 +8,8 @@ comments: true
 images:
 Tags:
   - programming
-  - DevOps - DevSecOps
+  - DevOps
+  - DevSecOps
   - Docker
 ---
 
@@ -35,7 +36,6 @@ The best way I have seen engineers really understand docker is when they fully u
 I have seen lots of engineers not understand the basics of common Linux distro's or what the default admin user is in windows (**Administrator**).
 
 If you do not have the proper foundation you will just wind up guessing and that is a high likelihood of making things worse for yourself.
-
 
 ### Common Linux base images
 
