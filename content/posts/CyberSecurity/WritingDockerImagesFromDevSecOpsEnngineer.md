@@ -8,7 +8,8 @@ comments: true
 images:
 Tags:
   - programming
-  - DevOps - DevSecOps
+  - DevOps
+  - DevSecOps
   - Docker
 ---
 
@@ -35,7 +36,6 @@ The best way I have seen engineers really understand docker is when they fully u
 I have seen lots of engineers not understand the basics of common Linux distro's or what the default admin user is in windows (**Administrator**).
 
 If you do not have the proper foundation you will just wind up guessing and that is a high likelihood of making things worse for yourself.
-
 
 ### Common Linux base images
 
@@ -157,3 +157,5 @@ SBOM is becoming more and more important as we need to keep track of what we are
 Thank you for sticking to the end, I know that I did not give any just do this and all the security problems will go away. I do not think that is helpful for you as that is not the reality. Technology will continue to change and we will continue to learn and get better and what we do. If you have any questions please leave a comment or message me on Twitter.
 
 I now have a [news letter](https://newsletter.hacker1db.dev/), if you want to get some insider content.
+
+{{< youtube wHHc9Ygvp5s >}}
