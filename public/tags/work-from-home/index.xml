@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Work From Home on Hacker1db.dev blog</title>
+    <link>//localhost:1313/tags/work-from-home/</link>
+    <description>Recent content in Work From Home on Hacker1db.dev blog</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <copyright>hacker1db.dev</copyright>
+    <lastBuildDate>Sat, 11 Mar 2023 16:47:15 -0800</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/work-from-home/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Five Things to Help With Work From Home</title>
+      <link>//localhost:1313/posts/programing/five-things-to-help-with-work-from-home/</link>
+      <pubDate>Sat, 11 Mar 2023 16:47:15 -0800</pubDate>
+      <guid>//localhost:1313/posts/programing/five-things-to-help-with-work-from-home/</guid>
+      <description>&lt;h1 id=&#34;hahahugoshortcode9s0hbhb&#34;&gt;Remote Work&lt;/h1&gt;&#xA;&lt;p&gt;Working from home (WFH) is no longer a luxury or a temporary solution; it&amp;rsquo;s a way of life for many of us. As a DevSecOps engineer, I’ve spent countless hours working remotely, balancing security, collaboration, and productivity. While WFH offers flexibility, it also presents unique challenges—especially in security-focused roles. Here are five practical tips to help you thrive in a remote work environment.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
