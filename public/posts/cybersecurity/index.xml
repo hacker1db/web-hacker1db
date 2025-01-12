@@ -2,29 +2,29 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>World of CyberSecurity on Hacker1db.dev blog</title>
-    <link>/posts/cybersecurity/</link>
+    <link>//localhost:1313/posts/cybersecurity/</link>
     <description>Recent content in World of CyberSecurity on Hacker1db.dev blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>hacker1db.dev</copyright>
-    <lastBuildDate>Sun, 08 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="/posts/cybersecurity/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 08 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="//localhost:1313/posts/cybersecurity/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Containers from a DevSecOps Engineers perspective</title>
-      <link>/posts/cybersecurity/writingdockerimagesfromdevsecopsenngineer/</link>
+      <link>//localhost:1313/posts/cybersecurity/writingdockerimagesfromdevsecopsenngineer/</link>
       <pubDate>Sun, 08 Jan 2023 00:00:00 +0000</pubDate>
       
-      <guid>/posts/cybersecurity/writingdockerimagesfromdevsecopsenngineer/</guid>
-      <description>&lt;h1 id=&#34;hahahugoshortcode4s0hbhb&#34;&gt;What Software engineers should know about building docker files&lt;/h1&gt;
+      <guid>//localhost:1313/posts/cybersecurity/writingdockerimagesfromdevsecopsenngineer/</guid>
+      <description>&lt;h1 id=&#34;hahahugoshortcode5s0hbhb&#34;&gt;What Software engineers should know about building docker files&lt;/h1&gt;
 &lt;blockquote&gt;
 &lt;p&gt;So sounds like you want a shortcut answer, we do not have any of those in stock.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Getting started in the world of Infosec</title>
-      <link>/posts/cybersecurity/infosec-getting-started/</link>
+      <link>//localhost:1313/posts/cybersecurity/infosec-getting-started/</link>
       <pubDate>Sat, 09 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>/posts/cybersecurity/infosec-getting-started/</guid>
+      <guid>//localhost:1313/posts/cybersecurity/infosec-getting-started/</guid>
       <description>&lt;h1 id=&#34;hahahugoshortcode3s0hbhb&#34;&gt;The world of Infosec &amp;#34;No sugar coating it!&amp;#34;&lt;/h1&gt;
 &lt;h2 id=&#34;centerstrong-getting-started---if-you-could-hire-me-that-would-be-great-strongcenter&#34;&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt; Getting started - if you could hire me that would be great! &lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;/h2&gt;
 &lt;p&gt;So let&amp;rsquo;s be honest, getting started is a bit of misnomer.
