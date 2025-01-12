@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>CyberSecurity on Hacker1db.dev blog</title>
-    <link>//localhost:1313/tags/cybersecurity/</link>
+    <link>/tags/cybersecurity/</link>
     <description>Recent content in CyberSecurity on Hacker1db.dev blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>hacker1db.dev</copyright>
     <lastBuildDate>Sat, 09 Feb 2019 00:00:00 +0000</lastBuildDate>
-    <atom:link href="//localhost:1313/tags/cybersecurity/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/cybersecurity/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Getting started in the world of Infosec</title>
-      <link>//localhost:1313/posts/cybersecurity/infosec-getting-started/</link>
+      <link>/posts/cybersecurity/infosec-getting-started/</link>
       <pubDate>Sat, 09 Feb 2019 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/posts/cybersecurity/infosec-getting-started/</guid>
+      <guid>/posts/cybersecurity/infosec-getting-started/</guid>
       <description>&lt;h1 id=&#34;hahahugoshortcode3s0hbhb&#34;&gt;The world of Infosec &amp;#34;No sugar coating it!&amp;#34;&lt;/h1&gt;&#xA;&lt;h2 id=&#34;centerstrong-getting-started---if-you-could-hire-me-that-would-be-great-strongcenter&#34;&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt; Getting started - if you could hire me that would be great! &lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;/h2&gt;&#xA;&lt;p&gt;So let&amp;rsquo;s be honest, getting started is a bit of misnomer.&#xA;why is that you ask well everyone wants to go directly into infosec and while that might be awesome and trust me&#xA;its a great feeling when you finally &amp;ldquo;Make it!&amp;rdquo; but really if you want to do well in information security you have&#xA;to be in love with the field otherwise you&amp;rsquo;ll just end up burnt out! joining the &lt;strong&gt;&amp;quot; I hate my job group.&amp;quot;&lt;/strong&gt;&lt;/p&gt;</description>
     </item>
   </channel>
