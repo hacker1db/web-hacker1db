@@ -3,7 +3,10 @@ title: Hacker1db.dev blog
 languageCode: "en-us"
 author: hacker1db
 copyright: hacker1db.dev
-paginate: 25
+pagination:
+  disableAliases: false
+  pagerSize: 25
+  path: page
 summaryLength: 20
 enableRobotsTXT: true
 enableGitInfo: false
@@ -23,9 +26,11 @@ dataDir: data
 layoutDir: layouts
 publishDir: public
 canonifyURLs: true
-disqusShortname: hacker1db-dev
+ignoreLogs:
+  - warning-goldmark-raw-html
 
 params:
+  disqusShortname: hacker1db-dev
   dateform: "Jan 2, 2006"
   dateformShort: "Jan 2"
   dateformNum: "2006-01-02"
