@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Docker on Hacker1db.dev blog</title>
+    <link>/tags/docker/</link>
+    <description>Recent content in Docker on Hacker1db.dev blog</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <copyright>hacker1db.dev</copyright>
+    <lastBuildDate>Sun, 08 Jan 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Containers from a DevSecOps Engineers perspective</title>
+      <link>/posts/cybersecurity/writingdockerimagesfromdevsecopsenngineer/</link>
+      <pubDate>Sun, 08 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>/posts/cybersecurity/writingdockerimagesfromdevsecopsenngineer/</guid>
+      <description>&lt;h1 id=&#34;hahahugoshortcode3s0hbhb&#34;&gt;What Software engineers should know about building docker files&lt;/h1&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;So sounds like you want a shortcut answer, we do not have any of those in stock.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

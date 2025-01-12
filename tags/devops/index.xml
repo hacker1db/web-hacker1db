@@ -4,18 +4,24 @@
     <title>DevOps on Hacker1db.dev blog</title>
     <link>/tags/devops/</link>
     <description>Recent content in DevOps on Hacker1db.dev blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>hacker1db.dev</copyright>
-    <lastBuildDate>Sun, 13 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/devops/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 08 Jan 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="/tags/devops/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Containers from a DevSecOps Engineers perspective</title>
+      <link>/posts/cybersecurity/writingdockerimagesfromdevsecopsenngineer/</link>
+      <pubDate>Sun, 08 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>/posts/cybersecurity/writingdockerimagesfromdevsecopsenngineer/</guid>
+      <description>&lt;h1 id=&#34;hahahugoshortcode3s0hbhb&#34;&gt;What Software engineers should know about building docker files&lt;/h1&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;So sounds like you want a shortcut answer, we do not have any of those in stock.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Getting Started I want to learn DevOps</title>
       <link>/posts/devops/i-want-to-learn-devops/</link>
       <pubDate>Sun, 13 Feb 2022 00:00:00 +0000</pubDate>
-      
       <guid>/posts/devops/i-want-to-learn-devops/</guid>
-      <description>I want to learn DevOps DevOps Manifesto DevOps is the union of people, process, and products to enable continuous delivery of value to our end users.</description>
+      <description>&lt;h1 id=&#34;hahahugoshortcode5s0hbhb&#34;&gt;I want to learn DevOps&lt;/h1&gt;&#xA;&lt;h2 id=&#34;devops-manifesto&#34;&gt;&lt;strong&gt;DevOps Manifesto&lt;/strong&gt;&lt;/h2&gt;&#xA;&lt;p&gt;DevOps is the union of people, process, and products to enable continuous delivery of value to our end users.&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>
