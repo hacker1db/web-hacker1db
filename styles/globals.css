@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-light-background text-light-color dark:bg-dark-background dark:text-dark-color;
+}
+
+a {
+  @apply text-light-color-variant dark:text-dark-color-variant;
+}
+
+button,
+.button,
+a.button {
+  @apply flex items-center justify-center px-4 py-2 mb-1 text-center font-medium rounded-lg border border-transparent cursor-pointer outline-none;
+  @apply bg-light-background-header dark:bg-dark-background-header;
+}
+
+button.outline,
+.button.outline,
+a.button.outline {
+  @apply bg-transparent shadow-none px-4 py-2 border-light-background-secondary dark:border-dark-background-secondary;
+}
+
+button.primary,
+.button.primary,
+a.button.primary {
+  @apply shadow-md;
+}
+
+button.primary:hover,
+.button.primary:hover,
+a.button.primary:hover {
+  @apply shadow-lg;
+}
+
+button.link,
+.button.link,
+a.button.link {
+  @apply bg-none text-base;
+}
+
+button.small,
+.button.small,
+a.button.small {
+  @apply text-sm;
+}
+
+button.wide,
+.button.wide,
+a.button.wide {
+  @apply min-w-[200px] px-6 py-3;
+}
+
+code {
+  @apply font-mono px-1.5 py-0.5 rounded bg-light-background-secondary dark:bg-dark-background-secondary;
+}
+
+pre {
+  @apply p-2.5 rounded text-sm overflow-auto bg-light-background-secondary dark:bg-dark-background-secondary;
+}
+
+blockquote {
+  @apply border-l-4 border-blue-500 my-10 px-5 py-2.5;
+}
+
+ul,
+ol {
+  @apply ml-10;
+}
+
+.container {
+  @apply flex flex-col justify-center text-center;
+}
+
+.content {
+  @apply flex flex-col flex-1 items-center justify-center;
+}
+
+hr {
+  @apply w-full border-none h-px bg-light-border-color dark:bg-dark-border-color;
+}
+
+.hidden {
+  @apply hidden;
+}
+
+.hide-on-phone {
+  @apply hidden md:block;
+}
+
+.hide-on-tablet {
+  @apply hidden lg:block;
+}
+
+.screen-reader-text {
+  @apply absolute w-px h-px p-0 m-0 overflow-hidden border-0;
+}
+
+.screen-reader-text:focus {
+  @apply block p-4 text-sm font-bold text-blue-700 bg-gray-100 rounded shadow-outline;
+}
+
+.background-image {
+  @apply bg-no-repeat bg-fixed bg-cover bg-center;
+}
+
+.highlight {
+  @apply my-7.5;
+}
