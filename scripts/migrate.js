@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const matter = require('gray-matter');
 const { execSync } = require('child_process');
+const yaml = require('js-yaml');
 
 const hugoContentDir = path.join(__dirname, '..', 'content');
 const nextContentDir = path.join(__dirname, '..', 'next-content');
@@ -33,7 +34,7 @@ ${content}`;
 }
 
 function migrateConfig() {
-  const hugoConfig = fs.readFileSync(hugoConfigPath, 'utf8');
+  const hugoConfig = yaml.load(fs.readFileSync(hugoConfigPath, 'utf8'));
   const nextConfig = `
 module.exports = {
   reactStrictMode: true,
@@ -41,10 +42,10 @@ module.exports = {
     domains: ['hacker1db.dev'],
   },
   env: {
-    SITE_TITLE: 'Hacker1db.dev blog',
-    AUTHOR: 'hacker1db',
-    DESCRIPTION: 'Hack Your Life One Day At a Time',
-    KEYWORDS: 'Homepage, Blog, Programming, Cyber Security, DevSecOps, Music, Travel, Coffee',
+    SITE_TITLE: '${hugoConfig.title}',
+    AUTHOR: '${hugoConfig.author}',
+    DESCRIPTION: '${hugoConfig.params.description}',
+    KEYWORDS: '${hugoConfig.params.keywords}',
   },
 };
 `;
