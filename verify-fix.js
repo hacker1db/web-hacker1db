@@ -19,7 +19,7 @@ const html = fs.readFileSync(htmlPath, 'utf8');
 const subtitleTexts = [
   'I want to learn DevOps',
   'Remote Work', 
-  'How to start programing',
+  'How to start programming',
   'The world of Infosec',
   'What Software engineers should know about building docker files'
 ];
