@@ -4,6 +4,7 @@ import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
 import { Post, PostMatter } from '@/types/blog';
+import { processShortcodes, processFrontmatter } from './shortcodes';
 
 const postsDirectory = path.join(process.cwd(), 'content/posts');
 
@@ -41,17 +42,31 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     const { data, content } = matter(fileContents);
     
+    // Process frontmatter to ensure proper typing
+    const processedData = processFrontmatter(data);
+    
+    // Process Hugo shortcodes before converting to HTML
+    const processedContent = processShortcodes(content, processedData);
+    
     // Process markdown to HTML
-    const processedContent = await remark()
+    const processedMarkdown = await remark()
       .use(html, { sanitize: false })
-      .process(content);
-    const contentHtml = processedContent.toString();
+      .process(processedContent);
+    const contentHtml = processedMarkdown.toString();
+    
+    // Create a better excerpt
+    const plainText = content.replace(/```[\s\S]*?```/g, '') // Remove code blocks
+                           .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Convert links to text
+                           .replace(/[#*_`]/g, '') // Remove markdown formatting
+                           .replace(/\n+/g, ' ') // Replace newlines with spaces
+                           .trim();
+    const excerpt = plainText.length > 200 ? plainText.substring(0, 200).trim() + '...' : plainText;
     
     return {
       slug,
       content: contentHtml,
-      data: data as PostMatter,
-      excerpt: content.substring(0, 200) + '...'
+      data: processedData,
+      excerpt
     };
   } catch (error) {
     console.error(`Error reading post ${slug}:`, error);
@@ -75,5 +90,14 @@ export async function getPostsByCategory(category: string): Promise<Post[]> {
   const allPosts = await getAllPosts();
   return allPosts.filter(post => 
     post.slug.toLowerCase().includes(category.toLowerCase())
+  );
+}
+
+export async function getPostsByTag(tag: string): Promise<Post[]> {
+  const allPosts = await getAllPosts();
+  return allPosts.filter(post => 
+    post.data.tags?.some(postTag => 
+      postTag.toLowerCase().includes(tag.toLowerCase())
+    )
   );
 }

@@ -88,14 +88,17 @@ A modern, fast blog built with Next.js, TypeScript, and React. Previously built 
 ## ✨ Features
 
 - **⚡ Fast Performance**: Built with Next.js 15 and optimized for speed
-- **📝 Markdown Support**: Write posts in Markdown with frontmatter
+- **📝 Markdown Support**: Write posts in Markdown with comprehensive Hugo shortcode support
 - **🎨 Dark Theme**: Terminal-inspired design with custom CSS
-- **📱 Responsive**: Mobile-first responsive design
+- **📱 Responsive**: Mobile-first responsive design with card-based layout
 - **🔍 SEO Optimized**: Proper meta tags and Open Graph support
 - **🏷️ Tagging System**: Organize posts with tags and series
-- **🔗 Social Integration**: Links to social media profiles
+- **🔗 Social Integration**: Centrally managed social media links with platform-specific styling
 - **⚙️ TypeScript**: Full type safety and IntelliSense
 - **📊 Static Generation**: Pre-rendered for optimal performance
+- **🎥 Media Rich**: Support for YouTube/Vimeo embeds, code highlighting, and interactive content
+- **📇 Card Layout**: Modern grid-based post display with hover animations
+- **🎯 Hugo Compatible**: Seamless migration from Hugo with shortcode processing
 
 ## 📝 Writing Posts
 
@@ -136,9 +139,79 @@ Write your post content here using Markdown syntax.
 
 Edit `src/lib/config.ts` to customize:
 - Site title and description
-- Social media links
-- Footer content
 - Author information
+- Footer content
+
+### Social Media Icons
+
+Social media icons and links are centrally managed in `src/lib/socialIcons.ts`. To add or modify social icons:
+
+1. **Add a new icon**: Edit the `socialIconsConfig` object in `src/lib/socialIcons.ts`
+2. **Update URLs**: Modify the `url` property for existing icons
+3. **Change colors**: Update the `color` property for hover effects
+4. **Custom icons**: Add your own SVG path data
+
+Example of adding a new social platform:
+```typescript
+// In src/lib/socialIcons.ts
+linkedin: {
+  name: 'linkedin',
+  url: 'https://linkedin.com/in/yourprofile',
+  color: '#0077B5',
+  viewBox: '0 0 24 24',
+  path: 'YOUR_SVG_PATH_DATA_HERE'
+}
+```
+
+The icons will automatically appear on the homepage and use the configured colors on hover.
+
+### Hugo Shortcodes Support
+
+The migration includes comprehensive support for Hugo shortcodes with enhanced functionality:
+
+#### Content Shortcodes
+- `{{< param subtitle >}}` - Displays frontmatter parameters
+- `{{< highlight language >}}` - Code syntax highlighting (converts to markdown)
+- `{{< ref "path" >}}` - Internal links (converted to Next.js routes)
+- `{{< relref "path" >}}` - Relative internal links
+
+#### Media Shortcodes
+- `{{< youtube VIDEO_ID >}}` - Responsive YouTube embeds
+- `{{< vimeo VIDEO_ID >}}` - Responsive Vimeo embeds  
+- `{{< figure src="image.jpg" alt="Alt text" caption="Caption" >}}` - Enhanced image figures
+- `{{< gist username gist_id >}}` - GitHub Gist embeds
+
+#### Interactive Elements
+- `{{< newsletter >}}` - Styled newsletter signup with social links
+
+#### Example Usage
+```markdown
+---
+title: "My Post"
+subtitle: "Learn Next.js"
+---
+
+# {{< param subtitle >}}
+
+{{< youtube dQw4w9WgXcQ >}}
+
+{{< highlight javascript >}}
+console.log('Hello World!');
+{{< /highlight >}}
+
+{{< newsletter >}}
+```
+
+### Card-Style Layout
+
+The blog now features a modern card-based design inspired by [joshmedeski.com](https://www.joshmedeski.com/posts/):
+
+- **Grid layout** - Responsive cards that adapt to screen size
+- **Hover animations** - Cards lift and highlight on hover
+- **Category badges** - Visual category indicators
+- **Enhanced metadata** - Date, author, series, and tag information
+- **Read more links** - Clear call-to-action
+- **Smart excerpts** - Auto-generated from content (excludes code blocks)
 
 ### Styling
 

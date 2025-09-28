@@ -1,4 +1,5 @@
 import { SiteConfig } from '@/types/blog';
+import { getSocialLinksFromConfig } from './socialIcons';
 
 export const siteConfig: SiteConfig = {
   title: "Hacker1db.dev blog",
@@ -6,32 +7,7 @@ export const siteConfig: SiteConfig = {
   author: "hacker1db",
   homeSubtitle: "Cyber Security Professional, Software Engineer, Traveler, Music lover, Coffee Nerd.",
   keywords: "Homepage, Blog, Programming, Cyber Security, DevSecOps, Music, Travel, Coffee",
-  social: [
-    {
-      name: "twitter",
-      url: "https://www.twitter.com/hacker1db"
-    },
-    {
-      name: "instagram", 
-      url: "https://www.instagram.com/hacker1db"
-    },
-    {
-      name: "twitch",
-      url: "https://www.twitch.tv/hacker1db"
-    },
-    {
-      name: "github",
-      url: "https://www.github.com/hacker1db"
-    },
-    {
-      name: "youtube",
-      url: "https://www.youtube.com/channel/UCApwUq9I-WDU_L2-Z4Tc1Aw"
-    },
-    {
-      name: "tryhackme",
-      url: "https://tryhackme.com/p/hacker1db"
-    }
-  ],
+  social: getSocialLinksFromConfig(),
   logo: {
     logoText: "$ cd /home/",
     logoHomeLink: "/",
