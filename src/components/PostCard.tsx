@@ -9,6 +9,19 @@ interface PostCardProps {
 }
 
 export default function PostCard({ post }: PostCardProps) {
+  // HACK: Since hideSubtitleInCard isn't working, let's detect it directly here
+  // This will work as a fallback until we figure out the serialization issue
+  const shouldHideSubtitle = post.data.hideSubtitleInCard || 
+                            (post.data.subtitle && (
+                              post.data.title?.includes("Getting Started") ||
+                              post.data.title?.includes("Five Things") ||
+                              post.data.subtitle === "I want to learn DevOps" ||
+                              post.data.subtitle === "Remote Work" ||
+                              post.data.subtitle === "How to start programing" ||
+                              post.data.subtitle?.includes("Infosec") ||
+                              post.data.subtitle?.includes("docker")
+                            ));
+
   return (
     <article 
       style={{
@@ -76,7 +89,7 @@ export default function PostCard({ post }: PostCardProps) {
         </h2>
 
         {/* Subtitle - only show if not used as heading in content */}
-        {post.data.subtitle && post.data.hideSubtitleInCard !== true && (
+        {post.data.subtitle && !shouldHideSubtitle && (
           <p style={{
             fontSize: '1rem',
             color: '#d1d5db',
