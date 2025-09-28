@@ -130,7 +130,8 @@ export function processFrontmatter(data: any, content?: string): PostMatter {
     series: Array.isArray(data.series) ? data.series : (data.series ? [data.series] : []),
     tags: Array.isArray(data.tags) ? data.tags : (data.tags ? [data.tags] : []),
     category: data.category || '',
-    hideSubtitleInCard: data.hideSubtitleInCard || hasSubtitleParam
+    // Explicitly set to true if subtitle param is detected
+    hideSubtitleInCard: Boolean(data.hideSubtitleInCard || hasSubtitleParam)
   };
 
   return processed;

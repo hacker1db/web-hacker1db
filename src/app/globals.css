@@ -288,16 +288,17 @@ a:hover {
   border: 1px solid #4b5563;
 }
 
+/* Enhanced code blocks with syntax highlighting */
 .prose pre {
-  background-color: #0d1117 !important;
+  background: linear-gradient(135deg, #0d1117 0%, #161b22 100%) !important;
   border: 1px solid #30363d;
-  border-radius: 0.75rem;
-  padding: 1.5rem;
+  border-radius: 1rem;
+  padding: 2rem;
   overflow-x: auto;
-  margin: 2rem 0;
+  margin: 2.5rem 0;
   font-size: 0.9rem;
-  line-height: 1.6;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  line-height: 1.7;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   position: relative;
 }
 
@@ -307,9 +308,19 @@ a:hover {
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #6FC1FF, #8B5CF6, #06B6D4);
-  border-radius: 0.75rem 0.75rem 0 0;
+  height: 4px;
+  background: linear-gradient(90deg, #6FC1FF 0%, #8B5CF6 50%, #06B6D4 100%);
+  border-radius: 1rem 1rem 0 0;
+}
+
+.prose pre::after {
+  content: '● ● ●';
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  color: #6b7280;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
 }
 
 .prose pre code {
@@ -319,11 +330,12 @@ a:hover {
   font-size: inherit;
   border: none;
   font-weight: normal;
+  font-family: 'JetBrains Mono', 'Fira Code', Monaco, Menlo, 'Courier New', monospace;
 }
 
-/* Override highlight.js styles for better contrast */
+/* Syntax highlighting improvements */
 .prose .hljs {
-  background: #0d1117 !important;
+  background: transparent !important;
   color: #e6edf3 !important;
   padding: 0 !important;
 }
@@ -339,6 +351,7 @@ a:hover {
 .prose .hljs-literal,
 .prose .hljs-type {
   color: #ff7b72 !important;
+  font-weight: 600;
 }
 
 .prose .hljs-string,
@@ -350,6 +363,7 @@ a:hover {
 .prose .hljs-section,
 .prose .hljs-selector-id {
   color: #79c0ff !important;
+  font-weight: 600;
 }
 
 .prose .hljs-subst,
@@ -372,78 +386,115 @@ a:hover {
 
 .prose .hljs-number {
   color: #79c0ff !important;
+  font-weight: 600;
 }
 
-/* Video and media styles */
+/* Enhanced media elements */
 .prose iframe {
   width: 100%;
-  border-radius: 0.75rem;
-  margin: 2rem 0;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  border-radius: 1rem;
+  margin: 2.5rem 0;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  border: 1px solid #374151;
 }
 
 .prose img {
   max-width: 100%;
   height: auto;
-  border-radius: 0.75rem;
-  margin: 2rem 0;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 1rem;
+  margin: 2.5rem auto;
+  display: block;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  border: 1px solid #374151;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.prose img:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
 }
 
 .prose video {
   width: 100%;
-  border-radius: 0.75rem;
-  margin: 2rem 0;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  border-radius: 1rem;
+  margin: 2.5rem 0;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  border: 1px solid #374151;
 }
 
-/* Table styles */
+/* Beautiful tables */
 .prose table {
   width: 100%;
   border-collapse: collapse;
-  margin: 2rem 0;
+  margin: 2.5rem 0;
   border: 1px solid #374151;
-  border-radius: 0.75rem;
+  border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, rgba(55, 65, 81, 0.1) 0%, rgba(55, 65, 81, 0.05) 100%);
 }
 
 .prose th,
 .prose td {
   border: 1px solid #374151;
-  padding: 1rem 1.5rem;
+  padding: 1.25rem 1.5rem;
   text-align: left;
 }
 
 .prose th {
-  background-color: #374151;
+  background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
   font-weight: 600;
   color: #ffffff;
   font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .prose td {
-  background-color: rgba(55, 65, 81, 0.3);
+  background-color: rgba(55, 65, 81, 0.2);
   line-height: 1.6;
+  transition: background-color 0.2s ease;
 }
 
-/* Strong emphasis */
+.prose tr:hover td {
+  background-color: rgba(111, 193, 255, 0.1);
+}
+
+/* Enhanced text formatting */
 .prose strong {
   color: #ffffff;
-  font-weight: 600;
+  font-weight: 700;
+  background: linear-gradient(135deg, rgba(111, 193, 255, 0.2) 0%, rgba(139, 92, 246, 0.1) 100%);
+  padding: 0.1em 0.3em;
+  border-radius: 0.25rem;
 }
 
 .prose em {
   color: #d1d5db;
   font-style: italic;
+  position: relative;
 }
 
-/* Horizontal rule */
+/* Beautiful horizontal rules */
 .prose hr {
   border: none;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #6FC1FF, transparent);
-  margin: 3rem 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #6FC1FF 20%, #8B5CF6 50%, #06B6D4 80%, transparent);
+  margin: 4rem 0;
+  border-radius: 2px;
+  position: relative;
+}
+
+.prose hr::after {
+  content: '✦';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #1a1d21;
+  color: #6FC1FF;
+  padding: 0 1rem;
+  font-size: 1.2rem;
 }
 
 /* Syntax highlighting overrides */
