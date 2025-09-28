@@ -76,7 +76,7 @@ export default function PostCard({ post }: PostCardProps) {
         </h2>
 
         {/* Subtitle */}
-        {post.data.subtitle && (
+        {post.data.subtitle && !post.data.hideSubtitleInCard && (
           <p style={{
             fontSize: '1rem',
             color: '#d1d5db',

@@ -8,6 +8,7 @@ export interface PostMatter {
   series?: string[];
   tags?: string[];
   category?: string;
+  hideSubtitleInCard?: boolean;
 }
 
 export interface Post {

@@ -13,12 +13,13 @@ export function processShortcodes(content: string, frontmatter: PostMatter): str
     return value ? String(value) : match; // Return original if not found
   });
 
-  // Process {{< highlight language >}} shortcodes
+  // Process {{< highlight language >}} shortcodes with proper line breaks
   processedContent = processedContent.replace(
     /\{\{<\s*highlight\s+(\w+)\s*>\}\}([\s\S]*?)\{\{<\s*\/highlight\s*>\}\}/g,
     (match, language, code) => {
-      // Convert to markdown code block
-      return `\`\`\`${language}\n${code.trim()}\n\`\`\``;
+      // Clean up the code content and convert to markdown code block
+      const cleanCode = code.trim();
+      return `\`\`\`${language}\n${cleanCode}\n\`\`\``;
     }
   );
 
@@ -115,7 +116,10 @@ export function processShortcodes(content: string, frontmatter: PostMatter): str
 /**
  * Extract and process Hugo-style frontmatter parameters
  */
-export function processFrontmatter(data: any): PostMatter {
+export function processFrontmatter(data: any, content?: string): PostMatter {
+  // Auto-detect if subtitle should be hidden in card when it's used as a param in content
+  const hasSubtitleParam = content ? /\{\{<\s*param\s+subtitle\s*>\}\}/g.test(content) : false;
+  
   const processed: PostMatter = {
     title: data.title || '',
     date: data.date || '',
@@ -125,7 +129,8 @@ export function processFrontmatter(data: any): PostMatter {
     Comments: data.Comments || false,
     series: Array.isArray(data.series) ? data.series : (data.series ? [data.series] : []),
     tags: Array.isArray(data.tags) ? data.tags : (data.tags ? [data.tags] : []),
-    category: data.category || ''
+    category: data.category || '',
+    hideSubtitleInCard: data.hideSubtitleInCard || hasSubtitleParam
   };
 
   return processed;

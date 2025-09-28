@@ -27,13 +27,20 @@ export default async function PostPage({ params }: PostPageProps) {
   }
 
   return (
-    <div style={{ maxWidth: '64rem', margin: '0 auto' }}>
+    <div style={{ maxWidth: '56rem', margin: '0 auto', padding: '0 1rem' }}>
       {/* Back to Posts Link */}
       <div className="mb-6">
         <Link 
           href="/posts"
           className="text-cursor"
-          style={{ textDecoration: 'none' }}
+          style={{ 
+            textDecoration: 'none',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            padding: '0.5rem 0',
+            transition: 'all 0.2s ease'
+          }}
         >
           ← Back to Posts
         </Link>
@@ -41,35 +48,72 @@ export default async function PostPage({ params }: PostPageProps) {
 
       {/* Article Header */}
       <article>
-        <header className="mb-8 text-center">
-          <h1 className="text-4xl font-bold mb-4 text-white" style={{ lineHeight: '1.2' }}>
+        <header style={{ marginBottom: '3rem', textAlign: 'center' }}>
+          <h1 style={{ 
+            fontSize: 'clamp(2rem, 5vw, 3rem)',
+            fontWeight: '700',
+            marginBottom: '1rem',
+            color: '#ffffff',
+            lineHeight: '1.1',
+            letterSpacing: '-0.025em'
+          }}>
             {post.data.title}
           </h1>
           
-          {post.data.subtitle && (
-            <p className="text-xl text-gray-300 mb-6">
+          {post.data.subtitle && !post.data.hideSubtitleInCard && (
+            <p style={{
+              fontSize: 'clamp(1.125rem, 3vw, 1.375rem)',
+              color: '#9ca3af',
+              marginBottom: '2rem',
+              lineHeight: '1.4',
+              fontStyle: 'italic'
+            }}>
               {post.data.subtitle}
             </p>
           )}
           
-          <div className="flex items-center justify-center text-gray-400 mb-6" style={{ fontSize: '0.875rem' }}>
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            color: '#6b7280', 
+            fontSize: '0.95rem',
+            marginBottom: '2rem',
+            flexWrap: 'wrap',
+            gap: '1rem'
+          }}>
             <time dateTime={post.data.date}>
               {format(new Date(post.data.date), 'MMMM d, yyyy')}
             </time>
             {post.data.author && (
-              <>
-                <span style={{ margin: '0 0.5rem' }}>•</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ color: '#374151' }}>•</span>
                 <span>by {post.data.author}</span>
-              </>
+              </span>
             )}
           </div>
           
           {post.data.tags && post.data.tags.length > 0 && (
-            <div className="flex" style={{ flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center' }}>
+            <div style={{ 
+              display: 'flex', 
+              flexWrap: 'wrap', 
+              gap: '0.75rem', 
+              justifyContent: 'center',
+              marginBottom: '1rem'
+            }}>
               {post.data.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="tag"
+                  style={{
+                    backgroundColor: 'rgba(111, 193, 255, 0.1)',
+                    color: '#6FC1FF',
+                    fontSize: '0.875rem',
+                    fontWeight: '500',
+                    padding: '0.5rem 1rem',
+                    borderRadius: '9999px',
+                    border: '1px solid rgba(111, 193, 255, 0.3)',
+                    transition: 'all 0.2s ease'
+                  }}
                 >
                   #{tag}
                 </span>
@@ -78,9 +122,17 @@ export default async function PostPage({ params }: PostPageProps) {
           )}
           
           {post.data.series && post.data.series.length > 0 && (
-            <div className="mt-4">
-              <p className="text-gray-400" style={{ fontSize: '0.875rem' }}>
-                Part of series: {post.data.series.join(', ')}
+            <div style={{ marginTop: '1rem' }}>
+              <p style={{ 
+                color: '#9ca3af', 
+                fontSize: '0.9rem',
+                backgroundColor: 'rgba(156, 163, 175, 0.1)',
+                padding: '0.75rem 1.5rem',
+                borderRadius: '0.5rem',
+                border: '1px solid rgba(156, 163, 175, 0.2)',
+                display: 'inline-block'
+              }}>
+                📚 Part of series: {post.data.series.join(', ')}
               </p>
             </div>
           )}
@@ -89,23 +141,70 @@ export default async function PostPage({ params }: PostPageProps) {
         {/* Article Content */}
         <div 
           className="prose"
+          style={{
+            maxWidth: 'none',
+            margin: '0 auto'
+          }}
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
       </article>
 
       {/* Navigation */}
-      <div className="mt-12 border-t border-gray-700" style={{ paddingTop: '2rem' }}>
-        <div className="flex justify-between items-center">
+      <div style={{ 
+        marginTop: '4rem', 
+        borderTop: '1px solid #374151', 
+        paddingTop: '2rem' 
+      }}>
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '1rem'
+        }}>
           <Link 
             href="/posts"
-            className="text-cursor"
-            style={{ textDecoration: 'none' }}
+            style={{
+              textDecoration: 'none',
+              color: '#6FC1FF',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '0.75rem 1.5rem',
+              backgroundColor: 'rgba(111, 193, 255, 0.1)',
+              border: '1px solid rgba(111, 193, 255, 0.3)',
+              borderRadius: '0.5rem',
+              transition: 'all 0.2s ease',
+              fontWeight: '500'
+            }}
           >
             ← All Posts
           </Link>
           
-          <div className="text-gray-400" style={{ fontSize: '0.875rem' }}>
-            Share this post
+          <div style={{ 
+            color: '#9ca3af', 
+            fontSize: '0.9rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1rem'
+          }}>
+            <span>Share this post</span>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <a 
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(`https://hacker1db.dev/posts/${slug}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: '#6FC1FF',
+                  textDecoration: 'none',
+                  padding: '0.5rem',
+                  borderRadius: '0.375rem',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                🐦
+              </a>
+            </div>
           </div>
         </div>
       </div>

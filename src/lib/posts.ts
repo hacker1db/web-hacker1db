@@ -2,7 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
-import html from 'remark-html';
+import remarkRehype from 'remark-rehype';
+import rehypeHighlight from 'rehype-highlight';
+import rehypeStringify from 'rehype-stringify';
 import { Post, PostMatter } from '@/types/blog';
 import { processShortcodes, processFrontmatter } from './shortcodes';
 
@@ -42,15 +44,20 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     const { data, content } = matter(fileContents);
     
-    // Process frontmatter to ensure proper typing
-    const processedData = processFrontmatter(data);
+    // Process frontmatter to ensure proper typing and auto-detect card subtitle hiding
+    const processedData = processFrontmatter(data, content);
     
     // Process Hugo shortcodes before converting to HTML
     const processedContent = processShortcodes(content, processedData);
     
-    // Process markdown to HTML
+    // Process markdown to HTML with syntax highlighting
     const processedMarkdown = await remark()
-      .use(html, { sanitize: false })
+      .use(remarkRehype, { allowDangerousHtml: true })
+      .use(rehypeHighlight, {
+        detect: true,
+        ignoreMissing: true
+      })
+      .use(rehypeStringify, { allowDangerousHtml: true })
       .process(processedContent);
     const contentHtml = processedMarkdown.toString();
     
