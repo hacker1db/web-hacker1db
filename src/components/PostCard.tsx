@@ -34,16 +34,6 @@ export default function PostCard({ post }: PostCardProps) {
         position: 'relative',
         overflow: 'hidden'
       }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateY(-4px)';
-        e.currentTarget.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.2)';
-        e.currentTarget.style.borderColor = '#6FC1FF';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
-        e.currentTarget.style.borderColor = '#374151';
-      }}
     >
       {/* Category Badge */}
       {post.slug.includes('/') && (
@@ -77,12 +67,6 @@ export default function PostCard({ post }: PostCardProps) {
             lineHeight: '1.3',
             transition: 'color 0.2s ease',
             paddingRight: post.slug.includes('/') ? '4rem' : '0'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color = '#6FC1FF';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color = '#ffffff';
           }}
         >
           {post.data.title}
@@ -122,8 +106,9 @@ export default function PostCard({ post }: PostCardProps) {
           marginBottom: '1.5rem' 
         }}>
           {post.data.tags.slice(0, 3).map((tag) => (
-            <span
+            <Link
               key={tag}
+              href={`/tags/${encodeURIComponent(tag.toLowerCase())}`}
               style={{
                 backgroundColor: 'rgba(107, 114, 128, 0.3)',
                 color: '#d1d5db',
@@ -131,11 +116,13 @@ export default function PostCard({ post }: PostCardProps) {
                 fontWeight: '500',
                 padding: '0.25rem 0.75rem',
                 borderRadius: '0.375rem',
-                border: '1px solid rgba(107, 114, 128, 0.2)'
+                border: '1px solid rgba(107, 114, 128, 0.2)',
+                textDecoration: 'none',
+                transition: 'all 0.2s ease'
               }}
             >
-              {tag}
-            </span>
+              #{tag}
+            </Link>
           ))}
           {post.data.tags.length > 3 && (
             <span style={{
@@ -172,13 +159,18 @@ export default function PostCard({ post }: PostCardProps) {
           {post.data.series && post.data.series.length > 0 && (
             <>
               <span>•</span>
-              <span style={{
-                color: '#6FC1FF',
-                fontSize: '0.75rem',
-                fontWeight: '500'
-              }}>
+              <Link
+                href={`/series/${encodeURIComponent(post.data.series[0].toLowerCase())}`}
+                style={{
+                  color: '#6FC1FF',
+                  fontSize: '0.75rem',
+                  fontWeight: '500',
+                  textDecoration: 'none',
+                  transition: 'color 0.2s ease'
+                }}
+              >
                 Series: {post.data.series[0]}
-              </span>
+              </Link>
             </>
           )}
         </div>

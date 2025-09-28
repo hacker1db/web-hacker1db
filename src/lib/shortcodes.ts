@@ -120,15 +120,18 @@ export function processFrontmatter(data: any, content?: string): PostMatter {
   // Auto-detect if subtitle should be hidden in card when it's used as a param in content
   const hasSubtitleParam = content ? /\{\{<\s*param\s+subtitle\s*>\}\}/g.test(content) : false;
   
+  // Handle both 'tags' and 'Tags' (case insensitive)
+  const tags = data.tags || data.Tags || [];
+  
   const processed: PostMatter = {
-    title: data.title || '',
+    title: data.title || data.Title || '',
     date: data.date || '',
     subtitle: data.subtitle || '',
     author: data.author || '',
     toc: data.toc || false,
     Comments: data.Comments || false,
     series: Array.isArray(data.series) ? data.series : (data.series ? [data.series] : []),
-    tags: Array.isArray(data.tags) ? data.tags : (data.tags ? [data.tags] : []),
+    tags: Array.isArray(tags) ? tags : (tags ? [tags] : []),
     category: data.category || '',
     // Explicitly set to true if subtitle param is detected
     hideSubtitleInCard: Boolean(data.hideSubtitleInCard || hasSubtitleParam)

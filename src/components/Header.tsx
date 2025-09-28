@@ -51,6 +51,26 @@ export default function Header() {
             Posts
           </Link>
           <Link 
+            href="/series"
+            style={{ 
+              color: '#d1d5db', 
+              textDecoration: 'none',
+              transition: 'color 0.2s ease'
+            }}
+          >
+            Series
+          </Link>
+          <Link 
+            href="/tags"
+            style={{ 
+              color: '#d1d5db', 
+              textDecoration: 'none',
+              transition: 'color 0.2s ease'
+            }}
+          >
+            Tags
+          </Link>
+          <Link 
             href="/about"
             style={{ 
               color: '#d1d5db', 

@@ -6,7 +6,11 @@ import html from 'remark-html';
 
 async function getAboutContent() {
   try {
-    const fullPath = path.join(process.cwd(), 'content/about.md');
+    // Try .mdx first, then .md for backward compatibility
+    let fullPath = path.join(process.cwd(), 'content/about.mdx');
+    if (!fs.existsSync(fullPath)) {
+      fullPath = path.join(process.cwd(), 'content/about.md');
+    }
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     const { data, content } = matter(fileContents);
     

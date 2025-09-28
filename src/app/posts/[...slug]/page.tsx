@@ -102,8 +102,9 @@ export default async function PostPage({ params }: PostPageProps) {
               marginBottom: '1rem'
             }}>
               {post.data.tags.map((tag) => (
-                <span
+                <Link
                   key={tag}
+                  href={`/tags/${encodeURIComponent(tag.toLowerCase())}`}
                   style={{
                     backgroundColor: 'rgba(111, 193, 255, 0.1)',
                     color: '#6FC1FF',
@@ -112,28 +113,34 @@ export default async function PostPage({ params }: PostPageProps) {
                     padding: '0.5rem 1rem',
                     borderRadius: '9999px',
                     border: '1px solid rgba(111, 193, 255, 0.3)',
-                    transition: 'all 0.2s ease'
+                    transition: 'all 0.2s ease',
+                    textDecoration: 'none'
                   }}
                 >
                   #{tag}
-                </span>
+                </Link>
               ))}
             </div>
           )}
           
           {post.data.series && post.data.series.length > 0 && (
             <div style={{ marginTop: '1rem' }}>
-              <p style={{ 
-                color: '#9ca3af', 
-                fontSize: '0.9rem',
-                backgroundColor: 'rgba(156, 163, 175, 0.1)',
-                padding: '0.75rem 1.5rem',
-                borderRadius: '0.5rem',
-                border: '1px solid rgba(156, 163, 175, 0.2)',
-                display: 'inline-block'
-              }}>
+              <Link
+                href={`/series/${encodeURIComponent(post.data.series[0].toLowerCase())}`}
+                style={{ 
+                  color: '#9ca3af', 
+                  fontSize: '0.9rem',
+                  backgroundColor: 'rgba(156, 163, 175, 0.1)',
+                  padding: '0.75rem 1.5rem',
+                  borderRadius: '0.5rem',
+                  border: '1px solid rgba(156, 163, 175, 0.2)',
+                  display: 'inline-block',
+                  textDecoration: 'none',
+                  transition: 'all 0.2s ease'
+                }}
+              >
                 📚 Part of series: {post.data.series.join(', ')}
-              </p>
+              </Link>
             </div>
           )}
         </header>

@@ -1,0 +1,1234 @@
+---
+title: "Building Secure REST APIs in Go: A Developer's Guide to Security-First Design"
+date: "2024-01-22"
+author: "hacker1db"
+subtitle: "Security patterns and practices for production-ready Go APIs"
+tags: ["Programming", "Go", "API Security", "Web Development", "Security"]
+series: ["Programming"]
+toc: true
+---
+
+# Building Secure REST APIs in Go: A Developer's Guide to Security-First Design
+
+After building APIs that handle millions of requests daily, I've learned that security can't be an afterthought. In this guide, I'll share battle-tested patterns for building secure REST APIs in Go from the ground up.
+
+## Security-First API Architecture
+
+### The Foundation: Secure by Default
+
+When I start a new API project, security considerations drive the initial architecture decisions. Here's my standard project structure:
+
+```
+secure-api/
+├── cmd/
+│   └── server/
+│       └── main.go
+├── internal/
+│   ├── auth/
+│   │   ├── jwt.go
+│   │   ├── middleware.go
+│   │   └── rbac.go
+│   ├── handlers/
+│   │   ├── users.go
+│   │   └── health.go
+│   ├── middleware/
+│   │   ├── rate_limit.go
+│   │   ├── logging.go
+│   │   └── security.go
+│   ├── models/
+│   ├── database/
+│   └── validation/
+├── configs/
+├── docs/
+└── deployments/
+```
+
+## Authentication and Authorization
+
+### JWT Implementation with Security Best Practices
+
+```go
+package auth
+
+import (
+    "crypto/rand"
+    "errors"
+    "fmt"
+    "time"
+
+    "github.com/golang-jwt/jwt/v5"
+    "golang.org/x/crypto/argon2"
+)
+
+type JWTManager struct {
+    secretKey     []byte
+    tokenDuration time.Duration
+    issuer        string
+}
+
+type Claims struct {
+    UserID   string   `json:"user_id"`
+    Email    string   `json:"email"`
+    Roles    []string `json:"roles"`
+    jwt.RegisteredClaims
+}
+
+func NewJWTManager(secretKey string, tokenDuration time.Duration, issuer string) *JWTManager {
+    return &JWTManager{
+        secretKey:     []byte(secretKey),
+        tokenDuration: tokenDuration,
+        issuer:        issuer,
+    }
+}
+
+func (manager *JWTManager) Generate(userID, email string, roles []string) (string, error) {
+    claims := Claims{
+        UserID: userID,
+        Email:  email,
+        Roles:  roles,
+        RegisteredClaims: jwt.RegisteredClaims{
+            ExpiresAt: jwt.NewNumericDate(time.Now().Add(manager.tokenDuration)),
+            IssuedAt:  jwt.NewNumericDate(time.Now()),
+            NotBefore: jwt.NewNumericDate(time.Now()),
+            Issuer:    manager.issuer,
+            Subject:   userID,
+            ID:        generateJTI(), // Unique token ID for revocation
+        },
+    }
+
+    token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+    return token.SignedString(manager.secretKey)
+}
+
+func (manager *JWTManager) Verify(tokenString string) (*Claims, error) {
+    token, err := jwt.ParseWithClaims(
+        tokenString,
+        &Claims{},
+        func(token *jwt.Token) (interface{}, error) {
+            if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+                return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+            }
+            return manager.secretKey, nil
+        },
+    )
+
+    if err != nil {
+        return nil, fmt.Errorf("invalid token: %w", err)
+    }
+
+    claims, ok := token.Claims.(*Claims)
+    if !ok {
+        return nil, errors.New("invalid token claims")
+    }
+
+    return claims, nil
+}
+
+// Secure password hashing with Argon2
+func HashPassword(password string) (string, error) {
+    salt := make([]byte, 32)
+    if _, err := rand.Read(salt); err != nil {
+        return "", err
+    }
+
+    hash := argon2.IDKey([]byte(password), salt, 1, 64*1024, 4, 32)
+    
+    // Format: argon2id$salt$hash (base64 encoded)
+    return fmt.Sprintf("argon2id$%s$%s", 
+        base64.RawStdEncoding.EncodeToString(salt),
+        base64.RawStdEncoding.EncodeToString(hash)), nil
+}
+
+func VerifyPassword(password, encodedHash string) bool {
+    parts := strings.Split(encodedHash, "$")
+    if len(parts) != 3 || parts[0] != "argon2id" {
+        return false
+    }
+
+    salt, err := base64.RawStdEncoding.DecodeString(parts[1])
+    if err != nil {
+        return false
+    }
+
+    hash, err := base64.RawStdEncoding.DecodeString(parts[2])
+    if err != nil {
+        return false
+    }
+
+    computedHash := argon2.IDKey([]byte(password), salt, 1, 64*1024, 4, 32)
+    return subtle.ConstantTimeCompare(hash, computedHash) == 1
+}
+
+func generateJTI() string {
+    bytes := make([]byte, 16)
+    rand.Read(bytes)
+    return fmt.Sprintf("%x", bytes)
+}
+```
+
+### Role-Based Access Control (RBAC)
+
+```go
+package auth
+
+import (
+    "context"
+    "fmt"
+    "net/http"
+    "strings"
+)
+
+type Role string
+
+const (
+    RoleAdmin     Role = "admin"
+    RoleUser      Role = "user"
+    RoleModerator Role = "moderator"
+)
+
+type Permission string
+
+const (
+    PermissionRead   Permission = "read"
+    PermissionWrite  Permission = "write"
+    PermissionDelete Permission = "delete"
+    PermissionAdmin  Permission = "admin"
+)
+
+type RBACManager struct {
+    rolePermissions map[Role][]Permission
+}
+
+func NewRBACManager() *RBACManager {
+    return &RBACManager{
+        rolePermissions: map[Role][]Permission{
+            RoleAdmin:     {PermissionRead, PermissionWrite, PermissionDelete, PermissionAdmin},
+            RoleModerator: {PermissionRead, PermissionWrite},
+            RoleUser:      {PermissionRead},
+        },
+    }
+}
+
+func (rbac *RBACManager) HasPermission(userRoles []string, requiredPermission Permission) bool {
+    for _, roleStr := range userRoles {
+        role := Role(roleStr)
+        if permissions, exists := rbac.rolePermissions[role]; exists {
+            for _, permission := range permissions {
+                if permission == requiredPermission {
+                    return true
+                }
+            }
+        }
+    }
+    return false
+}
+
+// Middleware for authentication
+func (manager *JWTManager) AuthMiddleware() func(http.Handler) http.Handler {
+    return func(next http.Handler) http.Handler {
+        return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+            authHeader := r.Header.Get("Authorization")
+            if authHeader == "" {
+                http.Error(w, "Authorization header required", http.StatusUnauthorized)
+                return
+            }
+
+            bearerToken := strings.Split(authHeader, " ")
+            if len(bearerToken) != 2 || bearerToken[0] != "Bearer" {
+                http.Error(w, "Invalid authorization header format", http.StatusUnauthorized)
+                return
+            }
+
+            claims, err := manager.Verify(bearerToken[1])
+            if err != nil {
+                http.Error(w, "Invalid token", http.StatusUnauthorized)
+                return
+            }
+
+            // Add claims to request context
+            ctx := context.WithValue(r.Context(), "claims", claims)
+            next.ServeHTTP(w, r.WithContext(ctx))
+        })
+    }
+}
+
+// Permission-based authorization middleware
+func RequirePermission(rbac *RBACManager, permission Permission) func(http.Handler) http.Handler {
+    return func(next http.Handler) http.Handler {
+        return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+            claims, ok := r.Context().Value("claims").(*Claims)
+            if !ok {
+                http.Error(w, "Unauthorized", http.StatusUnauthorized)
+                return
+            }
+
+            if !rbac.HasPermission(claims.Roles, permission) {
+                http.Error(w, "Insufficient permissions", http.StatusForbidden)
+                return
+            }
+
+            next.ServeHTTP(w, r)
+        })
+    }
+}
+```
+
+## Input Validation and Sanitization
+
+### Comprehensive Validation Framework
+
+```go
+package validation
+
+import (
+    "errors"
+    "fmt"
+    "net/mail"
+    "regexp"
+    "strings"
+    "unicode"
+)
+
+type ValidationError struct {
+    Field   string `json:"field"`
+    Message string `json:"message"`
+}
+
+type ValidationErrors []ValidationError
+
+func (v ValidationErrors) Error() string {
+    var messages []string
+    for _, err := range v {
+        messages = append(messages, fmt.Sprintf("%s: %s", err.Field, err.Message))
+    }
+    return strings.Join(messages, "; ")
+}
+
+type UserCreateRequest struct {
+    Email     string `json:"email"`
+    Password  string `json:"password"`
+    FirstName string `json:"first_name"`
+    LastName  string `json:"last_name"`
+    Phone     string `json:"phone"`
+}
+
+func (u *UserCreateRequest) Validate() error {
+    var errors ValidationErrors
+
+    // Email validation
+    if u.Email == "" {
+        errors = append(errors, ValidationError{"email", "Email is required"})
+    } else if !isValidEmail(u.Email) {
+        errors = append(errors, ValidationError{"email", "Invalid email format"})
+    }
+
+    // Password validation
+    if u.Password == "" {
+        errors = append(errors, ValidationError{"password", "Password is required"})
+    } else if !isStrongPassword(u.Password) {
+        errors = append(errors, ValidationError{"password", 
+            "Password must be at least 8 characters with uppercase, lowercase, number, and special character"})
+    }
+
+    // Name validation
+    if u.FirstName == "" {
+        errors = append(errors, ValidationError{"first_name", "First name is required"})
+    } else if !isValidName(u.FirstName) {
+        errors = append(errors, ValidationError{"first_name", "Invalid first name format"})
+    }
+
+    if u.LastName == "" {
+        errors = append(errors, ValidationError{"last_name", "Last name is required"})
+    } else if !isValidName(u.LastName) {
+        errors = append(errors, ValidationError{"last_name", "Invalid last name format"})
+    }
+
+    // Phone validation (optional)
+    if u.Phone != "" && !isValidPhone(u.Phone) {
+        errors = append(errors, ValidationError{"phone", "Invalid phone number format"})
+    }
+
+    if len(errors) > 0 {
+        return errors
+    }
+
+    return nil
+}
+
+func isValidEmail(email string) bool {
+    _, err := mail.ParseAddress(email)
+    return err == nil
+}
+
+func isStrongPassword(password string) bool {
+    if len(password) < 8 {
+        return false
+    }
+
+    var (
+        hasUpper   = false
+        hasLower   = false
+        hasNumber  = false
+        hasSpecial = false
+    )
+
+    for _, char := range password {
+        switch {
+        case unicode.IsUpper(char):
+            hasUpper = true
+        case unicode.IsLower(char):
+            hasLower = true
+        case unicode.IsNumber(char):
+            hasNumber = true
+        case unicode.IsPunct(char) || unicode.IsSymbol(char):
+            hasSpecial = true
+        }
+    }
+
+    return hasUpper && hasLower && hasNumber && hasSpecial
+}
+
+func isValidName(name string) bool {
+    // Allow letters, spaces, hyphens, and apostrophes
+    nameRegex := regexp.MustCompile(`^[a-zA-Z\s\-']{1,50}$`)
+    return nameRegex.MatchString(name)
+}
+
+func isValidPhone(phone string) bool {
+    // Simple international phone number validation
+    phoneRegex := regexp.MustCompile(`^\+?[\d\s\-\(\)]{10,15}$`)
+    return phoneRegex.MatchString(phone)
+}
+
+// SQL injection prevention
+func SanitizeString(input string) string {
+    // Remove potential SQL injection characters
+    dangerous := []string{"'", "\"", ";", "--", "/*", "*/", "xp_", "sp_"}
+    result := input
+    
+    for _, char := range dangerous {
+        result = strings.ReplaceAll(result, char, "")
+    }
+    
+    return strings.TrimSpace(result)
+}
+```
+
+## Security Middleware Stack
+
+### Comprehensive Security Headers
+
+```go
+package middleware
+
+import (
+    "fmt"
+    "log"
+    "net/http"
+    "time"
+
+    "github.com/google/uuid"
+)
+
+// Security headers middleware
+func SecurityHeaders() func(http.Handler) http.Handler {
+    return func(next http.Handler) http.Handler {
+        return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+            // Content Security Policy
+            w.Header().Set("Content-Security-Policy", 
+                "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'")
+            
+            // XSS Protection
+            w.Header().Set("X-XSS-Protection", "1; mode=block")
+            
+            // Content Type Options
+            w.Header().Set("X-Content-Type-Options", "nosniff")
+            
+            // Frame Options
+            w.Header().Set("X-Frame-Options", "DENY")
+            
+            // HSTS (HTTP Strict Transport Security)
+            w.Header().Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
+            
+            // Referrer Policy
+            w.Header().Set("Referrer-Policy", "strict-origin-when-cross-origin")
+            
+            // Permissions Policy
+            w.Header().Set("Permissions-Policy", 
+                "geolocation=(), microphone=(), camera=()")
+
+            next.ServeHTTP(w, r)
+        })
+    }
+}
+
+// CORS middleware with security considerations
+func CORS(allowedOrigins []string) func(http.Handler) http.Handler {
+    return func(next http.Handler) http.Handler {
+        return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+            origin := r.Header.Get("Origin")
+            
+            // Check if origin is allowed
+            allowed := false
+            for _, allowedOrigin := range allowedOrigins {
+                if origin == allowedOrigin {
+                    allowed = true
+                    break
+                }
+            }
+            
+            if allowed {
+                w.Header().Set("Access-Control-Allow-Origin", origin)
+                w.Header().Set("Access-Control-Allow-Credentials", "true")
+            }
+            
+            w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+            w.Header().Set("Access-Control-Allow-Headers", 
+                "Accept, Authorization, Content-Type, X-CSRF-Token, X-Request-ID")
+            
+            if r.Method == "OPTIONS" {
+                w.WriteHeader(http.StatusOK)
+                return
+            }
+
+            next.ServeHTTP(w, r)
+        })
+    }
+}
+
+// Request logging with security context
+func RequestLogging() func(http.Handler) http.Handler {
+    return func(next http.Handler) http.Handler {
+        return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+            start := time.Now()
+            
+            // Generate request ID
+            requestID := uuid.New().String()
+            r.Header.Set("X-Request-ID", requestID)
+            w.Header().Set("X-Request-ID", requestID)
+            
+            // Wrap response writer to capture status code
+            wrapped := &responseWriter{ResponseWriter: w, statusCode: http.StatusOK}
+            
+            next.ServeHTTP(wrapped, r)
+            
+            // Log request details (exclude sensitive data)
+            log.Printf(
+                "method=%s path=%s status=%d duration=%v request_id=%s user_agent=%s ip=%s",
+                r.Method,
+                r.URL.Path,
+                wrapped.statusCode,
+                time.Since(start),
+                requestID,
+                r.UserAgent(),
+                getClientIP(r),
+            )
+        })
+    }
+}
+
+type responseWriter struct {
+    http.ResponseWriter
+    statusCode int
+}
+
+func (rw *responseWriter) WriteHeader(code int) {
+    rw.statusCode = code
+    rw.ResponseWriter.WriteHeader(code)
+}
+
+func getClientIP(r *http.Request) string {
+    // Check X-Real-IP header first
+    if ip := r.Header.Get("X-Real-IP"); ip != "" {
+        return ip
+    }
+    
+    // Check X-Forwarded-For header
+    if ip := r.Header.Get("X-Forwarded-For"); ip != "" {
+        // Take the first IP if multiple
+        if idx := strings.Index(ip, ","); idx != -1 {
+            return ip[:idx]
+        }
+        return ip
+    }
+    
+    // Fallback to RemoteAddr
+    if ip := r.RemoteAddr; ip != "" {
+        if idx := strings.LastIndex(ip, ":"); idx != -1 {
+            return ip[:idx]
+        }
+        return ip
+    }
+    
+    return "unknown"
+}
+```
+
+### Rate Limiting Implementation
+
+```go
+package middleware
+
+import (
+    "fmt"
+    "net/http"
+    "sync"
+    "time"
+)
+
+type RateLimiter struct {
+    mu       sync.Mutex
+    clients  map[string]*Client
+    rate     int           // requests per minute
+    duration time.Duration // window duration
+}
+
+type Client struct {
+    requests []time.Time
+    mu       sync.Mutex
+}
+
+func NewRateLimiter(requestsPerMinute int) *RateLimiter {
+    rl := &RateLimiter{
+        clients:  make(map[string]*Client),
+        rate:     requestsPerMinute,
+        duration: time.Minute,
+    }
+    
+    // Cleanup old clients periodically
+    go rl.cleanup()
+    
+    return rl
+}
+
+func (rl *RateLimiter) IsAllowed(clientID string) bool {
+    rl.mu.Lock()
+    client, exists := rl.clients[clientID]
+    if !exists {
+        client = &Client{}
+        rl.clients[clientID] = client
+    }
+    rl.mu.Unlock()
+    
+    client.mu.Lock()
+    defer client.mu.Unlock()
+    
+    now := time.Now()
+    
+    // Remove old requests outside the window
+    validRequests := []time.Time{}
+    for _, req := range client.requests {
+        if now.Sub(req) <= rl.duration {
+            validRequests = append(validRequests, req)
+        }
+    }
+    client.requests = validRequests
+    
+    // Check if under rate limit
+    if len(client.requests) < rl.rate {
+        client.requests = append(client.requests, now)
+        return true
+    }
+    
+    return false
+}
+
+func (rl *RateLimiter) RateLimitMiddleware() func(http.Handler) http.Handler {
+    return func(next http.Handler) http.Handler {
+        return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+            clientID := getClientIP(r)
+            
+            if !rl.IsAllowed(clientID) {
+                w.Header().Set("X-RateLimit-Limit", fmt.Sprintf("%d", rl.rate))
+                w.Header().Set("X-RateLimit-Remaining", "0")
+                w.Header().Set("Retry-After", "60")
+                http.Error(w, "Rate limit exceeded", http.StatusTooManyRequests)
+                return
+            }
+            
+            next.ServeHTTP(w, r)
+        })
+    }
+}
+
+func (rl *RateLimiter) cleanup() {
+    ticker := time.NewTicker(time.Minute)
+    defer ticker.Stop()
+    
+    for range ticker.C {
+        rl.mu.Lock()
+        now := time.Now()
+        
+        for clientID, client := range rl.clients {
+            client.mu.Lock()
+            if len(client.requests) == 0 || 
+               now.Sub(client.requests[len(client.requests)-1]) > rl.duration {
+                delete(rl.clients, clientID)
+            }
+            client.mu.Unlock()
+        }
+        rl.mu.Unlock()
+    }
+}
+```
+
+## Database Security
+
+### Secure Database Connection and Queries
+
+```go
+package database
+
+import (
+    "database/sql"
+    "fmt"
+    "time"
+
+    _ "github.com/lib/pq"
+)
+
+type DB struct {
+    *sql.DB
+}
+
+type Config struct {
+    Host         string
+    Port         int
+    User         string
+    Password     string
+    DBName       string
+    SSLMode      string
+    MaxOpenConns int
+    MaxIdleConns int
+    MaxLifetime  time.Duration
+}
+
+func NewConnection(config Config) (*DB, error) {
+    dsn := fmt.Sprintf(
+        "host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
+        config.Host, config.Port, config.User, config.Password, config.DBName, config.SSLMode,
+    )
+    
+    db, err := sql.Open("postgres", dsn)
+    if err != nil {
+        return nil, fmt.Errorf("failed to open database: %w", err)
+    }
+    
+    // Configure connection pool for security and performance
+    db.SetMaxOpenConns(config.MaxOpenConns)
+    db.SetMaxIdleConns(config.MaxIdleConns)
+    db.SetConnMaxLifetime(config.MaxLifetime)
+    
+    // Test connection
+    if err := db.Ping(); err != nil {
+        return nil, fmt.Errorf("failed to ping database: %w", err)
+    }
+    
+    return &DB{db}, nil
+}
+
+// User repository with prepared statements
+type UserRepository struct {
+    db *DB
+}
+
+func NewUserRepository(db *DB) *UserRepository {
+    return &UserRepository{db: db}
+}
+
+func (repo *UserRepository) Create(user *User) error {
+    query := `
+        INSERT INTO users (id, email, password_hash, first_name, last_name, phone, created_at, updated_at)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`
+    
+    _, err := repo.db.Exec(
+        query,
+        user.ID,
+        user.Email,
+        user.PasswordHash,
+        user.FirstName,
+        user.LastName,
+        user.Phone,
+        user.CreatedAt,
+        user.UpdatedAt,
+    )
+    
+    if err != nil {
+        return fmt.Errorf("failed to create user: %w", err)
+    }
+    
+    return nil
+}
+
+func (repo *UserRepository) GetByEmail(email string) (*User, error) {
+    query := `
+        SELECT id, email, password_hash, first_name, last_name, phone, created_at, updated_at
+        FROM users
+        WHERE email = $1 AND deleted_at IS NULL`
+    
+    user := &User{}
+    err := repo.db.QueryRow(query, email).Scan(
+        &user.ID,
+        &user.Email,
+        &user.PasswordHash,
+        &user.FirstName,
+        &user.LastName,
+        &user.Phone,
+        &user.CreatedAt,
+        &user.UpdatedAt,
+    )
+    
+    if err != nil {
+        if err == sql.ErrNoRows {
+            return nil, fmt.Errorf("user not found")
+        }
+        return nil, fmt.Errorf("failed to get user: %w", err)
+    }
+    
+    return user, nil
+}
+
+// Audit logging for sensitive operations
+func (repo *UserRepository) logAuditEvent(userID, action, details string) error {
+    query := `
+        INSERT INTO audit_logs (user_id, action, details, ip_address, user_agent, timestamp)
+        VALUES ($1, $2, $3, $4, $5, $6)`
+    
+    _, err := repo.db.Exec(query, userID, action, details, "", "", time.Now())
+    return err
+}
+```
+
+## Error Handling and Security
+
+### Secure Error Response System
+
+```go
+package handlers
+
+import (
+    "encoding/json"
+    "log"
+    "net/http"
+)
+
+type ErrorResponse struct {
+    Error   string `json:"error"`
+    Message string `json:"message"`
+    Code    int    `json:"code"`
+}
+
+type APIError struct {
+    Type    string
+    Message string
+    Code    int
+    Err     error
+}
+
+func (e *APIError) Error() string {
+    return e.Message
+}
+
+// Security-conscious error handling
+func HandleError(w http.ResponseWriter, r *http.Request, err error) {
+    requestID := r.Header.Get("X-Request-ID")
+    
+    var apiErr *APIError
+    var statusCode int
+    var userMessage string
+    
+    // Type assertion for custom API errors
+    if e, ok := err.(*APIError); ok {
+        apiErr = e
+        statusCode = e.Code
+        userMessage = e.Message
+    } else {
+        // Generic error - don't expose internal details
+        apiErr = &APIError{
+            Type:    "internal_error",
+            Message: "An internal error occurred",
+            Code:    http.StatusInternalServerError,
+            Err:     err,
+        }
+        statusCode = http.StatusInternalServerError
+        userMessage = "An internal error occurred"
+    }
+    
+    // Log detailed error for developers (not exposed to client)
+    log.Printf(
+        "ERROR: request_id=%s type=%s message=%s error=%v",
+        requestID,
+        apiErr.Type,
+        apiErr.Message,
+        apiErr.Err,
+    )
+    
+    // Return sanitized error to client
+    response := ErrorResponse{
+        Error:   apiErr.Type,
+        Message: userMessage,
+        Code:    statusCode,
+    }
+    
+    w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(statusCode)
+    json.NewEncoder(w).Encode(response)
+}
+
+// Predefined secure error responses
+var (
+    ErrInvalidCredentials = &APIError{
+        Type:    "invalid_credentials",
+        Message: "Invalid email or password",
+        Code:    http.StatusUnauthorized,
+    }
+    
+    ErrInsufficientPermissions = &APIError{
+        Type:    "insufficient_permissions",
+        Message: "You don't have permission to perform this action",
+        Code:    http.StatusForbidden,
+    }
+    
+    ErrResourceNotFound = &APIError{
+        Type:    "resource_not_found",
+        Message: "The requested resource was not found",
+        Code:    http.StatusNotFound,
+    }
+    
+    ErrValidationFailed = &APIError{
+        Type:    "validation_failed",
+        Message: "Request validation failed",
+        Code:    http.StatusBadRequest,
+    }
+)
+```
+
+## Complete Secure Handler Example
+
+### User Authentication Handler
+
+```go
+package handlers
+
+import (
+    "encoding/json"
+    "net/http"
+    "time"
+
+    "your-project/internal/auth"
+    "your-project/internal/database"
+    "your-project/internal/models"
+    "your-project/internal/validation"
+)
+
+type AuthHandler struct {
+    jwtManager *auth.JWTManager
+    userRepo   *database.UserRepository
+}
+
+func NewAuthHandler(jwtManager *auth.JWTManager, userRepo *database.UserRepository) *AuthHandler {
+    return &AuthHandler{
+        jwtManager: jwtManager,
+        userRepo:   userRepo,
+    }
+}
+
+func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
+    var req validation.UserCreateRequest
+    
+    if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+        HandleError(w, r, ErrValidationFailed)
+        return
+    }
+    
+    // Validate input
+    if err := req.Validate(); err != nil {
+        HandleError(w, r, &APIError{
+            Type:    "validation_failed",
+            Message: err.Error(),
+            Code:    http.StatusBadRequest,
+            Err:     err,
+        })
+        return
+    }
+    
+    // Check if user already exists
+    _, err := h.userRepo.GetByEmail(req.Email)
+    if err == nil {
+        HandleError(w, r, &APIError{
+            Type:    "user_exists",
+            Message: "User with this email already exists",
+            Code:    http.StatusConflict,
+        })
+        return
+    }
+    
+    // Hash password
+    passwordHash, err := auth.HashPassword(req.Password)
+    if err != nil {
+        HandleError(w, r, &APIError{
+            Type:    "password_hash_failed",
+            Message: "Failed to process password",
+            Code:    http.StatusInternalServerError,
+            Err:     err,
+        })
+        return
+    }
+    
+    // Create user
+    user := &models.User{
+        ID:           generateUserID(),
+        Email:        req.Email,
+        PasswordHash: passwordHash,
+        FirstName:    req.FirstName,
+        LastName:     req.LastName,
+        Phone:        req.Phone,
+        CreatedAt:    time.Now(),
+        UpdatedAt:    time.Now(),
+    }
+    
+    if err := h.userRepo.Create(user); err != nil {
+        HandleError(w, r, &APIError{
+            Type:    "user_creation_failed",
+            Message: "Failed to create user",
+            Code:    http.StatusInternalServerError,
+            Err:     err,
+        })
+        return
+    }
+    
+    // Generate JWT token
+    token, err := h.jwtManager.Generate(user.ID, user.Email, []string{"user"})
+    if err != nil {
+        HandleError(w, r, &APIError{
+            Type:    "token_generation_failed",
+            Message: "Failed to generate authentication token",
+            Code:    http.StatusInternalServerError,
+            Err:     err,
+        })
+        return
+    }
+    
+    // Return successful response (excluding sensitive data)
+    response := map[string]interface{}{
+        "user": map[string]interface{}{
+            "id":         user.ID,
+            "email":      user.Email,
+            "first_name": user.FirstName,
+            "last_name":  user.LastName,
+            "created_at": user.CreatedAt,
+        },
+        "token": token,
+    }
+    
+    w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusCreated)
+    json.NewEncoder(w).Encode(response)
+}
+
+func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
+    var req struct {
+        Email    string `json:"email"`
+        Password string `json:"password"`
+    }
+    
+    if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+        HandleError(w, r, ErrValidationFailed)
+        return
+    }
+    
+    // Rate limiting should be handled by middleware
+    // Additional brute force protection could be added here
+    
+    // Get user by email
+    user, err := h.userRepo.GetByEmail(req.Email)
+    if err != nil {
+        // Don't reveal whether email exists or not
+        HandleError(w, r, ErrInvalidCredentials)
+        return
+    }
+    
+    // Verify password
+    if !auth.VerifyPassword(req.Password, user.PasswordHash) {
+        HandleError(w, r, ErrInvalidCredentials)
+        return
+    }
+    
+    // Generate JWT token
+    token, err := h.jwtManager.Generate(user.ID, user.Email, []string{"user"})
+    if err != nil {
+        HandleError(w, r, &APIError{
+            Type:    "token_generation_failed",
+            Message: "Authentication failed",
+            Code:    http.StatusInternalServerError,
+            Err:     err,
+        })
+        return
+    }
+    
+    response := map[string]interface{}{
+        "token": token,
+        "user": map[string]interface{}{
+            "id":         user.ID,
+            "email":      user.Email,
+            "first_name": user.FirstName,
+            "last_name":  user.LastName,
+        },
+    }
+    
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(response)
+}
+```
+
+## Security Testing
+
+### Automated Security Tests
+
+```go
+package handlers_test
+
+import (
+    "bytes"
+    "encoding/json"
+    "net/http"
+    "net/http/httptest"
+    "testing"
+    "time"
+)
+
+func TestAuthHandler_Security(t *testing.T) {
+    // Setup test dependencies
+    jwtManager := auth.NewJWTManager("test-secret", time.Hour, "test")
+    
+    tests := []struct {
+        name           string
+        method         string
+        path           string
+        body           interface{}
+        expectedStatus int
+        expectedError  string
+    }{
+        {
+            name:           "SQL injection attempt",
+            method:         "POST",
+            path:           "/auth/login",
+            body:           map[string]string{
+                "email":    "admin@example.com'; DROP TABLE users; --",
+                "password": "password123",
+            },
+            expectedStatus: http.StatusUnauthorized,
+            expectedError:  "invalid_credentials",
+        },
+        {
+            name:           "XSS attempt in registration",
+            method:         "POST",
+            path:           "/auth/register",
+            body:           map[string]string{
+                "email":      "test@example.com",
+                "password":   "Password123!",
+                "first_name": "<script>alert('xss')</script>",
+                "last_name":  "User",
+            },
+            expectedStatus: http.StatusBadRequest,
+            expectedError:  "validation_failed",
+        },
+        {
+            name:           "Weak password rejection",
+            method:         "POST",
+            path:           "/auth/register",
+            body:           map[string]string{
+                "email":      "test@example.com",
+                "password":   "weak",
+                "first_name": "Test",
+                "last_name":  "User",
+            },
+            expectedStatus: http.StatusBadRequest,
+            expectedError:  "validation_failed",
+        },
+    }
+
+    for _, tt := range tests {
+        t.Run(tt.name, func(t *testing.T) {
+            var body bytes.Buffer
+            json.NewEncoder(&body).Encode(tt.body)
+            
+            req := httptest.NewRequest(tt.method, tt.path, &body)
+            req.Header.Set("Content-Type", "application/json")
+            
+            w := httptest.NewRecorder()
+            
+            // Call your handler here
+            // handler.ServeHTTP(w, req)
+            
+            if w.Code != tt.expectedStatus {
+                t.Errorf("Expected status %d, got %d", tt.expectedStatus, w.Code)
+            }
+        })
+    }
+}
+```
+
+## Production Deployment Security
+
+### Docker Security Configuration
+
+```dockerfile
+# Multi-stage build for security
+FROM golang:1.21-alpine AS builder
+
+# Create non-root user
+RUN addgroup -g 1001 appgroup && \
+    adduser -D -s /bin/sh -u 1001 -G appgroup appuser
+
+WORKDIR /app
+
+# Copy and build application
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -ldflags '-extldflags "-static"' -o main cmd/server/main.go
+
+# Final stage - minimal image
+FROM scratch
+
+# Import CA certificates for HTTPS
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+
+# Copy user information
+COPY --from=builder /etc/passwd /etc/passwd
+COPY --from=builder /etc/group /etc/group
+
+# Copy binary
+COPY --from=builder /app/main /main
+
+# Use non-root user
+USER appuser:appgroup
+
+# Expose port
+EXPOSE 8080
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD ["/main", "health"]
+
+ENTRYPOINT ["/main"]
+```
+
+## Key Takeaways
+
+Building secure APIs in Go requires attention to detail at every layer:
+
+1. **Authentication & Authorization**: Use strong JWT implementation with proper claims validation
+2. **Input Validation**: Never trust user input - validate and sanitize everything  
+3. **Error Handling**: Don't leak sensitive information in error messages
+4. **Rate Limiting**: Protect against brute force and DoS attacks
+5. **Security Headers**: Implement comprehensive security headers
+6. **Database Security**: Use prepared statements and connection pooling
+7. **Logging & Monitoring**: Log security events without exposing sensitive data
+
+Remember: security is not a feature you add at the end—it's a foundational principle that should guide every design decision from day one.
+
+---
+
+*Want to stay updated on the latest security practices and Go development patterns? Subscribe to my [newsletter](https://newsletter.hacker1db.dev) for weekly deep-dives and real-world examples.*

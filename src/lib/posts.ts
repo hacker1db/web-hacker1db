@@ -22,10 +22,10 @@ export function getAllPostSlugs(): string[] {
       
       if (stat.isDirectory()) {
         getFilesRecursively(fullPath);
-      } else if (file.endsWith('.md') && file !== '_index.md') {
-        // Get relative path from posts directory and remove .md extension
+      } else if ((file.endsWith('.md') || file.endsWith('.mdx')) && !file.startsWith('_index.')) {
+        // Get relative path from posts directory and remove .md/.mdx extension
         const relativePath = path.relative(postsDirectory, fullPath);
-        const slug = relativePath.replace(/\.md$/, '');
+        const slug = relativePath.replace(/\.mdx?$/, '');
         allFiles.push(slug);
       }
     }
@@ -40,7 +40,11 @@ export function getAllPostSlugs(): string[] {
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
   try {
-    const fullPath = path.join(postsDirectory, `${slug}.md`);
+    // Try .mdx first, then .md
+    let fullPath = path.join(postsDirectory, `${slug}.mdx`);
+    if (!fs.existsSync(fullPath)) {
+      fullPath = path.join(postsDirectory, `${slug}.md`);
+    }
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     const { data, content } = matter(fileContents);
     
@@ -107,4 +111,53 @@ export async function getPostsByTag(tag: string): Promise<Post[]> {
       postTag.toLowerCase().includes(tag.toLowerCase())
     )
   );
+}
+
+export async function getAllTags(): Promise<{ tag: string; count: number }[]> {
+  const allPosts = await getAllPosts();
+  const tagMap = new Map<string, number>();
+  
+  allPosts.forEach(post => {
+    if (post.data.tags) {
+      post.data.tags.forEach(tag => {
+        const normalizedTag = tag.trim();
+        if (normalizedTag) {
+          tagMap.set(normalizedTag, (tagMap.get(normalizedTag) || 0) + 1);
+        }
+      });
+    }
+  });
+  
+  return Array.from(tagMap.entries())
+    .map(([tag, count]) => ({ tag, count }))
+    .sort((a, b) => b.count - a.count); // Sort by count descending, then alphabetically
+}
+
+export async function getPostsBySeries(series: string): Promise<Post[]> {
+  const allPosts = await getAllPosts();
+  return allPosts.filter(post => 
+    post.data.series?.some(postSeries => 
+      postSeries.toLowerCase().includes(series.toLowerCase())
+    )
+  );
+}
+
+export async function getAllSeries(): Promise<{ series: string; count: number }[]> {
+  const allPosts = await getAllPosts();
+  const seriesMap = new Map<string, number>();
+  
+  allPosts.forEach(post => {
+    if (post.data.series) {
+      post.data.series.forEach(series => {
+        const normalizedSeries = series.trim();
+        if (normalizedSeries) {
+          seriesMap.set(normalizedSeries, (seriesMap.get(normalizedSeries) || 0) + 1);
+        }
+      });
+    }
+  });
+  
+  return Array.from(seriesMap.entries())
+    .map(([series, count]) => ({ series, count }))
+    .sort((a, b) => b.count - a.count);
 }
