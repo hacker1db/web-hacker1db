@@ -1,0 +1,169 @@
+3:"$Sreact.fragment"
+4:I[4839,["839","static/chunks/839-9d4cc1348dfc6930.js","156","static/chunks/app/posts/%5B...slug%5D/page-1e68c59887884006.js"],""]
+5:I[5244,[],""]
+6:I[3866,[],""]
+8:I[6213,[],"OutletBoundary"]
+a:I[6213,[],"MetadataBoundary"]
+c:I[6213,[],"ViewportBoundary"]
+e:I[4835,[],""]
+1:HL["/_next/static/media/e4af272ccee01ff0-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+2:HL["/_next/static/css/a8f60f2670d75067.css","style"]
+0:{"P":null,"b":"67hxTRUvBMSzvGZmPQg6Z","p":"","c":["","posts","CyberSecurity","WritingDockerImagesFromDevSecOpsEnngineer",""],"i":false,"f":[[["",{"children":["posts",{"children":[["slug","CyberSecurity/WritingDockerImagesFromDevSecOpsEnngineer","c"],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true],["",["$","$3","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/a8f60f2670d75067.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"en","children":[["$","head",null,{"children":["$","style",null,{"dangerouslySetInnerHTML":{"__html":"\n  body {\n    margin: 0;\n    padding: 0;\n    background-color: #1a1d21;\n    color: #ffffff;\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;\n    min-height: 100vh;\n  }\n  \n  .terminal-cursor::after {\n    content: \"_\";\n    animation: blink 1s infinite;\n    color: #6FC1FF;\n  }\n  \n  @keyframes blink {\n    0%, 50% { opacity: 1; }\n    51%, 100% { opacity: 0; }\n  }\n  \n  .circle {\n    border-radius: 50%;\n    max-width: 200px;\n    height: auto;\n  }\n  \n  a {\n    color: inherit;\n    text-decoration: none;\n    transition: color 0.2s ease;\n  }\n  \n  a:hover {\n    color: #6FC1FF;\n  }\n"}}]}],["$","body",null,{"className":"__className_f367f3","children":["$","div",null,{"style":{"display":"flex","flexDirection":"column","minHeight":"100vh"},"children":[["$","header",null,{"style":{"backgroundColor":"#1a1d21","borderBottom":"1px solid #374151","padding":"1rem 0"},"children":["$","div",null,{"style":{"maxWidth":"1024px","margin":"0 auto","padding":"0 1rem","display":"flex","alignItems":"center","justifyContent":"space-between"},"children":[["$","$L4",null,{"href":"/","style":{"fontFamily":"Monaco, Menlo, Courier New, monospace","fontSize":"1.125rem","color":"#6FC1FF","textDecoration":"none"},"children":[["$","span",null,{"children":"$$ cd /home/"}],["$","span",null,{"className":"terminal-cursor","style":{"color":"#6FC1FF"}}]]}],["$","nav",null,{"style":{"display":"flex","gap":"1.5rem"},"children":[["$","$L4",null,{"href":"/","style":{"color":"#d1d5db","textDecoration":"none","transition":"color 0.2s ease"},"children":"Home"}],["$","$L4",null,{"href":"/posts","style":{"color":"#d1d5db","textDecoration":"none","transition":"color 0.2s ease"},"children":"Posts"}],["$","$L4",null,{"href":"/about","style":{"color":"#d1d5db","textDecoration":"none","transition":"color 0.2s ease"},"children":"About"}]]}]]}]}],["$","main",null,{"style":{"flexGrow":1,"maxWidth":"1024px","margin":"0 auto","padding":"2rem 1rem"},"children":["$","$L5",null,{"parallelRouterKey":"children","segmentPath":["children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":"404"}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],"notFoundStyles":[]}]}],["$","footer",null,{"style":{"backgroundColor":"#1a1d21","borderTop":"1px solid #374151","padding":"2rem 0"},"children":["$","div",null,{"style":{"maxWidth":"1024px","margin":"0 auto","padding":"0 1rem","display":"flex","justifyContent":"space-between","alignItems":"center","flexWrap":"wrap","gap":"1rem"},"children":[["$","div",null,{"style":{"color":"#9ca3af","fontSize":"0.875rem"},"children":"thoughts and ideas of hacker1db"}],["$","div",null,{"style":{"color":"#9ca3af","fontSize":"0.875rem","textAlign":"right"},"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"Powered by <a href='https://nextjs.org/'>Next.js</a>, and <a href='https://github.com'>GitHub</a>"}}],["$","div",null,{"style":{"marginTop":"0.25rem"},"children":["© ",2025," ","hacker1db"]}]]}]]}]}]]}]}]]}]]}],{"children":["posts",["$","$3","c",{"children":[null,["$","$L5",null,{"parallelRouterKey":"children","segmentPath":["children","posts","children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined"}]]}],{"children":[["slug","CyberSecurity/WritingDockerImagesFromDevSecOpsEnngineer","c"],["$","$3","c",{"children":[null,["$","$L5",null,{"parallelRouterKey":"children","segmentPath":["children","posts","children","$0:f:0:1:2:children:2:children:0","children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined"}]]}],{"children":["__PAGE__",["$","$3","c",{"children":["$L7",null,["$","$L8",null,{"children":"$L9"}]]}],{},null]},null]},null]},null],["$","$3","h",{"children":[null,["$","$3","pt2KM45r3MAmzzUaN19qY",{"children":[["$","$La",null,{"children":"$Lb"}],["$","$Lc",null,{"children":"$Ld"}],["$","meta",null,{"name":"next-size-adjust"}]]}]]}]]],"m":"$undefined","G":["$e","$undefined"],"s":false,"S":true}
+f:T2a5e,<h1>{{&#x3C; param subtitle >}}</h1>
+<blockquote>
+<p>So sounds like you want a shortcut answer, we do not have any of those in stock.</p>
+</blockquote>
+<p>Things to note, when I talk about docker I am referring to containers in general. I know that in the world of software engineering, we are all trying to learn. I know that some of these concepts are difficult to fully remember so, refer back to this blog post next you are building a new container.</p>
+<p>I am not providing an example of a secure image as this post is less about <strong>here copy paste this example</strong> and more about giving you the building blocks to <strong>fish for yourself</strong>.</p>
+<p>I will make some assumptions that you have a basic understanding of what containers are and have probably built a few containers.</p>
+<h2>Part 1 - back to the basics</h2>
+<ul>
+<li>Understanding dockerfile instructions such as <code>FROM</code>
+<ul>
+<li><a href="https://docs.docker.com/engine/reference/builder">Here is the reference list of building docker files</a></li>
+</ul>
+</li>
+<li>Understanding layers and using multi-stage builds
+<ul>
+<li>Understand <a href="https://docs.docker.com/build/building/multi-stage/">Multi stage builds</a></li>
+</ul>
+</li>
+<li>Understanding of file system and user permissions</li>
+</ul>
+<p>The best way I have seen engineers really understand docker is when they fully understand the file system they are using.</p>
+<p>I have seen lots of engineers not understand the basics of common Linux distro's or what the default admin user is in windows (<strong>Administrator</strong>).</p>
+<p>If you do not have the proper foundation you will just wind up guessing and that is a high likelihood of making things worse for yourself.</p>
+<h3>Common Linux base images</h3>
+<ul>
+<li>Debian Linux</li>
+<li>Alpine Linux</li>
+<li>Ubuntu Linux</li>
+</ul>
+<h2>Part 2 - Running containers and docker context</h2>
+<ul>
+<li>Docker from some image on the internet or (internal)</li>
+<li>pull and push from a registry
+<ul>
+<li>pull and run locally</li>
+<li>push from local</li>
+<li>push from the build pipeline</li>
+</ul>
+</li>
+<li>looking around inside the container</li>
+</ul>
+<p>The big problem I see is that most engineers struggle to understand what context they are in for example knowing what the current folder path is when copy files from the local computer into the image.</p>
+<h2>part 3 - the tools and common pitfalls</h2>
+<p>Let's talk about the tools, this list is from my experience as a full time DevSecOps engineer these are tools I use help teams daily fix their images.</p>
+<ul>
+<li>Dive <em>A tool for exploring a docker image, layer contents, and discovering ways to shrink the size of your Docker/OCI image.</em></li>
+<li>Scanning tools
+<em>remember to scan as you go along, and at every commit.</em> This is why <a href="https://githooks.com/">git commit hooks</a>) are really helpful for this to become second nature.</li>
+</ul>
+<h3>Common pitfalls</h3>
+<p>Below is a list of common problems I have seen over my time as an information security practitioner, it is by no means exhaustive and the nature of security is subject to change which is part of the beauty of the role.</p>
+<ol>
+<li>STOP it!! Running your container as root -- I mean come on <strong>I said the least privilege...please</strong></li>
+</ol>
+<ul>
+<li>This includes administrator for windows based containers, as I stated previously in the basics section you should take the time to have a solid foundation in how these operating systems are structured.</li>
+</ul>
+<ol start="2">
+<li>Just because you need it in dev does not mean you need it in production. <strong>Tools like Curl should be removed</strong>, the concept is to lower attack surface area.</li>
+<li>Using more secure base images that have fewer tools or packages installed on them. One great example of this is <strong>Alpine-based images</strong>. I wanted to mention this as a side note, I personally run the latest version of a base image tag such as the following.</li>
+</ol>
+<blockquote>
+<p>this is the image I use as my release layer but I think you should do the same for the build layer as well.</p>
+</blockquote>
+<pre><code class="language-dockerfile">FROM golang:alpine
+</code></pre>
+<p>This does again require that you take the time to understand how these more locked-down operating systems work. This also means you need to take the time to understand your language and framework at a deeper level.</p>
+<ol start="4">
+<li>Outdated packages, <strong>you may be bringing in more than you know</strong>.
+<ul>
+<li>On this related note, you may have outdated packages pre-installed `Think about packages like OpenSSL you are responsible to update this package.
+<ul>
+<li>These are Operating system-level packages that also need to be maintained and updated. I see a lot of cases this will be handled by updating the <code>FROM BaseImageVersionTag</code> that is used in the base layer of the image.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Stop taking the default <strong>copy-paste container images</strong> from some website or tutorial.
+<ul>
+<li>This includes those from your editor i.e Visual Studio or Jet Brains these are meant to give you a starter template to get up and running but are not production ready.</li>
+</ul>
+</li>
+<li>Secure or confidential information being copied over the container
+<ul>
+<li>The example here is <code>ssh keys or certificates</code>, Trivy scanner will highlight this for you.</li>
+</ul>
+</li>
+<li>Dependency hell of nested packages - In some cases where packages are required of other packages these are the culprits. Meaning that you may have to locate the outdated version and update it to a secure version of it because the maintainers have not been to update the upstream package that you actually are required to run the application.
+In the world of C#, this takes on the <em>deps.json</em> located in the bin/{either debug or release} folder or in the Javascript world node modules bringing in some required package that has an open <a href="https://cve.mitre.org/">CVE</a>.
+I bring these files up as the simple fix generally is to find the dependency and override the outdated vulnerable version.</li>
+</ol>
+<h3>Please just stop doing this</h3>
+<ol>
+<li>Stop building images for each environment, the goal should be to build and ship one artifact.
+If you do not follow this pattern you end up defeating one of the main benefits of containers build and ship once. Your configuration or secrets should come from an external vault or configuration service. But <code>hacker1db my config is not a secret why can't I just check it into my source control and ship it that way?</code> Well if it's good enough for your secrets and you already have to fetch them why would you not just pull all your configuration from a secure place.</li>
+<li>Don't just fix the issue locally on your machine <code>Open an issue on the repo of the package that has an issue</code> give back to the community!
+<ol>
+<li>Fix the issue if you can find some spare time to give back to those whose code you are using.</li>
+<li>Check to see if there is an open issue already on the repo, or in this case see if there is a security advisory</li>
+</ol>
+</li>
+</ol>
+<h3>Tools you will benefit from</h3>
+<p>For the purposes of tools, I am going to talk about a tool that is open-source and can be used in both personal and professional projects.</p>
+<blockquote>
+<p>NOTE: I may at some point write a blog post that talks about commercial tools and my personal thoughts on them.</p>
+</blockquote>
+<ul>
+<li><a href="https://github.com/wagoodman/dive">Dive</a></li>
+</ul>
+<p>Dive is super helpful for looking in the built image container when you want to see how the file system is getting evaluated.</p>
+<ul>
+<li><a href="https://docs.docker.com/engine/reference/commandline/cli/">learning the command line arguments of docker</a></li>
+</ul>
+<p>I put this in here so that you would be able to understand how to run locally so that when you go run them in a pipeline you know what each parameter does.</p>
+<ul>
+<li><a href="https://linuxize.com/post/how-to-create-bash-aliases/">alias's commands to shorthand so you do not need to keep repeating yourself</a></li>
+</ul>
+<p>I do this all time with commands I run together, if you set up your repository where the docker file is always in the same place this will be even easier. The awesome benefit of the alias is you can chain commands together for example you can do the following when building on mac.</p>
+<pre><code class="language-shell">alias dbs="docker build --tag localimage:testtag . | trivy image localimage:testtag"
+</code></pre>
+<ul>
+<li><a href="https://github.com/aquasecurity/trivy">Trivy Scanner -- Container Scanning</a></li>
+</ul>
+<p>Trivy is an open-source scanner you can use for free and I used it above.</p>
+<p>{{&#x3C; figure src="/posts/cybersecurity/trivy.png" alt="Trivy Scanner example" >}}</p>
+<ul>
+<li><a href="https://snyk.io/learn/docker-security-scanning/">Synk -- Container scanning</a></li>
+</ul>
+<p>I put Synk in here as it is built into docker cli but this <em>is a paid product</em>.</p>
+<ul>
+<li>
+<p><a href="https://pre-commit.com/">Pre Commit hooks</a></p>
+</li>
+<li>
+<p><a href="https://githooks.com/">Git hooks general info</a></p>
+</li>
+</ul>
+<p>Pre-commit hooks are great but start with an alias and build up the habit of scanning the container image before you push the code up to the repo.</p>
+<h3>Honorable mention tools (Advanced)</h3>
+<hr>
+<h4><a href="https://docs.sigstore.dev/main-concepts">Container signing with sigstore</a></h4>
+<h4><a href="https://www.aquasec.com/cloud-native-academy/supply-chain-security/sbom/">SBOM Tools -- what is SBOM</a></h4>
+<p>SBOM is becoming more and more important as we need to keep track of what we are bringing along for the ride in production. The best place to start here is just to list out the technology you are using in the project's readme file of the repository. Start with the basic list of tech and build up to using these tools.</p>
+<ul>
+<li><a href="https://github.com/anchore/syft">syft</a></li>
+<li><a href="https://aquasecurity.github.io/trivy/v0.27.1/docs/references/cli/sbom/">Trivy SBOM</a></li>
+<li><a href="https://github.com/microsoft/sbom-tool">microsoft sbom-tool</a></li>
+</ul>
+<h2>Wrap up</h2>
+<p>Thank you for sticking to the end, I know that I did not give any just do this and all the security problems will go away. I do not think that is helpful for you as that is not the reality. Technology will continue to change and we will continue to learn and get better and what we do. If you have any questions please leave a comment or message me on Twitter.</p>
+<p>I now have a <a href="https://newsletter.hacker1db.dev/">news letter</a>, if you want to get some insider content.</p>
+<p>{{&#x3C; youtube wHHc9Ygvp5s >}}</p>
+7:["$","div",null,{"style":{"maxWidth":"64rem","margin":"0 auto"},"children":[["$","div",null,{"className":"mb-6","children":["$","$L4",null,{"href":"/posts","className":"text-cursor","style":{"textDecoration":"none"},"children":"← Back to Posts"}]}],["$","article",null,{"children":[["$","header",null,{"className":"mb-8 text-center","children":[["$","h1",null,{"className":"text-4xl font-bold mb-4 text-white","style":{"lineHeight":"1.2"},"children":"$undefined"}],["$","p",null,{"className":"text-xl text-gray-300 mb-6","children":"What Software engineers should know about building docker files"}],["$","div",null,{"className":"flex items-center justify-center text-gray-400 mb-6","style":{"fontSize":"0.875rem"},"children":[["$","time",null,{"dateTime":"$D2023-01-08T00:00:00.000Z","children":"January 7, 2023"}],"$undefined"]}],"$undefined","$undefined"]}],["$","div",null,{"className":"prose","dangerouslySetInnerHTML":{"__html":"$f"}}]]}],["$","div",null,{"className":"mt-12 border-t border-gray-700","style":{"paddingTop":"2rem"},"children":["$","div",null,{"className":"flex justify-between items-center","children":[["$","$L4",null,{"href":"/posts","className":"text-cursor","style":{"textDecoration":"none"},"children":"← All Posts"}],["$","div",null,{"className":"text-gray-400","style":{"fontSize":"0.875rem"},"children":"Share this post"}]]}]}]]}]
+d:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+b:[["$","meta","0",{"charSet":"utf-8"}],["$","title","1",{"children":"Hacker1db.dev blog"}],["$","meta","2",{"name":"description","content":"Hack Your Life One Day At a Time"}],["$","meta","3",{"name":"author","content":"hacker1db"}],["$","meta","4",{"name":"keywords","content":"Homepage, Blog, Programming, Cyber Security, DevSecOps, Music, Travel, Coffee"}],["$","meta","5",{"property":"og:title","content":"Hacker1db.dev blog"}],["$","meta","6",{"property":"og:description","content":"Hack Your Life One Day At a Time"}],["$","meta","7",{"property":"og:type","content":"website"}],["$","meta","8",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","9",{"name":"twitter:title","content":"Hacker1db.dev blog"}],["$","meta","10",{"name":"twitter:description","content":"Hack Your Life One Day At a Time"}]]
+9:null
