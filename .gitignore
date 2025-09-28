@@ -4,6 +4,7 @@ out/
 
 # Dependencies
 node_modules/
+node_modules_*/
 .pnp
 .pnp.js
 
