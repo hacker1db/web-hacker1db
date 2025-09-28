@@ -1,14 +1,14 @@
 # Next.js
-/.next/
-/out/
+.next/
+out/
 
 # Dependencies
-/node_modules
-/.pnp
+node_modules/
+.pnp
 .pnp.js
 
 # Testing
-/coverage
+coverage/
 
 # Misc
 .DS_Store
@@ -30,12 +30,25 @@ yarn-error.log*
 next-env.d.ts
 
 # Hugo archive (old files)
-/hugo-archive/
+hugo-archive/
 
-# Package lock files (use npm)
+# Package managers
 yarn.lock
 pnpm-lock.yaml
 
 # IDE files
-.idea
-.vscode
+.idea/
+.vscode/
+
+# Build artifacts
+dist/
+build/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
