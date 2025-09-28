@@ -2,8 +2,6 @@
 
 // Clean up the test file
 const fs = require('fs');
-fs.unlinkSync(__filename);
-process.exit(0);
 
 // Test script to verify subtitle parameter handling
 const fs = require('fs');
