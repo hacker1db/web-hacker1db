@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { CheckIcon, ClipboardDocumentIcon } from '@heroicons/react/24/outline';
+import { useState } from "react";
+import { CheckIcon, ClipboardDocumentIcon } from "@heroicons/react/24/outline";
 
 interface CodeBlockProps {
   children: string;
@@ -9,7 +9,11 @@ interface CodeBlockProps {
   className?: string;
 }
 
-export default function CodeBlock({ children, language, className }: CodeBlockProps) {
+export default function CodeBlock({
+  children,
+  language,
+  className,
+}: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = async () => {
@@ -18,12 +22,12 @@ export default function CodeBlock({ children, language, className }: CodeBlockPr
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error('Failed to copy text: ', err);
+      console.error("Failed to copy text: ", err);
     }
   };
 
   // Extract language from className (e.g., "language-javascript" -> "javascript")
-  const lang = language || className?.replace('language-', '') || 'text';
+  const lang = language || className?.replace("language-", "") || "text";
 
   return (
     <div className="relative group">
@@ -37,7 +41,7 @@ export default function CodeBlock({ children, language, className }: CodeBlockPr
           className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-gray-300 
                    bg-gray-700 hover:bg-gray-600 rounded-md transition-all duration-200 
                    opacity-0 group-hover:opacity-100 focus:opacity-100"
-          title={copied ? 'Copied!' : 'Copy code'}
+          title={copied ? "Copied!" : "Copy code"}
         >
           {copied ? (
             <>
@@ -52,12 +56,10 @@ export default function CodeBlock({ children, language, className }: CodeBlockPr
           )}
         </button>
       </div>
-      
+
       {/* Code content */}
       <pre className="!mt-0 !rounded-t-none">
-        <code className={className}>
-          {children}
-        </code>
+        <code className={className}>{children}</code>
       </pre>
     </div>
   );
