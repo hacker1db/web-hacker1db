@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { siteConfig } from "@/lib/config";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MDXProvider from "@/components/MDXProvider";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: siteConfig.title,
@@ -99,9 +96,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title={`${siteConfig.title} RSS Feed`}
+          href="/rss.xml"
+        />
         <style dangerouslySetInnerHTML={{ __html: globalStyles }} />
       </head>
-      <body className={inter.className}>
+      <body>
         <div
           style={{
             display: "flex",
