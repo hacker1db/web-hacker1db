@@ -96,6 +96,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title={`${siteConfig.title} RSS Feed`}
+          href="/rss.xml"
+        />
         <style dangerouslySetInnerHTML={{ __html: globalStyles }} />
       </head>
       <body>

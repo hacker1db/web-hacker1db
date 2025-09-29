@@ -88,6 +88,33 @@ export default function Header() {
           >
             About
           </Link>
+          <a
+            href="/rss.xml"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: "#d1d5db",
+              textDecoration: "none",
+              transition: "color 0.2s ease",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.25rem",
+            }}
+            title="RSS Feed"
+          >
+            RSS
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              style={{ opacity: 0.8 }}
+            >
+              <path d="M4 11a9 9 0 0 1 9 9"></path>
+              <path d="M4 4a16 16 0 0 1 16 16"></path>
+              <circle cx="5" cy="19" r="1"></circle>
+            </svg>
+          </a>
         </nav>
       </div>
     </header>
