@@ -28,16 +28,19 @@ jobs:
     - name: Build project
       run: pnpm run build
       
+    - name: Install Vercel CLI
+      run: pnpm add -g vercel
+
     - name: Deploy Preview to Vercel
-      uses: amondnet/vercel-action@v25
       id: vercel-deployment
-      with:
-        vercel-token: ${{ secrets.VERCEL_TOKEN }}
-        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-        github-comment: true
-        working-directory: ./
-        
+      env:
+        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+        VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      run: |
+        # Deploy to Vercel and capture the preview URL
+        DEPLOY_URL=$(vercel --token "$VERCEL_TOKEN" --org-id "$VERCEL_ORG_ID" --project-id "$VERCEL_PROJECT_ID" --yes --prod=false --cwd . --scope "$VERCEL_ORG_ID" 2>&1 | tee /tmp/vercel.log | grep -Eo 'https://[a-zA-Z0-9.-]+\.vercel\.app' | tail -1)
+        echo "preview-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
     - name: Comment PR with preview URL
       if: github.event_name == 'pull_request'
       uses: actions/github-script@v7
