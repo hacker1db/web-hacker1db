@@ -22,7 +22,8 @@ export default function Header() {
             fontFamily: 'Monaco, Menlo, Courier New, monospace',
             fontSize: '1.125rem',
             color: '#6FC1FF',
-            textDecoration: 'none'
+            textDecoration: 'none',
+            transition: 'color 0.2s ease'
           }}
         >
           <span>{siteConfig.logo.logoText}</span>
