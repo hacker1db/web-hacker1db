@@ -10,10 +10,10 @@ export async function GET() {
   try {
     // Get all posts sorted by date (most recent first)
     const posts = await getAllPosts();
-    
+
     // Generate RSS feed
     const rssXml = generateRSSFeed(posts);
-    
+
     // Return RSS XML with proper headers
     return new NextResponse(rssXml, {
       status: 200,

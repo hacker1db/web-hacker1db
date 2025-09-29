@@ -61,7 +61,7 @@ export const metadata: Metadata = {
       ],
       "application/atom+xml": [
         {
-          url: "/atom.xml", 
+          url: "/atom.xml",
           title: `${siteConfig.title} Atom Feed`,
         },
       ],

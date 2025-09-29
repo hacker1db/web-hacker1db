@@ -10,10 +10,10 @@ export async function GET() {
   try {
     // Get all posts sorted by date (most recent first)
     const posts = await getAllPosts();
-    
+
     // Generate Atom feed
     const atomXml = generateAtomFeed(posts);
-    
+
     // Return Atom XML with proper headers
     return new NextResponse(atomXml, {
       status: 200,

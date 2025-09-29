@@ -15,7 +15,7 @@ export interface RSSItem {
 export function generateRSSFeed(posts: Post[]): string {
   const siteUrl = "https://hacker1db.dev";
   const feedUrl = `${siteUrl}/feed.xml`;
-  
+
   // Convert posts to RSS items
   const rssItems: RSSItem[] = posts.map((post) => ({
     title: post.data.title,
@@ -65,7 +65,7 @@ export function generateRSSFeed(posts: Post[]): string {
       ${item.categories
         .map((category) => `<category>${escapeXml(category)}</category>`)
         .join("")}
-    </item>`
+    </item>`,
       )
       .join("")}
   </channel>
@@ -77,7 +77,7 @@ export function generateRSSFeed(posts: Post[]): string {
 export function generateAtomFeed(posts: Post[]): string {
   const siteUrl = "https://hacker1db.dev";
   const feedUrl = `${siteUrl}/atom.xml`;
-  
+
   // Convert posts to Atom entries
   const atomEntries = posts.map((post) => {
     const categories = [
