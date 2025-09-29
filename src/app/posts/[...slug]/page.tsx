@@ -2,6 +2,7 @@ import { getAllPostSlugs, getPostBySlug } from "@/lib/posts";
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import CopyButton from "@/components/CopyButton";
 
 interface PostPageProps {
   params: Promise<{
@@ -28,6 +29,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
   return (
     <div style={{ maxWidth: "56rem", margin: "0 auto", padding: "0 1rem" }}>
+      <CopyButton />
       {/* Back to Posts Link */}
       <div className="mb-6">
         <Link

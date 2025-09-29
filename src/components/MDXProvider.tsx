@@ -43,27 +43,35 @@ const components = {
 
   // Custom code block with copy functionality
   pre: ({ children, ...props }: PreProps) => {
-    // Extract code content and language from children
+    // Check if children is a code element (most common case for markdown code blocks)
     if (
       children &&
       typeof children === "object" &&
       "props" in children &&
-      children.props &&
-      typeof children.props === "object" &&
-      "children" in children.props &&
-      typeof (children as { props: { children: unknown } }).props.children ===
-        "string"
+      children.props
     ) {
-      const code = (
-        children as { props: { children: string } }
-      ).props.children.trim();
-      const className =
-        (children.props as { className?: string }).className || "";
-      const language = className.replace("language-", "") || "text";
+      // Type assertion for React element with props
+      const childProps = children.props as Record<string, unknown>;
 
+      // Extract code content and language
+      if (childProps.children && typeof childProps.children === "string") {
+        const code = childProps.children.trim();
+        const className = (childProps.className as string) || "";
+        const language = className.replace("language-", "") || "text";
+
+        return (
+          <CodeBlock language={language} className={className}>
+            {code}
+          </CodeBlock>
+        );
+      }
+    }
+
+    // Handle direct string children (less common but possible)
+    if (typeof children === "string") {
       return (
-        <CodeBlock language={language} className={className}>
-          {code}
+        <CodeBlock language="text" className="">
+          {children.trim()}
         </CodeBlock>
       );
     }

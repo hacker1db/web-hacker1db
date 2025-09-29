@@ -273,10 +273,10 @@ header nav a:hover {
   border: 1px solid #4b5563;
 }
 
-/* Enhanced code blocks with syntax highlighting - UPDATED FOR SELF-CONTAINED BLOCKS */
+/* Enhanced code blocks with syntax highlighting - Mac-style terminal design */
 .prose pre {
-  background: linear-gradient(135deg, #0d1117 0%, #161b22 100%) !important;
-  border: 1px solid #30363d;
+  background: linear-gradient(135deg, #2d333b 0%, #22272e 100%) !important;
+  border: 1px solid #444c56;
   border-radius: 0.75rem;
   padding: 0 !important;
   overflow: hidden;
@@ -289,6 +289,113 @@ header nav a:hover {
 .prose pre:hover {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
   transform: translateY(-2px);
+}
+
+/* Mac-style terminal header */
+.prose pre::before {
+  content: '';
+  display: block;
+  height: 2.75rem;
+  background: linear-gradient(135deg, #3c4043 0%, #484a4d 50%, #3c4043 100%);
+  border-bottom: 1px solid #444c56;
+  position: relative;
+  margin: 0;
+}
+
+/* Mac traffic light dots */
+.prose pre::after {
+  content: '';
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  background: #ff5f56;
+  border-radius: 50%;
+  box-shadow: 
+    1.25rem 0 0 #ffbd2e,
+    2.5rem 0 0 #27ca3f;
+  z-index: 2;
+}
+
+/* Language label for different languages */
+.prose pre[class*="language-"]::before {
+  content: attr(class);
+  position: absolute;
+  top: 0.875rem;
+  right: 1rem;
+  font-size: 0.75rem;
+  color: #8b949e;
+  font-family: 'JetBrains Mono', 'Fira Code', Monaco, Menlo, monospace;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  z-index: 2;
+}
+
+/* Copy button styles */
+.copy-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  background: rgba(55, 65, 81, 0.8);
+  border: 1px solid rgba(75, 85, 99, 0.6);
+  border-radius: 0.375rem;
+  color: #d1d5db;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+  z-index: 10;
+}
+
+.prose pre:hover .copy-btn {
+  opacity: 1;
+}
+
+.copy-btn:hover {
+  background: rgba(75, 85, 99, 0.9);
+  border-color: rgba(107, 114, 128, 0.8);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.copy-btn:active {
+  transform: translateY(0);
+}
+
+.copy-btn .copy-icon {
+  width: 14px;
+  height: 14px;
+  stroke-width: 1.5;
+}
+
+.copy-btn .copy-icon.success {
+  color: #10b981;
+}
+
+.copy-btn .copy-text.success {
+  color: #10b981;
+}
+
+/* Mobile responsive copy button */
+@media (max-width: 640px) {
+  .copy-btn {
+    right: 0.5rem;
+    top: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    opacity: 1; /* Always visible on mobile */
+  }
+  
+  .copy-btn .copy-text {
+    display: none; /* Hide text on mobile, only show icon */
+  }
 }
 
 /* Remove the old decorative elements when using CodeBlock component */
@@ -327,14 +434,17 @@ header nav a:hover {
 
 .prose pre code {
   background: none !important;
-  padding: 0 !important;
+  padding: 1.5rem !important;
   color: #e6edf3 !important;
-  font-size: inherit;
+  font-size: 0.875rem;
   border: none !important;
   font-weight: normal;
   font-family: 'JetBrains Mono', 'Fira Code', Monaco, Menlo, 'Courier New', monospace;
   display: block;
   width: 100%;
+  line-height: 1.6;
+  overflow-x: auto;
+  margin-top: 0;
 }
 
 /* Animations for code blocks */
