@@ -1,0 +1,73 @@
+---
+title: "Testing Code Blocks"
+date: 2025-01-12
+subtitle: "Testing enhanced code block functionality"
+author: "hacker1db"
+tags:
+  - "Testing"
+  - "Code"
+---
+
+# Testing Enhanced Code Blocks
+
+Here are some examples of code blocks with different languages to test our new copy functionality:
+
+## Go Code Example
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, World!")
+    
+    // Some command example
+    name := "hacker1db"
+    fmt.Printf("Welcome %s!\n", name)
+}
+```
+
+## JavaScript Example
+
+```javascript
+function greet(name) {
+    console.log(`Hello, ${name}!`);
+    return `Welcome ${name}!`;
+}
+
+const message = greet('hacker1db');
+console.log(message);
+```
+
+## Bash Commands
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+## Python Example
+
+```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+# Generate fibonacci sequence
+for i in range(10):
+    print(f"F({i}) = {fibonacci(i)}")
+```
+
+## Inline Code
+
+Here's some `inline code` that should be styled differently from the code blocks above.
+
+The copy button should only appear on the larger code blocks, not on inline code like `npm install` or `console.log()`.

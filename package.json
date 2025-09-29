@@ -17,6 +17,7 @@
     "precommit": "npm run lint:fix && npm run type-check"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@next/mdx": "^15.5.4",
