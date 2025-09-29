@@ -86,15 +86,110 @@ export function processShortcodes(
     /\{\{<\s*newsletter\s*>\}\}/g,
     () => {
       return `
-<div style="border: 2px solid #6FC1FF; border-radius: 12px; padding: 2rem; margin: 2rem 0; background: linear-gradient(135deg, rgba(111, 193, 255, 0.1) 0%, rgba(111, 193, 255, 0.05) 100%);">
-  <h3 style="margin-top: 0; color: #6FC1FF; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;">📧 Stay Updated</h3>
-  <p style="margin-bottom: 1rem; color: #d1d5db;">Follow me on social media for the latest posts and updates!</p>
-  <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+<div style="border: 2px solid #6FC1FF; border-radius: 12px; padding: 2rem; margin: 2rem 0; background: linear-gradient(135deg, rgba(111, 193, 255, 0.1) 0%, rgba(111, 193, 255, 0.05) 100%); text-align: center;">
+  <h3 style="margin-top: 0; color: #6FC1FF; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;">📧 Stay Updated with Security Insights</h3>
+  <p style="margin-bottom: 1.5rem; color: #d1d5db;">Get weekly tips on cybersecurity, DevOps automation, and secure coding practices directly to your inbox.</p>
+  
+  <form style="max-width: 400px; margin: 0 auto; margin-bottom: 1.5rem;" onsubmit="handleNewsletterSubmit(event)">
+    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+      <input 
+        type="email" 
+        name="email"
+        placeholder="your.email@example.com" 
+        required
+        style="flex: 1; padding: 0.75rem 1rem; border-radius: 6px; border: 1px solid #374151; background-color: #1f2937; color: #ffffff; font-size: 1rem; outline: none; transition: all 0.2s ease;"
+        onfocus="this.style.borderColor='#6FC1FF'; this.style.boxShadow='0 0 0 2px rgba(111, 193, 255, 0.2)';"
+        onblur="this.style.borderColor='#374151'; this.style.boxShadow='none';"
+      />
+      <button 
+        type="submit"
+        style="background-color: #6FC1FF; color: #000000; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease; white-space: nowrap;"
+        onmouseover="this.style.backgroundColor='#5FA8E6';"
+        onmouseout="this.style.backgroundColor='#6FC1FF';"
+      >
+        Subscribe
+      </button>
+    </div>
+    <div id="newsletter-message" style="display: none; padding: 0.5rem; border-radius: 4px; font-size: 0.875rem; margin-bottom: 1rem;"></div>
+  </form>
+
+  <div style="display: flex; gap: 0.75rem; justify-content: center; margin-bottom: 1rem; flex-wrap: wrap;">
     <a href="https://twitter.com/hacker1db" target="_blank" style="color: #6FC1FF; text-decoration: none; font-weight: 500;">Twitter</a>
     <a href="https://github.com/hacker1db" target="_blank" style="color: #6FC1FF; text-decoration: none; font-weight: 500;">GitHub</a>
     <a href="https://youtube.com/channel/UCApwUq9I-WDU_L2-Z4Tc1Aw" target="_blank" style="color: #6FC1FF; text-decoration: none; font-weight: 500;">YouTube</a>
   </div>
-</div>`;
+
+  <p style="margin: 0; font-size: 0.75rem; color: #9ca3af;">
+    No spam. Unsubscribe anytime. See our <a href="/privacy" style="color: #6FC1FF; text-decoration: none;">privacy policy</a>.
+  </p>
+</div>
+
+<script>
+async function handleNewsletterSubmit(event) {
+  event.preventDefault();
+  const form = event.target;
+  const emailInput = form.email;
+  const messageDiv = document.getElementById('newsletter-message');
+  const submitButton = form.querySelector('button[type="submit"]');
+  
+  const email = emailInput.value.trim();
+  if (!email) {
+    showMessage('Please enter your email address.', 'error');
+    return;
+  }
+  
+  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+  if (!emailRegex.test(email)) {
+    showMessage('Please enter a valid email address.', 'error');
+    return;
+  }
+  
+  // Show loading state
+  submitButton.textContent = 'Subscribing...';
+  submitButton.disabled = true;
+  submitButton.style.backgroundColor = '#6FC1FF80';
+  submitButton.style.cursor = 'not-allowed';
+  
+  try {
+    // Simulate API call - in production, this would call your newsletter service
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    showMessage('Thanks for subscribing! Check your email for confirmation.', 'success');
+    emailInput.value = '';
+  } catch (error) {
+    showMessage('Something went wrong. Please try again.', 'error');
+  } finally {
+    // Reset button state
+    submitButton.textContent = 'Subscribe';
+    submitButton.disabled = false;
+    submitButton.style.backgroundColor = '#6FC1FF';
+    submitButton.style.cursor = 'pointer';
+  }
+}
+
+function showMessage(message, type) {
+  const messageDiv = document.getElementById('newsletter-message');
+  messageDiv.style.display = 'block';
+  messageDiv.textContent = message;
+  
+  if (type === 'success') {
+    messageDiv.style.backgroundColor = 'rgba(34, 197, 94, 0.1)';
+    messageDiv.style.color = '#22c55e';
+    messageDiv.style.border = '1px solid rgba(34, 197, 94, 0.3)';
+  } else {
+    messageDiv.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+    messageDiv.style.color = '#ef4444';
+    messageDiv.style.border = '1px solid rgba(239, 68, 68, 0.3)';
+  }
+  
+  // Hide message after 5 seconds for success messages
+  if (type === 'success') {
+    setTimeout(() => {
+      messageDiv.style.display = 'none';
+    }, 5000);
+  }
+}
+</script>`;
     },
   );
 
