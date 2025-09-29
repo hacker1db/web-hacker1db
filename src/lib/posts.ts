@@ -60,10 +60,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     // Process markdown to HTML with syntax highlighting
     const processedMarkdown = await remark()
       .use(remarkRehype, { allowDangerousHtml: true })
-      .use(rehypeHighlight, {
-        detect: true,
-        ignoreMissing: true,
-      })
+      .use(rehypeHighlight)
       .use(rehypeStringify, { allowDangerousHtml: true })
       .process(processedContent);
     const contentHtml = processedMarkdown.toString();
