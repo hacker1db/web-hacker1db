@@ -1,0 +1,21 @@
+{
+  "name": "Hacker1db Blog",
+  "short_name": "Hacker1db",
+  "description": "Personal blog about cybersecurity, DevOps, and programming",
+  "icons": [
+    {
+      "src": "/images/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#1a1d21",
+  "background_color": "#1a1d21",
+  "display": "standalone",
+  "start_url": "/"
+}
