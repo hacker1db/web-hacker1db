@@ -10,7 +10,6 @@ node_modules_*/
 
 # Package managers
 yarn.lock
-package-lock.json
 pnpm-lock.yaml
 
 # Testing

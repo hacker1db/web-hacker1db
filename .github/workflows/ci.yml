@@ -17,29 +17,24 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
-    - name: Setup pnpm
-      uses: pnpm/action-setup@v4
-      with:
-        version: 8
         
     - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'pnpm'
+        cache: 'npm'
         
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      run: npm ci
       
     - name: Run type check
-      run: pnpm run type-check
+      run: npm run type-check
       
     - name: Run linter
-      run: pnpm run lint
+      run: npm run lint
       
     - name: Build project
-      run: pnpm run build
+      run: npm run build
       
     - name: Cache build output
       uses: actions/cache@v3
@@ -47,6 +42,6 @@ jobs:
         path: |
           .next/cache
           .next/static
-        key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+        key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
         restore-keys: |
-          ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/pnpm-lock.yaml') }}-
+          ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
