@@ -2,6 +2,7 @@ import { getAllPostSlugs, getPostBySlug } from "@/lib/posts";
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import NewsletterSignup from "@/components/NewsletterSignup";
 
 interface PostPageProps {
   params: Promise<{
@@ -165,6 +166,15 @@ export default async function PostPage({ params }: PostPageProps) {
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
       </article>
+
+      {/* Newsletter Signup */}
+      <div style={{ marginTop: "3rem" }}>
+        <NewsletterSignup
+          title="📧 Enjoyed this post?"
+          description="Get more cybersecurity insights, DevOps tips, and secure coding practices delivered weekly to your inbox."
+          size="medium"
+        />
+      </div>
 
       {/* Navigation */}
       <div
