@@ -143,11 +143,72 @@ export async function getAllTags(): Promise<{ tag: string; count: number }[]> {
 
 export async function getPostsBySeries(series: string): Promise<Post[]> {
   const allPosts = await getAllPosts();
-  return allPosts.filter((post) =>
-    post.data.series?.some((postSeries) =>
-      postSeries.toLowerCase().includes(series.toLowerCase()),
-    ),
+  return allPosts
+    .filter((post) =>
+      post.data.series?.some((postSeries) =>
+        postSeries.toLowerCase().includes(series.toLowerCase()),
+      ),
+    )
+    .sort(
+      (a, b) =>
+        new Date(a.data.date).getTime() - new Date(b.data.date).getTime(),
+    );
+}
+
+export async function getSeriesNavigation(currentPost: Post): Promise<{
+  seriesName: string;
+  currentIndex: number;
+  totalPosts: number;
+  previousPost: Post | null;
+  nextPost: Post | null;
+  allSeriesPosts: Post[];
+}> {
+  if (!currentPost.data.series || currentPost.data.series.length === 0) {
+    return {
+      seriesName: "",
+      currentIndex: -1,
+      totalPosts: 0,
+      previousPost: null,
+      nextPost: null,
+      allSeriesPosts: [],
+    };
+  }
+
+  const seriesName = currentPost.data.series[0]; // Use the first series
+  const seriesPosts = await getPostsBySeries(seriesName);
+  const currentIndex = seriesPosts.findIndex(
+    (post) => post.slug === currentPost.slug,
   );
+
+  return {
+    seriesName,
+    currentIndex,
+    totalPosts: seriesPosts.length,
+    previousPost: currentIndex > 0 ? seriesPosts[currentIndex - 1] : null,
+    nextPost:
+      currentIndex < seriesPosts.length - 1
+        ? seriesPosts[currentIndex + 1]
+        : null,
+    allSeriesPosts: seriesPosts,
+  };
+}
+
+export async function getSeriesMeta(seriesName: string): Promise<{
+  totalPosts: number;
+  estimatedReadingTime: number;
+  description?: string;
+}> {
+  const posts = await getPostsBySeries(seriesName);
+
+  // Estimate 200 words per minute reading speed
+  // Rough estimate: 500 words per post average
+  const estimatedReadingTime = Math.ceil((posts.length * 500) / 200);
+
+  return {
+    totalPosts: posts.length,
+    estimatedReadingTime,
+    description: `A comprehensive ${posts.length}-part series on ${seriesName}`,
+  };
 }
 
 export async function getAllSeries(): Promise<

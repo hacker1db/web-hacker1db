@@ -1,7 +1,12 @@
-import { getAllPostSlugs, getPostBySlug } from "@/lib/posts";
+import {
+  getAllPostSlugs,
+  getPostBySlug,
+  getSeriesNavigation,
+} from "@/lib/posts";
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import SeriesNavigation from "@/components/SeriesNavigation";
 
 interface PostPageProps {
   params: Promise<{
@@ -25,6 +30,9 @@ export default async function PostPage({ params }: PostPageProps) {
   if (!post) {
     notFound();
   }
+
+  // Get series navigation data
+  const seriesNavigation = await getSeriesNavigation(post);
 
   return (
     <div style={{ maxWidth: "56rem", margin: "0 auto", padding: "0 1rem" }}>
@@ -165,6 +173,19 @@ export default async function PostPage({ params }: PostPageProps) {
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
       </article>
+
+      {/* Series Navigation */}
+      {seriesNavigation.totalPosts > 0 && (
+        <SeriesNavigation
+          seriesName={seriesNavigation.seriesName}
+          currentIndex={seriesNavigation.currentIndex}
+          totalPosts={seriesNavigation.totalPosts}
+          previousPost={seriesNavigation.previousPost}
+          nextPost={seriesNavigation.nextPost}
+          allSeriesPosts={seriesNavigation.allSeriesPosts}
+          currentSlug={slug}
+        />
+      )}
 
       {/* Navigation */}
       <div
