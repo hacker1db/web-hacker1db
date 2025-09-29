@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { siteConfig } from "@/lib/config";
+import SearchButton from "./SearchButton";
 
 export default function Header() {
   return (
@@ -18,6 +19,8 @@ export default function Header() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: "1rem",
         }}
       >
         <Link
@@ -37,58 +40,67 @@ export default function Header() {
           ></span>
         </Link>
 
-        <nav style={{ display: "flex", gap: "1.5rem" }}>
-          <Link
-            href="/"
-            style={{
-              color: "#d1d5db",
-              textDecoration: "none",
-              transition: "color 0.2s ease",
-            }}
-          >
-            Home
-          </Link>
-          <Link
-            href="/posts"
-            style={{
-              color: "#d1d5db",
-              textDecoration: "none",
-              transition: "color 0.2s ease",
-            }}
-          >
-            Posts
-          </Link>
-          <Link
-            href="/series"
-            style={{
-              color: "#d1d5db",
-              textDecoration: "none",
-              transition: "color 0.2s ease",
-            }}
-          >
-            Series
-          </Link>
-          <Link
-            href="/tags"
-            style={{
-              color: "#d1d5db",
-              textDecoration: "none",
-              transition: "color 0.2s ease",
-            }}
-          >
-            Tags
-          </Link>
-          <Link
-            href="/about"
-            style={{
-              color: "#d1d5db",
-              textDecoration: "none",
-              transition: "color 0.2s ease",
-            }}
-          >
-            About
-          </Link>
-        </nav>
+        <div style={{ 
+          display: "flex", 
+          alignItems: "center", 
+          gap: "1.5rem",
+          flexWrap: "wrap"
+        }}>
+          <nav style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap" }}>
+            <Link
+              href="/"
+              style={{
+                color: "#d1d5db",
+                textDecoration: "none",
+                transition: "color 0.2s ease",
+              }}
+            >
+              Home
+            </Link>
+            <Link
+              href="/posts"
+              style={{
+                color: "#d1d5db",
+                textDecoration: "none",
+                transition: "color 0.2s ease",
+              }}
+            >
+              Posts
+            </Link>
+            <Link
+              href="/series"
+              style={{
+                color: "#d1d5db",
+                textDecoration: "none",
+                transition: "color 0.2s ease",
+              }}
+            >
+              Series
+            </Link>
+            <Link
+              href="/tags"
+              style={{
+                color: "#d1d5db",
+                textDecoration: "none",
+                transition: "color 0.2s ease",
+              }}
+            >
+              Tags
+            </Link>
+            <Link
+              href="/about"
+              style={{
+                color: "#d1d5db",
+                textDecoration: "none",
+                transition: "color 0.2s ease",
+              }}
+            >
+              About
+            </Link>
+          </nav>
+          
+          <SearchButton />
+        </div>
       </div>
     </header>
   );

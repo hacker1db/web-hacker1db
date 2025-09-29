@@ -40,3 +40,19 @@ export interface SocialLink {
   name: string;
   url: string;
 }
+
+export interface SearchIndex {
+  id: string;
+  title: string;
+  content: string;
+  excerpt: string;
+  tags: string[];
+  category: string;
+  series?: string;
+  slug: string;
+  date: string;
+}
+
+export interface SearchResult extends SearchIndex {
+  score?: number;
+}

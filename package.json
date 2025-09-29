@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run generate-search-index && next build",
     "start": "next start",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx,json,md,css}\"",
     "lint:fix": "eslint --fix .",
@@ -14,7 +14,8 @@
     "deploy": "vercel --prod",
     "deploy:preview": "vercel",
     "ci": "npm run type-check && npm run lint && npm run build",
-    "precommit": "npm run lint:fix && npm run type-check"
+    "precommit": "npm run lint:fix && npm run type-check",
+    "generate-search-index": "node scripts/generate-search-index.js"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -24,6 +25,7 @@
     "@types/react-syntax-highlighter": "^15.5.13",
     "autoprefixer": "^10.4.21",
     "date-fns": "^3.6.0",
+    "fuse.js": "^7.1.0",
     "gray-matter": "^4.0.3",
     "highlight.js": "^11.11.1",
     "next": "^15.5.4",
