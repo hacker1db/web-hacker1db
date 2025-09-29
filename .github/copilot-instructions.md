@@ -72,6 +72,7 @@ hideSubtitleInCard: true  # Prevents duplicate when used as {{< param subtitle >
 - **Enhanced code blocks** with copy functionality via `CodeBlock` component
 - **Card-based layout** with hover animations and transitions
 - **Comprehensive CSS** in `globals.css` ensures all styling works properly
+- Ensure that the code base has no type `ANY` 
 
 ### Static Generation Patterns
 - All content pre-rendered at build time
@@ -95,3 +96,4 @@ Extend `processShortcodes()` in `src/lib/shortcodes.ts` with regex replacement p
 - Check `npm run type-check` for TypeScript errors
 - Verify MDX processing with `npm run dev` locally
 - Static export outputs to `out/` directory
+- verify that no ANY keyword use by running `npm run lint`

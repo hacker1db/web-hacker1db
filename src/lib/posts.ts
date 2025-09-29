@@ -5,7 +5,7 @@ import { remark } from "remark";
 import remarkRehype from "remark-rehype";
 import rehypeHighlight from "rehype-highlight";
 import rehypeStringify from "rehype-stringify";
-import { Post, PostMatter } from "@/types/blog";
+import { Post } from "@/types/blog";
 import { processShortcodes, processFrontmatter } from "./shortcodes";
 
 const postsDirectory = path.join(process.cwd(), "content/posts");

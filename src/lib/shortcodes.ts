@@ -1,5 +1,21 @@
 import { PostMatter } from "@/types/blog";
 
+interface FrontmatterData {
+  title?: string;
+  Title?: string;
+  date?: string;
+  subtitle?: string;
+  author?: string;
+  toc?: boolean;
+  Comments?: boolean;
+  series?: string | string[];
+  tags?: string | string[];
+  Tags?: string | string[];
+  category?: string;
+  hideSubtitleInCard?: boolean;
+  [key: string]: unknown;
+}
+
 /**
  * Process Hugo shortcodes in markdown content
  */
@@ -12,9 +28,9 @@ export function processShortcodes(
   // Process {{< param key >}} shortcodes
   processedContent = processedContent.replace(
     /\{\{<\s*param\s+(\w+)\s*>\}\}/g,
-    (match, paramKey) => {
+    (match, paramKey: string) => {
       // Look up the parameter in frontmatter
-      const value = (frontmatter as any)[paramKey];
+      const value = frontmatter[paramKey as keyof PostMatter];
       return value ? String(value) : match; // Return original if not found
     },
   );
@@ -22,7 +38,7 @@ export function processShortcodes(
   // Process {{< highlight language >}} shortcodes with proper line breaks
   processedContent = processedContent.replace(
     /\{\{<\s*highlight\s+(\w+)\s*>\}\}([\s\S]*?)\{\{<\s*\/highlight\s*>\}\}/g,
-    (match, language, code) => {
+    (match, language: string, code: string) => {
       // Clean up the code content and convert to markdown code block
       const cleanCode = code.trim();
       return `\`\`\`${language}\n${cleanCode}\n\`\`\``;
@@ -32,7 +48,7 @@ export function processShortcodes(
   // Process {{< youtube id >}} shortcode
   processedContent = processedContent.replace(
     /\{\{<\s*youtube\s+([^\s>]+)\s*>\}\}/g,
-    (match, videoId) => {
+    (match, videoId: string) => {
       return `
 <div style="position: relative; width: 100%; height: 0; padding-bottom: 56.25%; margin: 2rem 0;">
   <iframe 
@@ -50,7 +66,7 @@ export function processShortcodes(
   // Process {{< vimeo id >}} shortcode
   processedContent = processedContent.replace(
     /\{\{<\s*vimeo\s+([^\s>]+)\s*>\}\}/g,
-    (match, videoId) => {
+    (match, videoId: string) => {
       return `
 <div style="position: relative; width: 100%; height: 0; padding-bottom: 56.25%; margin: 2rem 0;">
   <iframe 
@@ -85,7 +101,7 @@ export function processShortcodes(
   // Process {{< figure src="..." alt="..." caption="..." >}} shortcode
   processedContent = processedContent.replace(
     /\{\{<\s*figure\s+src="([^"]+)"(?:\s+alt="([^"]*)")?(?:\s+caption="([^"]*)")?\s*>\}\}/g,
-    (match, src, alt = "", caption = "") => {
+    (match, src: string, alt = "", caption = "") => {
       const figureHtml = `
 <figure style="margin: 2rem 0; text-align: center;">
   <img src="${src}" alt="${alt}" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);" />
@@ -98,7 +114,7 @@ export function processShortcodes(
   // Process {{< gist username gist_id >}} shortcode
   processedContent = processedContent.replace(
     /\{\{<\s*gist\s+([^\s]+)\s+([^\s>]+)\s*>\}\}/g,
-    (match, username, gistId) => {
+    (match, username: string, gistId: string) => {
       return `
 <div style="margin: 2rem 0; padding: 1rem; border: 1px solid #374151; border-radius: 8px; background-color: #1f2937;">
   <script src="https://gist.github.com/${username}/${gistId}.js"></script>
@@ -112,7 +128,7 @@ export function processShortcodes(
   // Process {{< ref "path" >}} shortcodes (convert to relative links)
   processedContent = processedContent.replace(
     /\{\{<\s*ref\s+"([^"]+)"\s*>\}\}/g,
-    (match, path) => {
+    (match, path: string) => {
       // Convert Hugo ref to Next.js route
       const cleanPath = path.replace(/\.md$/, "").replace(/^\//, "");
       return `/posts/${cleanPath}`;
@@ -122,7 +138,7 @@ export function processShortcodes(
   // Process {{< relref "path" >}} shortcodes (convert to relative links)
   processedContent = processedContent.replace(
     /\{\{<\s*relref\s+"([^"]+)"\s*>\}\}/g,
-    (match, path) => {
+    (match, path: string) => {
       const cleanPath = path.replace(/\.md$/, "").replace(/^\//, "");
       return `/posts/${cleanPath}`;
     },
@@ -140,7 +156,10 @@ export function processShortcodes(
 /**
  * Extract and process Hugo-style frontmatter parameters
  */
-export function processFrontmatter(data: any, content?: string): PostMatter {
+export function processFrontmatter(
+  data: FrontmatterData,
+  content?: string,
+): PostMatter {
   // Auto-detect if subtitle should be hidden in card when it's used as a param in content
   const hasSubtitleParam = content
     ? /\{\{<\s*param\s+subtitle\s*>\}\}/g.test(content)
