@@ -89,9 +89,7 @@ export default function RootLayout({
               padding: "2rem 1rem",
             }}
           >
-            <MDXProvider>
-              {children}
-            </MDXProvider>
+            <MDXProvider>{children}</MDXProvider>
           </main>
           <Footer />
         </div>
@@ -99,4 +97,3 @@ export default function RootLayout({
     </html>
   );
 }
-
