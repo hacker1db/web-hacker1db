@@ -2,16 +2,31 @@
 
 import { MDXProvider as BaseMDXProvider } from "@mdx-js/react";
 import Link from "next/link";
-import { ReactNode } from "react";
+import { ReactNode, AnchorHTMLAttributes } from "react";
 import CodeBlock from "./CodeBlock";
+
+interface LinkProps
+  extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> {
+  href?: string;
+  children: ReactNode;
+}
+
+interface CodeProps {
+  children?: ReactNode;
+  className?: string;
+}
+
+interface PreProps {
+  children?: ReactNode;
+}
+
+interface BlockquoteProps {
+  children: ReactNode;
+}
 
 const components = {
   // Custom link component that uses Next.js Link for internal links
-  a: ({
-    href,
-    children,
-    ...props
-  }: { href?: string; children: ReactNode } & any) => {
+  a: ({ href, children, ...props }: LinkProps) => {
     if (href?.startsWith("/")) {
       return (
         <Link href={href} {...props}>
@@ -27,14 +42,23 @@ const components = {
   },
 
   // Custom code block with copy functionality
-  pre: ({ children, ...props }: { children: ReactNode } & any) => {
+  pre: ({ children, ...props }: PreProps) => {
     // Extract code content and language from children
     if (
-      children?.props?.children &&
-      typeof children.props.children === "string"
+      children &&
+      typeof children === "object" &&
+      "props" in children &&
+      children.props &&
+      typeof children.props === "object" &&
+      "children" in children.props &&
+      typeof (children as { props: { children: unknown } }).props.children ===
+        "string"
     ) {
-      const code = children.props.children.trim();
-      const className = children.props.className || "";
+      const code = (
+        children as { props: { children: string } }
+      ).props.children.trim();
+      const className =
+        (children.props as { className?: string }).className || "";
       const language = className.replace("language-", "") || "text";
 
       return (
@@ -124,7 +148,7 @@ const components = {
   },
 
   // Custom inline code styling
-  code: ({ children, className, ...props }: any) => {
+  code: ({ children, className, ...props }: CodeProps) => {
     // For inline code (not in pre blocks)
     if (!className?.startsWith("language-")) {
       return (
@@ -146,7 +170,7 @@ const components = {
   },
 
   // Custom blockquote styling
-  blockquote: ({ children, ...props }: { children: ReactNode } & any) => (
+  blockquote: ({ children, ...props }: BlockquoteProps) => (
     <blockquote
       style={{
         borderLeft: "4px solid #6FC1FF",
@@ -167,5 +191,10 @@ interface MDXProviderProps {
 }
 
 export default function MDXProvider({ children }: MDXProviderProps) {
-  return <BaseMDXProvider components={components}>{children}</BaseMDXProvider>;
+  // Type assertion to handle MDX component type compatibility
+  return (
+    <BaseMDXProvider components={components as never}>
+      {children}
+    </BaseMDXProvider>
+  );
 }

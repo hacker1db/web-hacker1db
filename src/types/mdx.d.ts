@@ -1,10 +1,14 @@
 declare module "*.mdx" {
-  let MDXComponent: (props: any) => JSX.Element;
+  import { ComponentType } from "react";
+  interface MDXProps {
+    [key: string]: unknown;
+  }
+  const MDXComponent: ComponentType<MDXProps>;
   export default MDXComponent;
 }
 
 declare module "@mdx-js/react" {
-  import { ComponentType, ReactElement, ReactNode } from "react";
+  import { ComponentType, ReactNode } from "react";
 
   export interface MDXProviderProps {
     children: ReactNode;
@@ -12,7 +16,7 @@ declare module "@mdx-js/react" {
   }
 
   export interface MDXProviderComponents {
-    [key: string]: ComponentType<any>;
+    [key: string]: ComponentType<unknown>;
   }
 
   export const MDXProvider: ComponentType<MDXProviderProps>;
