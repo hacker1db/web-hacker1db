@@ -23,79 +23,32 @@ export default function PostCard({ post }: PostCardProps) {
         post.data.subtitle?.includes("docker")));
 
   return (
-    <article
-      style={{
-        backgroundColor: "#1f2937",
-        borderRadius: "0.75rem",
-        padding: "1.5rem",
-        border: "1px solid #374151",
-        transition: "all 0.2s ease",
-        cursor: "pointer",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
+    <article className="bg-gray-800 rounded-xl p-6 border border-gray-600 transition-all duration-200 cursor-pointer relative overflow-hidden hover:border-gray-500 hover:shadow-lg">
       {/* Category Badge */}
       {post.slug.includes("/") && (
-        <div
-          style={{
-            position: "absolute",
-            top: "1rem",
-            right: "1rem",
-            backgroundColor: "#6FC1FF",
-            color: "#000000",
-            fontSize: "0.75rem",
-            fontWeight: "600",
-            padding: "0.25rem 0.75rem",
-            borderRadius: "9999px",
-            textTransform: "uppercase",
-            letterSpacing: "0.05em",
-          }}
-        >
+        <div className="absolute top-4 right-4 bg-cursor text-black text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
           {post.slug.split("/")[0]}
         </div>
       )}
 
-      <Link href={`/posts/${post.slug}`} style={{ textDecoration: "none" }}>
+      <Link href={`/posts/${post.slug}`} className="no-underline">
         {/* Title */}
-        <h2
-          style={{
-            fontSize: "1.5rem",
-            fontWeight: "700",
-            color: "#ffffff",
-            marginBottom: "0.5rem",
-            lineHeight: "1.3",
-            transition: "color 0.2s ease",
-            paddingRight: post.slug.includes("/") ? "4rem" : "0",
-          }}
-        >
+        <h2 className={`text-2xl font-bold text-white mb-2 leading-tight transition-colors duration-200 hover:text-cursor ${
+          post.slug.includes("/") ? "pr-16" : ""
+        }`}>
           {post.data.title}
         </h2>
 
         {/* Subtitle - only show if not used as heading in content */}
         {post.data.subtitle && !shouldHideSubtitle && (
-          <p
-            style={{
-              fontSize: "1rem",
-              color: "#d1d5db",
-              marginBottom: "1rem",
-              lineHeight: "1.5",
-            }}
-          >
+          <p className="text-base text-gray-300 mb-4 leading-6">
             {post.data.subtitle}
           </p>
         )}
 
         {/* Excerpt */}
         {post.excerpt && (
-          <p
-            style={{
-              color: "#9ca3af",
-              lineHeight: "1.6",
-              marginBottom: "1.5rem",
-              fontSize: "0.9rem",
-            }}
-          >
+          <p className="text-gray-400 leading-relaxed mb-6 text-sm">
             {post.excerpt}
           </p>
         )}
@@ -103,41 +56,18 @@ export default function PostCard({ post }: PostCardProps) {
 
       {/* Tags */}
       {post.data.tags && post.data.tags.length > 0 && (
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "0.5rem",
-            marginBottom: "1.5rem",
-          }}
-        >
+        <div className="flex flex-wrap gap-2 mb-6">
           {post.data.tags.slice(0, 3).map((tag) => (
             <Link
               key={tag}
               href={`/tags/${encodeURIComponent(tag.toLowerCase())}`}
-              style={{
-                backgroundColor: "rgba(107, 114, 128, 0.3)",
-                color: "#d1d5db",
-                fontSize: "0.75rem",
-                fontWeight: "500",
-                padding: "0.25rem 0.75rem",
-                borderRadius: "0.375rem",
-                border: "1px solid rgba(107, 114, 128, 0.2)",
-                textDecoration: "none",
-                transition: "all 0.2s ease",
-              }}
+              className="bg-gray-500/30 text-gray-300 text-xs font-medium px-3 py-1 rounded-md border border-gray-500/20 no-underline transition-all duration-200 hover:bg-gray-500/40 hover:text-white"
             >
               #{tag}
             </Link>
           ))}
           {post.data.tags.length > 3 && (
-            <span
-              style={{
-                color: "#9ca3af",
-                fontSize: "0.75rem",
-                fontWeight: "500",
-              }}
-            >
+            <span className="text-gray-400 text-xs font-medium">
               +{post.data.tags.length - 3} more
             </span>
           )}
@@ -145,18 +75,8 @@ export default function PostCard({ post }: PostCardProps) {
       )}
 
       {/* Footer */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          paddingTop: "1rem",
-          borderTop: "1px solid #374151",
-          fontSize: "0.875rem",
-          color: "#9ca3af",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+      <div className="flex justify-between items-center pt-4 border-t border-gray-600 text-sm text-gray-400">
+        <div className="flex items-center gap-3">
           <time dateTime={post.data.date}>
             {format(new Date(post.data.date), "MMM d, yyyy")}
           </time>
@@ -171,13 +91,7 @@ export default function PostCard({ post }: PostCardProps) {
               <span>•</span>
               <Link
                 href={`/series/${encodeURIComponent(post.data.series[0].toLowerCase())}`}
-                style={{
-                  color: "#6FC1FF",
-                  fontSize: "0.75rem",
-                  fontWeight: "500",
-                  textDecoration: "none",
-                  transition: "color 0.2s ease",
-                }}
+                className="text-cursor text-xs font-medium no-underline transition-colors duration-200 hover:text-cursor/80"
               >
                 Series: {post.data.series[0]}
               </Link>
@@ -187,17 +101,10 @@ export default function PostCard({ post }: PostCardProps) {
 
         <Link
           href={`/posts/${post.slug}`}
-          style={{
-            color: "#6FC1FF",
-            textDecoration: "none",
-            fontWeight: "500",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.25rem",
-          }}
+          className="text-cursor no-underline font-medium flex items-center gap-1 transition-colors duration-200 hover:text-cursor/80"
         >
           Read more
-          <span style={{ fontSize: "0.75rem" }}>→</span>
+          <span className="text-xs">→</span>
         </Link>
       </div>
     </article>

@@ -3,32 +3,11 @@ import { siteConfig } from "@/lib/config";
 
 export default function Header() {
   return (
-    <header
-      style={{
-        backgroundColor: "#1a1d21",
-        borderBottom: "1px solid #374151",
-        padding: "1rem 0",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "1024px",
-          margin: "0 auto",
-          padding: "0 1rem",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
+    <header className="bg-primary border-b border-gray-600 py-4">
+      <div className="max-w-4xl mx-auto px-4 flex items-center justify-between">
         <Link
           href={siteConfig.logo.logoHomeLink}
-          style={{
-            fontFamily: "Monaco, Menlo, Courier New, monospace",
-            fontSize: "1.125rem",
-            color: "#6FC1FF",
-            textDecoration: "none",
-            transition: "color 0.2s ease",
-          }}
+          className="font-mono text-lg text-cursor hover:text-cursor/80 transition-colors duration-200"
         >
           <span>{siteConfig.logo.logoText}</span>
           <span
@@ -37,54 +16,34 @@ export default function Header() {
           ></span>
         </Link>
 
-        <nav style={{ display: "flex", gap: "1.5rem" }}>
+        <nav className="flex gap-6">
           <Link
             href="/"
-            style={{
-              color: "#d1d5db",
-              textDecoration: "none",
-              transition: "color 0.2s ease",
-            }}
+            className="text-gray-300 hover:text-cursor transition-colors duration-200"
           >
             Home
           </Link>
           <Link
             href="/posts"
-            style={{
-              color: "#d1d5db",
-              textDecoration: "none",
-              transition: "color 0.2s ease",
-            }}
+            className="text-gray-300 hover:text-cursor transition-colors duration-200"
           >
             Posts
           </Link>
           <Link
             href="/series"
-            style={{
-              color: "#d1d5db",
-              textDecoration: "none",
-              transition: "color 0.2s ease",
-            }}
+            className="text-gray-300 hover:text-cursor transition-colors duration-200"
           >
             Series
           </Link>
           <Link
             href="/tags"
-            style={{
-              color: "#d1d5db",
-              textDecoration: "none",
-              transition: "color 0.2s ease",
-            }}
+            className="text-gray-300 hover:text-cursor transition-colors duration-200"
           >
             Tags
           </Link>
           <Link
             href="/about"
-            style={{
-              color: "#d1d5db",
-              textDecoration: "none",
-              transition: "color 0.2s ease",
-            }}
+            className="text-gray-300 hover:text-cursor transition-colors duration-200"
           >
             About
           </Link>
