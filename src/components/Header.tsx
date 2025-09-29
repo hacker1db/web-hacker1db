@@ -88,6 +88,19 @@ export default function Header() {
           >
             About
           </Link>
+          <Link
+            href="/feed.xml"
+            style={{
+              color: "#d1d5db",
+              textDecoration: "none",
+              transition: "color 0.2s ease",
+              display: "flex",
+              alignItems: "center",
+            }}
+            title="RSS Feed"
+          >
+            📡
+          </Link>
         </nav>
       </div>
     </header>
