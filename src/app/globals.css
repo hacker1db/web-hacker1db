@@ -10,6 +10,14 @@
     @apply bg-primary text-white font-sans leading-relaxed;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
+
+  a {
+    @apply text-inherit no-underline transition-colors duration-200;
+  }
+
+  a:hover {
+    @apply text-cursor;
+  }
 }
 
 /* Container and layout utilities */
@@ -45,42 +53,17 @@
     color: #6FC1FF;
   }
   
-  .bg-primary {
-    background-color: #1a1d21;
-  }
-  
   .bg-cursor {
     background-color: #6FC1FF;
   }
-}
 
-/* Enhanced prose styles for blog content */
-.prose {
-  color: #d1d5db;
-  line-height: 1.8;
-  max-width: none;
-  font-size: 1.1rem;
-}
+  .hover\:text-cursor:hover {
+    color: #6FC1FF;
+  }
 
-/* Additional utility classes that might be missing */
-.no-underline {
-  text-decoration: none;
-}
-
-.transition-colors {
-  transition: color 0.2s ease;
-}
-
-.duration-200 {
-  transition-duration: 200ms;
-}
-
-.hover\:text-cursor:hover {
-  color: #6FC1FF;
-}
-
-.hover\:text-cursor\/80:hover {
-  color: rgba(111, 193, 255, 0.8);
+  .hover\:text-cursor\/80:hover {
+    color: rgba(111, 193, 255, 0.8);
+  }
 }
 
 /* Header and navigation specific styling */
