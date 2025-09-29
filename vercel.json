@@ -28,9 +28,5 @@
     }
   ],
   "rewrites": [
-    {
-      "source": "/blog/:path*",
-      "destination": "/blog/:path*"
-    }
   ]
 }
