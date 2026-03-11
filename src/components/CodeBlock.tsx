@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { CheckIcon, ClipboardDocumentIcon } from "@heroicons/react/24/outline";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 interface CodeBlockProps {
   children: string;
@@ -31,6 +33,28 @@ export default function CodeBlock({
   // Extract language from className (e.g., "language-javascript" -> "javascript")
   const lang = language || className?.replace("language-", "") || "text";
 
+  // Map common language aliases to ones react-syntax-highlighter understands
+  const languageMap: Record<string, string> = {
+    sh: "bash",
+    shell: "bash",
+    zsh: "bash",
+    js: "javascript",
+    ts: "typescript",
+    py: "python",
+    rb: "ruby",
+    yml: "yaml",
+    md: "markdown",
+    dockerfile: "docker",
+  };
+
+  const normalizedLang = languageMap[lang.toLowerCase()] || lang.toLowerCase();
+
+  // Display name for the language badge
+  const displayLang =
+    lang === "bash" || lang === "shell" || lang === "sh"
+      ? "terminal"
+      : lang.toLowerCase();
+
   return (
     <div className="relative group mb-6 rounded-lg overflow-hidden shadow-2xl border border-gray-700 bg-gradient-to-b from-gray-800 to-gray-900">
       {/* Terminal-style header */}
@@ -43,9 +67,7 @@ export default function CodeBlock({
             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
           </div>
           <div className="ml-3 text-xs font-mono text-gray-400">
-            {lang === "bash" || lang === "shell" || lang === "sh"
-              ? "terminal"
-              : lang}
+            {displayLang}
           </div>
         </div>
 
@@ -78,15 +100,30 @@ export default function CodeBlock({
         </div>
       </div>
 
-      {/* Code content with terminal-like appearance */}
+      {/* Code content with syntax highlighting */}
       <div className="relative bg-gradient-to-b from-gray-900 to-black">
-        <pre className="!mt-0 !mb-0 !bg-transparent !border-none p-4 overflow-x-auto text-sm leading-relaxed">
-          <code
-            className={`${className} !bg-transparent !p-0 font-mono text-gray-100`}
-          >
-            {children}
-          </code>
-        </pre>
+        <SyntaxHighlighter
+          language={normalizedLang}
+          style={oneDark}
+          customStyle={{
+            margin: 0,
+            padding: "1rem 1.5rem",
+            background: "transparent",
+            fontSize: "0.875rem",
+            lineHeight: "1.7",
+          }}
+          codeTagProps={{
+            style: {
+              fontFamily:
+                "JetBrains Mono, Fira Code, Monaco, Menlo, Courier New, monospace",
+            },
+          }}
+          showLineNumbers={false}
+          wrapLines={true}
+          wrapLongLines={true}
+        >
+          {children}
+        </SyntaxHighlighter>
 
         {/* Subtle bottom gradient effect */}
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-teal-500 opacity-20"></div>

@@ -2,6 +2,9 @@ import { getAllPostSlugs, getPostBySlug } from "@/lib/posts";
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import { useMDXComponents } from "../../../../mdx-components";
+import remarkGfm from "remark-gfm";
 
 interface PostPageProps {
   params: Promise<{
@@ -25,6 +28,9 @@ export default async function PostPage({ params }: PostPageProps) {
   if (!post) {
     notFound();
   }
+
+  // Get MDX components for rendering
+  const components = useMDXComponents({});
 
   return (
     <div style={{ maxWidth: "56rem", margin: "0 auto", padding: "0 1rem" }}>
@@ -149,21 +155,30 @@ export default async function PostPage({ params }: PostPageProps) {
                   transition: "all 0.2s ease",
                 }}
               >
-                📚 Part of series: {post.data.series.join(", ")}
+                Part of series: {post.data.series.join(", ")}
               </Link>
             </div>
           )}
         </header>
 
-        {/* Article Content */}
+        {/* Article Content - Now using MDXRemote for React component rendering */}
         <div
           className="prose"
           style={{
             maxWidth: "none",
             margin: "0 auto",
           }}
-          dangerouslySetInnerHTML={{ __html: post.content }}
-        />
+        >
+          <MDXRemote
+            source={post.content}
+            components={components}
+            options={{
+              mdxOptions: {
+                remarkPlugins: [remarkGfm],
+              },
+            }}
+          />
+        </div>
       </article>
 
       {/* Navigation */}
@@ -225,7 +240,7 @@ export default async function PostPage({ params }: PostPageProps) {
                   transition: "all 0.2s ease",
                 }}
               >
-                🐦
+                X
               </a>
             </div>
           </div>

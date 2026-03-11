@@ -1,10 +1,6 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import { remark } from "remark";
-import remarkRehype from "remark-rehype";
-import rehypeHighlight from "rehype-highlight";
-import rehypeStringify from "rehype-stringify";
 import { Post } from "@/types/blog";
 import { processShortcodes, processFrontmatter } from "./shortcodes";
 
@@ -54,19 +50,9 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     // Process frontmatter to ensure proper typing and auto-detect card subtitle hiding
     const processedData = processFrontmatter(data, content);
 
-    // Process Hugo shortcodes before converting to HTML
+    // Process Hugo shortcodes in the content
+    // The MDX will be compiled at render time by next-mdx-remote
     const processedContent = processShortcodes(content, processedData);
-
-    // Process markdown to HTML with syntax highlighting
-    const processedMarkdown = await remark()
-      .use(remarkRehype, { allowDangerousHtml: true })
-      .use(rehypeHighlight, {
-        detect: true,
-        ignoreMissing: true,
-      })
-      .use(rehypeStringify, { allowDangerousHtml: true })
-      .process(processedContent);
-    const contentHtml = processedMarkdown.toString();
 
     // Create a better excerpt
     const plainText = content
@@ -82,7 +68,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
 
     return {
       slug,
-      content: contentHtml,
+      content: processedContent, // Return raw MDX content, not HTML
       data: processedData,
       excerpt,
     };
