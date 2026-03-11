@@ -1,11 +1,22 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import { siteConfig } from "@/lib/config";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MDXProvider from "@/components/MDXProvider";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = localFont({
+  src: [
+    { path: "../../public/fonts/Inter-Regular.woff2", weight: "400", style: "normal" },
+    { path: "../../public/fonts/Inter-Italic.woff2", weight: "400", style: "italic" },
+    { path: "../../public/fonts/Inter-Medium.woff2", weight: "500", style: "normal" },
+    { path: "../../public/fonts/Inter-MediumItalic.woff2", weight: "500", style: "italic" },
+    { path: "../../public/fonts/Inter-Bold.woff2", weight: "700", style: "normal" },
+    { path: "../../public/fonts/Inter-BoldItalic.woff2", weight: "700", style: "italic" },
+  ],
+  display: "swap",
+  fallback: ["-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+});
 
 export const metadata: Metadata = {
   title: siteConfig.title,
