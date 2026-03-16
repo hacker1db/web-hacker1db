@@ -27,8 +27,10 @@
 					.slice(0, 8)
 	);
 
+	// eslint-disable-next-line svelte/prefer-writable-derived
 	$effect(() => {
-		// Reset selection when results change
+		// selectedIndex must be both mutated by keyboard events and reset on results change
+		void results;
 		selectedIndex = 0;
 	});
 
@@ -81,7 +83,7 @@
 	>
 		<!-- Search input -->
 		<div style="display: flex; align-items: center; padding: 0.75rem 1rem; border-bottom: 1px solid #374151; gap: 0.5rem;">
-			<span style="color: #6FC1FF; font-size: 1rem; flex-shrink: 0;">{'>'}</span>
+			<span style="color: #6FC1FF; font-size: 1rem; flex-shrink: 0;">&gt;</span>
 			<input
 				bind:this={inputEl}
 				bind:value={query}

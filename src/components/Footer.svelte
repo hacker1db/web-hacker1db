@@ -37,12 +37,13 @@
 		tags.slice(0, 6).map((t, i) => {
 			const colorSet = tagColors[i % tagColors.length];
 			const icon = tagIconMap[t.tag.toLowerCase()] || colorSet.icon;
-			const { icon: _icon, ...colorSetRest } = colorSet;
 			return {
 				name: t.tag,
 				count: t.count,
 				icon,
-				...colorSetRest,
+				color: colorSet.color,
+				bg: colorSet.bg,
+				border: colorSet.border,
 			};
 		})
 	);
