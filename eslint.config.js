@@ -7,7 +7,7 @@ export default [
 	{
 		rules: {
 			'@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-			'@typescript-eslint/no-explicit-any': 'off',
+			'@typescript-eslint/no-explicit-any': 'error',
 			'svelte/require-each-key': 'off',
 			'svelte/no-navigation-without-resolve': 'off',
 			'svelte/no-at-html-tags': 'off'
