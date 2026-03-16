@@ -1,80 +1,83 @@
 # Hacker1db.dev Blog
 
-A modern, fast blog built with Next.js, TypeScript, and React. Previously built with Hugo, now migrated to a fully modern stack for better performance and developer experience.
+A modern, fast blog built with SvelteKit, TypeScript, and MDsveX. Previously built with Hugo, now migrated to a fully modern stack for better performance and developer experience.
 
-![Next.js](https://img.shields.io/badge/Next.js-16.1.6-black?logo=next.js)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue?logo=typescript)
-![React](https://img.shields.io/badge/React-19-blue?logo=react)
-![pnpm](https://img.shields.io/badge/pnpm-10-orange?logo=pnpm)
+![SvelteKit](https://img.shields.io/badge/SvelteKit-2.x-orange?logo=svelte)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)
+![MDsveX](https://img.shields.io/badge/MDsveX-0.x-purple)
+![npm](https://img.shields.io/badge/npm-10-red?logo=npm)
 
 ## Quick Start
 
 ### Prerequisites
 
 - Node.js 18+
-- pnpm (`npm install -g pnpm`)
+- npm
 
 ### Installation & Development
 
 1. **Install dependencies**
    ```bash
-   pnpm install
+   npm install
    ```
 
 2. **Start the development server**
    ```bash
-   pnpm dev
+   npm run dev
    ```
 
 3. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
+   Navigate to [http://localhost:5173](http://localhost:5173)
 
 ### Build & Deploy
 
 1. **Build for production**
    ```bash
-   pnpm build
+   npm run build
    ```
 
-2. **Start production server**
+2. **Preview production build**
    ```bash
-   pnpm start
+   npm run preview
    ```
 
 3. **Static export** (for static hosting)
    ```bash
-   pnpm build
-   # The static site will be in the 'out' directory
+   npm run build
+   # The static site will be in the 'build' directory
    ```
 
 ## Project Structure
 
 ```
 ├── src/
-│   ├── app/                    # Next.js App Router pages
-│   │   ├── layout.tsx          # Root layout with metadata
-│   │   ├── page.tsx            # Homepage
+│   ├── routes/                 # SvelteKit file-based routing
+│   │   ├── +layout.svelte      # Root layout with SearchModal and Cmd+K
+│   │   ├── +layout.server.ts   # Load searchable posts at build time
+│   │   ├── +page.svelte        # Homepage
 │   │   ├── about/              # About page
-│   │   └── posts/              # Blog posts
-│   │       ├── page.tsx        # Posts listing
-│   │       └── [...slug]/      # Dynamic post pages
-│   ├── components/             # React components
-│   │   ├── Header.tsx          # Navigation
-│   │   ├── Footer.tsx          # Site footer
-│   │   └── SocialIcons.tsx     # Social media links
+│   │   ├── posts/              # Blog posts listing
+│   │   ├── series/             # Series listing pages
+│   │   └── tags/               # Tag listing pages
+│   ├── components/             # Svelte components
+│   │   ├── Header.svelte       # Navigation with search button
+│   │   ├── Footer.svelte       # Site footer
+│   │   ├── SearchModal.svelte  # Cmd+K search with keyboard nav
+│   │   ├── PostCard.svelte     # Blog post card
+│   │   ├── CodeBlock.svelte    # Syntax-highlighted code blocks
+│   │   └── SocialIcons.svelte  # Social media links
 │   ├── lib/                    # Utilities and helpers
 │   │   ├── config.ts           # Site configuration
-│   │   └── posts.ts            # Blog post processing
-│   └── types/                  # TypeScript type definitions
-├── content/                    # Markdown blog posts
-│   ├── about.md                # About page content
-│   └── posts/                  # Blog posts organized by category
-├── public/                     # Static assets
-│   ├── images/                 # Images and media
-│   └── fonts/                  # Font files
+│   │   ├── posts.ts            # Blog post processing
+│   │   ├── types.ts            # TypeScript type definitions
+│   │   ├── shortcodes.ts       # Hugo shortcode processing
+│   │   └── socialIcons.ts      # Social media icon config
+│   └── posts/                  # MDsveX blog post source files (.svx)
+├── content/                    # Additional content assets
+├── static/                     # Static assets (images, fonts)
 ├── package.json                # Dependencies and scripts
-├── next.config.mjs             # Next.js configuration (ESM)
-├── pnpm-lock.yaml              # pnpm lock file
+├── svelte.config.js            # SvelteKit + MDsveX configuration
+├── vite.config.ts              # Vite configuration
 └── tsconfig.json               # TypeScript configuration
 ```
 
@@ -82,18 +85,18 @@ A modern, fast blog built with Next.js, TypeScript, and React. Previously built 
 
 | Command | Description |
 |---------|-------------|
-| `pnpm dev` | Start development server with Turbopack (default in Next.js 16) |
-| `pnpm build` | Build optimized production bundle via Turbopack |
-| `pnpm start` | Start production server |
-| `pnpm lint` | Run ESLint for code quality |
-| `pnpm type-check` | Run TypeScript type checking |
-| `pnpm format` | Format code with Prettier |
-| `pnpm clean` | Remove build artifacts |
+| `npm run dev` | Start development server |
+| `npm run build` | Build optimized production bundle |
+| `npm run preview` | Preview production build locally |
+| `npm run lint` | Run ESLint for code quality |
+| `npm run check` | Run Svelte type checking |
+| `npm run format` | Format code with Prettier |
 
 ## Features
 
-- **Fast Performance**: Built with Next.js 16 and Turbopack (stable, default bundler)
-- **Markdown Support**: Write posts in Markdown with comprehensive Hugo shortcode support
+- **Fast Performance**: Built with SvelteKit and Vite
+- **Markdown Support**: Write posts in MDsveX (.svx) with Svelte components inline
+- **Client-Side Search**: Cmd+K modal with keyboard navigation and instant results
 - **Dark Theme**: Terminal-inspired design with custom CSS
 - **Responsive**: Mobile-first responsive design with card-based layout
 - **SEO Optimized**: Proper meta tags and Open Graph support
@@ -102,14 +105,11 @@ A modern, fast blog built with Next.js, TypeScript, and React. Previously built 
 - **TypeScript**: Full type safety and IntelliSense
 - **Static Generation**: Pre-rendered for optimal performance
 - **Media Rich**: Support for YouTube/Vimeo embeds, code highlighting, and interactive content
-- **Card Layout**: Modern grid-based post display with hover animations
-- **Hugo Compatible**: Seamless migration from Hugo with shortcode processing
-- **Local Fonts**: Self-hosted Inter font for faster loading (no external requests)
-- **React 19**: Latest React with improved performance and new features
+- **Local Fonts**: Self-hosted fonts for faster loading (no external requests)
 
 ## Writing Posts
 
-Create new blog posts by adding Markdown files to the `content/posts/` directory:
+Create new blog posts by adding `.svx` files to the `src/posts/` directory:
 
 ```markdown
 ---
@@ -127,6 +127,7 @@ series:
 # Your Post Content
 
 Write your post content here using Markdown syntax.
+You can also use Svelte components directly in .svx files!
 ```
 
 ### Supported Frontmatter Fields
@@ -158,28 +159,14 @@ Social media icons and links are centrally managed in `src/lib/socialIcons.ts`. 
 3. **Change colors**: Update the `color` property for hover effects
 4. **Custom icons**: Add your own SVG path data
 
-Example of adding a new social platform:
-```typescript
-// In src/lib/socialIcons.ts
-linkedin: {
-  name: 'linkedin',
-  url: 'https://linkedin.com/in/yourprofile',
-  color: '#0077B5',
-  viewBox: '0 0 24 24',
-  path: 'YOUR_SVG_PATH_DATA_HERE'
-}
-```
-
-The icons will automatically appear on the homepage and use the configured colors on hover.
-
 ### Hugo Shortcodes Support
 
-The migration includes comprehensive support for Hugo shortcodes with enhanced functionality:
+The migration includes comprehensive support for Hugo shortcodes:
 
 #### Content Shortcodes
 - `{{< param subtitle >}}` - Displays frontmatter parameters
-- `{{< highlight language >}}` - Code syntax highlighting (converts to markdown)
-- `{{< ref "path" >}}` - Internal links (converted to Next.js routes)
+- `{{< highlight language >}}` - Code syntax highlighting
+- `{{< ref "path" >}}` - Internal links
 - `{{< relref "path" >}}` - Relative internal links
 
 #### Media Shortcodes
@@ -191,47 +178,6 @@ The migration includes comprehensive support for Hugo shortcodes with enhanced f
 #### Interactive Elements
 - `{{< newsletter >}}` - Styled newsletter signup with social links
 
-#### Example Usage
-```markdown
----
-title: "My Post"
-subtitle: "Learn Next.js"
----
-
-# {{< param subtitle >}}
-
-{{< youtube dQw4w9WgXcQ >}}
-
-{{< highlight javascript >}}
-console.log('Hello World!');
-{{< /highlight >}}
-
-{{< newsletter >}}
-```
-
-### Card-Style Layout
-
-The blog now features a modern card-based design inspired by [joshmedeski.com](https://www.joshmedeski.com/posts/):
-
-- **Grid layout** - Responsive cards that adapt to screen size
-- **Hover animations** - Cards lift and highlight on hover
-- **Category badges** - Visual category indicators
-- **Enhanced metadata** - Date, author, series, and tag information
-- **Read more links** - Clear call-to-action
-- **Smart excerpts** - Auto-generated from content (excludes code blocks)
-
-### Styling
-
-The site uses custom CSS located in `src/app/globals.css`. Key customization points:
-- Color scheme (currently dark terminal theme)
-- Typography and fonts
-- Layout and spacing
-- Component styles
-
-### Adding New Pages
-
-Create new pages by adding files to the `src/app/` directory following Next.js App Router conventions.
-
 ## Deployment
 
 ### Vercel (Recommended)
@@ -242,35 +188,35 @@ Create new pages by adding files to the `src/app/` directory following Next.js A
 
 ### Netlify
 
-1. Build the static site: `pnpm build`
-2. Upload the `out` directory to [Netlify](https://netlify.com)
+1. Build the static site: `npm run build`
+2. Upload the `build` directory to [Netlify](https://netlify.com)
 
 ### GitHub Pages
 
-1. Build the static site: `pnpm build`
-2. Deploy the `out` directory to GitHub Pages
+1. Build the static site: `npm run build`
+2. Deploy the `build` directory to GitHub Pages
 
 ### Other Static Hosts
 
-The site exports to static files in the `out` directory and can be deployed to any static hosting service.
+The site exports to static files in the `build` directory and can be deployed to any static hosting service.
 
 ## Development
 
 ### Local Development
 
 1. Clone the repository
-2. Install dependencies: `pnpm install`
-3. Start development server: `pnpm dev`
+2. Install dependencies: `npm install`
+3. Start development server: `npm run dev`
 4. Make changes and see them reflected instantly
 
 ### Adding Dependencies
 
 ```bash
 # Add a new dependency
-pnpm add package-name
+npm install package-name
 
 # Add a development dependency
-pnpm add -D package-name
+npm install -D package-name
 ```
 
 ## License
@@ -292,4 +238,4 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
-Built with Next.js 16, React 19, TypeScript, and pnpm
+Built with SvelteKit, MDsveX, TypeScript, and Vite
