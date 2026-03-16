@@ -1,0 +1,335 @@
+---
+title: "Automate Everything: The Philosophy and Practice of Getting Out of Your Own Way"
+date: 2026-03-15
+thumbnail: "https://images.unsplash.com/photo-1618586810102-aaa7049200c0?w=1200"
+author: hacker1db
+subtitle: "Why you should automate everything you do more than once, and how to actually start — shell scripts, CI/CD, cron jobs, reporting automation, with real examples."
+tags:
+  - "automation"
+  - "bash"
+  - "python"
+  - "ci-cd"
+  - "scripting"
+  - "productivity"
+  - "devsecops"
+series: []
+youtube: ""
+toc: true
+draft: false
+---
+
+# Automate Everything: The Philosophy and Practice of Getting Out of Your Own Way
+
+I have a rule: if I do something twice, I consider automating it. If I do it three times, I automate it.
+
+This is not an original idea. It's been written about, talked about, and turned into aphorisms. But most of the content about automation is either too abstract ("automation saves time!") or too specific ("here's how to use this particular SaaS tool"). I want to give you the practical philosophy and the actual patterns I use, with real code.
+
+No hype. Just the thinking and the tools.
+
+---
+
+## The Philosophy: Why Automate
+
+The case for automation is usually framed as time savings. "Automating this task saves me 20 minutes a week." Over a year, that's 17 hours. True, but this undersells the real benefit.
+
+**Automation removes cognitive load.** A task you do manually requires remembering to do it, remembering how to do it, and actually doing it. A task that's automated requires none of that. It happens, or it fails and alerts you. The mental overhead of remembering "I should run the security scan before pushing" disappears when the scan runs automatically on every push.
+
+**Automation creates consistency.** Humans are inconsistent. We skip steps when we're tired, hurried, or distracted. A script runs the same steps in the same order every time. For compliance work and security controls, consistency isn't just nice to have — it's the whole point.
+
+**Automation creates documentation.** A shell script is documentation of the steps. When someone new joins the team and asks "how do we deploy this?" the answer isn't a Confluence page that's three months out of date. It's the deploy script. The code is the truth.
+
+**Automation makes you faster at the edges.** When routine tasks are automated, your time and attention go to the non-routine. The interesting problems, the novel failures, the actual thinking work. Automation is how you spend more time doing the work that actually requires you.
+
+---
+
+## Start Here: The Two-Minute Rule for Scripts
+
+When you find yourself typing the same sequence of commands more than once, write a script. Immediately. Don't wait until you've done it ten times. The friction of writing the script while the task is fresh is lower than the friction of doing the task manually forever.
+
+Here's the structure I use for every shell script:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Brief description of what this script does
+# Usage: ./script-name.sh [args]
+
+# Constants
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly LOG_FILE="${SCRIPT_DIR}/script.log"
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+log() { echo -e "${GREEN}[$(date '+%H:%M:%S')]${NC} $*"; }
+warn() { echo -e "${YELLOW}[WARN]${NC} $*"; }
+error() { echo -e "${RED}[ERROR]${NC} $*" >&2; exit 1; }
+
+# Main logic here
+main() {
+    log "Starting..."
+    # do the thing
+    log "Done."
+}
+
+main "$@"
+```
+
+`set -euo pipefail` is non-negotiable. It makes the script fail on errors (`-e`), undefined variables (`-u`), and pipeline failures (`-o pipefail`). Without this, silent failures are common and dangerous.
+
+---
+
+## Real Things I've Automated (And What They Saved)
+
+### New Machine Setup
+
+Setting up a new machine used to take me half a day. Install tools, configure dotfiles, set up SSH keys, configure git, install language runtimes. Now it takes 20 minutes.
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+# bootstrap.sh - New machine setup
+log() { echo ">>> $*"; }
+
+log "Installing Homebrew..."
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+log "Installing from Brewfile..."
+brew bundle --file="${HOME}/dotfiles/Brewfile"
+
+log "Setting up dotfiles..."
+cd "${HOME}/dotfiles" && stow nvim tmux zsh git
+
+log "Installing Neovim plugins..."
+nvim --headless "+Lazy! sync" +qa
+
+log "Done. Restart terminal."
+```
+
+The `Brewfile` is the important part — it's a declarative list of every tool I use:
+
+```ruby
+# Brewfile
+tap "homebrew/bundle"
+
+brew "neovim"
+brew "tmux"
+brew "git"
+brew "gh"
+brew "jq"
+brew "yq"
+brew "ripgrep"
+brew "fd"
+brew "fzf"
+brew "stow"
+brew "terraform"
+brew "trivy"
+brew "semgrep"
+# ... etc
+```
+
+Every tool I install gets added to the Brewfile. New machine? `brew bundle`. Done.
+
+### Daily Security Report
+
+I run a scheduled script every morning that pulls together the security posture for the systems I'm responsible for. It queries AWS for new IAM changes, checks for new CVEs in our dependencies, and summarizes findings into a Markdown report that lands in my Obsidian inbox.
+
+```python
+#!/usr/bin/env python3
+"""Daily security digest generator."""
+
+import boto3
+import json
+import subprocess
+from datetime import datetime, timedelta
+from pathlib import Path
+
+def get_iam_events(hours_back: int = 24) -> list:
+    """Get IAM-related CloudTrail events from the last N hours."""
+    client = boto3.client("cloudtrail")
+    start_time = datetime.utcnow() - timedelta(hours=hours_back)
+
+    response = client.lookup_events(
+        LookupAttributes=[{"AttributeKey": "EventSource", "AttributeValue": "iam.amazonaws.com"}],
+        StartTime=start_time,
+        MaxResults=50
+    )
+    return response.get("Events", [])
+
+def get_trivy_findings(image: str) -> dict:
+    """Run trivy against a container image and return findings."""
+    result = subprocess.run(
+        ["trivy", "image", "--format", "json", "--quiet", image],
+        capture_output=True, text=True
+    )
+    return json.loads(result.stdout) if result.stdout else {}
+
+def generate_report(iam_events: list, findings: dict) -> str:
+    today = datetime.now().strftime("%Y-%m-%d")
+    lines = [
+        f"# Security Digest {today}\n",
+        f"## IAM Changes (Last 24h)\n",
+    ]
+    for event in iam_events[:10]:
+        lines.append(f"- `{event['EventName']}` by `{event.get('Username', 'unknown')}` at {event['EventTime']}\n")
+
+    lines.append("\n## Vulnerability Summary\n")
+    for result in findings.get("Results", []):
+        vulns = result.get("Vulnerabilities", [])
+        critical = sum(1 for v in vulns if v.get("Severity") == "CRITICAL")
+        high = sum(1 for v in vulns if v.get("Severity") == "HIGH")
+        lines.append(f"- {result['Target']}: {critical} CRITICAL, {high} HIGH\n")
+
+    return "".join(lines)
+
+if __name__ == "__main__":
+    events = get_iam_events()
+    findings = get_trivy_findings("myapp:latest")
+    report = generate_report(events, findings)
+
+    output_path = Path.home() / "notes/SecondBrain/0.Quick Notes/Daily Stuff" / f"{datetime.now().strftime('%Y-%m-%d')}-security.md"
+    output_path.write_text(report)
+    print(f"Report written to {output_path}")
+```
+
+This runs via cron at 7am. I open my Obsidian inbox and the digest is already there.
+
+### PR Security Review Checklist
+
+Every PR I review gets a checklist comment automatically generated based on what's in the diff. A GitHub Action detects the PR, runs a classifier on the changed files, and posts a pre-populated review comment:
+
+```yaml
+# .github/workflows/security-review.yml
+name: Security Review Helper
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  generate-checklist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect change categories
+        id: categories
+        run: |
+          CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+          HAS_AUTH=$(echo "$CHANGED" | grep -l "auth\|login\|token\|session" || true)
+          HAS_INFRA=$(echo "$CHANGED" | grep -l "\.tf$\|\.yaml$\|Dockerfile" || true)
+          HAS_DEPS=$(echo "$CHANGED" | grep -l "package\.json\|requirements\.txt\|\.csproj" || true)
+          echo "has_auth=${HAS_AUTH:+true}" >> $GITHUB_OUTPUT
+          echo "has_infra=${HAS_INFRA:+true}" >> $GITHUB_OUTPUT
+          echo "has_deps=${HAS_DEPS:+true}" >> $GITHUB_OUTPUT
+
+      - name: Post checklist
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = `## Security Review Checklist\n
+            ${{ steps.categories.outputs.has_auth == 'true' && '- [ ] Auth changes reviewed for privilege escalation\n- [ ] Token handling follows standards\n- [ ] Session management unchanged or intentionally updated' || '' }}
+            ${{ steps.categories.outputs.has_infra == 'true' && '- [ ] IaC changes reviewed with checkov\n- [ ] No new public exposure\n- [ ] IAM changes follow least privilege' || '' }}
+            ${{ steps.categories.outputs.has_deps == 'true' && '- [ ] New dependencies scanned with Trivy\n- [ ] No known CVEs in added packages' || '' }}
+            - [ ] No hardcoded secrets or credentials
+            - [ ] No debug logging left in
+            `;
+            github.rest.issues.createComment({
+              ...context.repo,
+              issue_number: context.issue.number,
+              body
+            });
+```
+
+### Git Hygiene Automation
+
+I have a script that runs after every `git clone` to set up pre-commit hooks, install the project's tools, and verify the environment:
+
+```bash
+#!/usr/bin/env bash
+# post-clone.sh - Run this after cloning a new repo
+set -euo pipefail
+
+log() { echo ">>> $*"; }
+
+log "Setting up pre-commit..."
+pip install pre-commit --quiet
+pre-commit install
+
+log "Checking for secrets in history..."
+trufflehog git "file://$(pwd)" --only-verified --json 2>/dev/null | jq -r '.SourceMetadata.Data.Git.file' | head -20
+
+log "Running initial dependency scan..."
+trivy fs . --severity HIGH,CRITICAL --quiet
+
+log "Done. Environment ready."
+```
+
+---
+
+## Cron and Scheduled Automation
+
+Not everything needs to be event-driven. Some automation just needs to run on a schedule.
+
+My crontab:
+
+```cron
+# Security digest at 7am weekdays
+0 7 * * 1-5 /Users/me/scripts/daily-security-digest.py
+
+# Weekly dependency check on all local repos
+0 9 * * 1 /Users/me/scripts/scan-local-repos.sh
+
+# Obsidian vault git backup every 4 hours
+0 */4 * * * cd /Users/me/notes/SecondBrain && git add -A && git commit -m "auto: $(date)" && git push origin main
+
+# Clean up old Docker images weekly
+0 10 * * 0 docker system prune -f --filter "until=168h"
+```
+
+The Obsidian vault backup is one I recommend to everyone. Your notes are worth backing up. Automatic git commit every 4 hours means I've never lost more than 4 hours of notes.
+
+---
+
+## Where Automation Fails
+
+No sugar coating: automation has failure modes.
+
+**Automating a bad process.** If the manual process is broken, automating it makes it faster at being broken. Before automating, understand the process. Automation is a multiplier — it multiplies good processes and bad ones equally.
+
+**Brittle scripts.** Scripts that fail silently are worse than no scripts. Always: `set -euo pipefail`, log output, alert on failure. A cron job that silently fails for three weeks and nobody notices is an active liability.
+
+**Automation debt.** Scripts accumulate. Six months from now, you have 40 scripts and you've forgotten what half of them do. Keep a README in your scripts directory. Comment your code. Delete scripts that are no longer used.
+
+**Over-automating.** Not everything should be automated. One-time tasks, things that require judgment, things that change frequently — sometimes the manual approach is the right one.
+
+---
+
+## Getting Started
+
+If you're not automating much today, here's where to start:
+
+1. **This week:** Identify one thing you do manually more than once a week. Write a script for it. It doesn't have to be perfect.
+
+2. **This month:** Add pre-commit hooks to every active project you work on. Start with secret detection (`gitleaks` or `detect-secrets`).
+
+3. **This quarter:** Set up one scheduled automation that produces a report or summary you currently produce manually.
+
+The compound effect is real. Every hour you invest in automation pays dividends every week forever. Start small. Make it work. Make it reliable. Move on to the next thing.
+
+---
+
+## Takeaway
+
+The philosophy is simple: your time is not infinite, your attention is your scarcest resource, and computers are really good at doing the same thing repeatedly without getting tired or making mistakes.
+
+If you do it twice, automate it. If it's worth doing consistently, automate it. If it requires human judgment every time, don't automate it.
+
+Write the script. Set up the hook. Schedule the job. Then spend your time on the things that actually require you.

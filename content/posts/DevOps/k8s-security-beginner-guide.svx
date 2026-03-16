@@ -1,0 +1,305 @@
+---
+title: "Kubernetes Security: A Beginner's Field Guide"
+date: 2026-03-15
+thumbnail: "https://images.unsplash.com/photo-1695668548342-c0c1ad479aee?w=1200"
+author: hacker1db
+subtitle: "The essential Kubernetes security concepts every practitioner needs to know before they get paged at 2am."
+tags:
+  - "kubernetes"
+  - "k8s"
+  - "security"
+  - "rbac"
+  - "devsecops"
+  - "containers"
+series: []
+youtube: ""
+toc: true
+draft: false
+---
+
+# Kubernetes Security: A Beginner's Field Guide
+
+Let me be straight with you: Kubernetes is one of the most powerful platforms we have, and also one of the easiest to misconfigure. I've seen production clusters running with `--authorization-mode=AlwaysAllow`. I've seen secrets stored in ConfigMaps. I've seen pods running as root with `hostPID: true`. No judgment — K8s has a learning curve that's less of a curve and more of a cliff face.
+
+But the good news is that the security fundamentals aren't as overwhelming as the overall platform. You don't need to know every API object or every operator pattern to build a reasonably secure cluster. You need to nail about six things. Let's walk through them together.
+
+---
+
+## Why K8s Security Is Different
+
+Before we dive in, it's worth understanding why Kubernetes security feels different from traditional application security. In K8s, the blast radius of a single misconfiguration is enormous. A compromised pod can potentially reach the Kubernetes API server, enumerate secrets across namespaces, move laterally to other workloads, or even escape to the underlying node. The attack surface is distributed by design — that's the whole point of the platform. Which means your security has to be layered the same way.
+
+Think of it as defense in depth, but the layers are: who can do what (RBAC), what pods are allowed to do (Pod Security Standards), what traffic is allowed (Network Policies), how secrets are handled, where images come from, and what can even get deployed in the first place (admission controllers). Let's go through each.
+
+---
+
+## RBAC: Who Can Do What
+
+Role-Based Access Control is how Kubernetes decides whether a request is authorized. It sounds simple, but it trips people up constantly.
+
+The core model is: **Subjects** (users, service accounts, groups) get bound to **Roles** (a set of permissions on resources) via **RoleBindings**. Roles are namespace-scoped; ClusterRoles and ClusterRoleBindings are cluster-wide.
+
+Here's the most common mistake: giving workloads cluster-admin because it's "easier." Don't.
+
+Instead, create a least-privilege role for your application:
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: my-app
+  name: my-app-reader
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets"]
+    verbs: ["get", "list"]
+    resourceNames: ["my-app-config", "my-app-secret"]  # scope to specific resources
+```
+
+Then bind it to a dedicated service account:
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: my-app-reader-binding
+  namespace: my-app
+subjects:
+  - kind: ServiceAccount
+    name: my-app-sa
+    namespace: my-app
+roleRef:
+  kind: Role
+  name: my-app-reader
+  apiGroup: rbac.authorization.k8s.io
+```
+
+A few things to audit regularly:
+
+- `kubectl get clusterrolebindings -o json | jq '.items[] | select(.subjects[]?.name == "system:unauthenticated")'` — anything bound to unauthenticated is a fire.
+- Service accounts with auto-mounted tokens that don't need API access. Set `automountServiceAccountToken: false` in your pod spec unless the workload actually needs it.
+- Who has `create` or `patch` on `pods/exec` — that's essentially shell access to running containers.
+
+---
+
+## Pod Security Standards
+
+The old PodSecurityPolicy is gone (deprecated in 1.21, removed in 1.25). The replacement is Pod Security Standards, enforced via the Pod Security Admission controller built into Kubernetes.
+
+There are three levels: **Privileged** (no restrictions), **Baseline** (prevents known privilege escalation), and **Restricted** (hardened). You apply them per namespace with labels:
+
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: my-app
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/enforce-version: v1.30
+    pod-security.kubernetes.io/warn: restricted
+    pod-security.kubernetes.io/audit: restricted
+```
+
+The `warn` and `audit` modes are great for rolling this out incrementally — they'll surface violations without blocking deployments while you clean things up.
+
+At minimum, your workloads should run with:
+
+```yaml
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  seccompProfile:
+    type: RuntimeDefault
+  capabilities:
+    drop:
+      - ALL
+```
+
+I know `readOnlyRootFilesystem: true` breaks some apps that write temp files. Mount a tmpfs volume for `/tmp` if you need it. It's worth the extra YAML.
+
+---
+
+## Network Policies: Default Deny, Then Open Up
+
+By default, every pod in your cluster can talk to every other pod. That's a flat network, and in a breach scenario it means lateral movement is trivial.
+
+Network Policies let you define ingress and egress rules at the pod level. The golden rule: start with a default-deny-all, then explicitly allow what's needed.
+
+```yaml
+# Default deny all ingress and egress in a namespace
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: my-app
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+```
+
+Then layer in what you actually need:
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-app-ingress
+  namespace: my-app
+spec:
+  podSelector:
+    matchLabels:
+      app: my-app
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8080
+```
+
+One important caveat: Network Policies are enforced by your CNI plugin (Calico, Cilium, Weave, etc.). If your CNI doesn't support them, the policies exist in etcd but do nothing. Verify your CNI actually enforces them.
+
+---
+
+## Secrets Management (and Why etcd Encryption Matters)
+
+The built-in Kubernetes Secret object is base64-encoded, not encrypted. That's a fact that still surprises people. If someone can read your etcd backup or has access to the API with the right RBAC permissions, they can pull your secrets in plaintext.
+
+Step one: enable encryption at rest for etcd. This is a control plane config:
+
+```yaml
+# /etc/kubernetes/encryption-config.yaml
+apiVersion: apiserver.config.k8s.io/v1
+kind: EncryptionConfiguration
+resources:
+  - resources:
+      - secrets
+    providers:
+      - aescbc:
+          keys:
+            - name: key1
+              secret: <base64-encoded-32-byte-key>
+      - identity: {}
+```
+
+Step two, and honestly more impactful: use an external secrets manager. AWS Secrets Manager, Azure Key Vault, HashiCorp Vault — all of them have Kubernetes integrations. The External Secrets Operator is the cleanest way to do this:
+
+```yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: my-db-password
+  namespace: my-app
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: azure-keyvault
+    kind: SecretStore
+  target:
+    name: my-db-secret
+  data:
+    - secretKey: password
+      remoteRef:
+        key: my-db-password
+```
+
+This way your secrets live in a dedicated vault with audit logging, rotation support, and access policies — not in Kubernetes etcd.
+
+---
+
+## Image Scanning: Know What You're Running
+
+Every container image is a supply chain. The base image, every package installed, every dependency pulled in — all of it is attack surface. You need to know what you're running before it hits production.
+
+Trivy is the tool I reach for. It's fast, accurate, and integrates well with CI pipelines:
+
+```bash
+# Scan an image before pushing
+trivy image --exit-code 1 --severity HIGH,CRITICAL myapp:latest
+
+# Scan a tarball
+trivy image --input myapp.tar
+
+# Output as JSON for reporting
+trivy image --format json --output results.json myapp:latest
+```
+
+Set `--exit-code 1` in CI so a HIGH or CRITICAL finding fails the build. Yes, this will cause friction. That's the point.
+
+For cluster-level enforcement, pair Trivy with a policy that only allows images from your trusted registry and that have passed scanning:
+
+```bash
+# In your CI pipeline, only push to internal registry after passing scan
+trivy image --exit-code 1 --severity HIGH,CRITICAL ${IMAGE}
+docker tag ${IMAGE} registry.internal.company.com/${IMAGE}
+docker push registry.internal.company.com/${IMAGE}
+```
+
+---
+
+## Admission Controllers: The Last Line of Defense
+
+Admission controllers are webhooks that intercept API requests before objects are persisted to etcd. They're your enforcement layer — the place where you say "no, you can't deploy that."
+
+OPA Gatekeeper and Kyverno are the two main policy engines here. Kyverno is Kubernetes-native and easier to get started with:
+
+```yaml
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-non-root
+spec:
+  validationFailureAction: Enforce
+  rules:
+    - name: check-runAsNonRoot
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      validate:
+        message: "Containers must not run as root."
+        pattern:
+          spec:
+            containers:
+              - securityContext:
+                  runAsNonRoot: true
+```
+
+Start with `validationFailureAction: Audit` to understand the blast radius before switching to `Enforce`. Otherwise you'll block deployments you didn't expect to block and get paged for it.
+
+---
+
+## Putting It Together: A Baseline Security Checklist
+
+Here's what I'd call a minimum viable security posture for a K8s cluster:
+
+- [ ] RBAC enabled, no wildcard permissions, dedicated service accounts per workload
+- [ ] Pod Security Standards at `baseline` minimum, `restricted` for sensitive namespaces
+- [ ] Default-deny Network Policies per namespace
+- [ ] etcd encryption at rest enabled
+- [ ] Secrets sourced from external vault (or at minimum, not hardcoded in env vars)
+- [ ] Image scanning in CI with failures on HIGH/CRITICAL
+- [ ] Admission controller enforcing security policies
+- [ ] Audit logging enabled on the API server
+- [ ] Node OS hardened and regularly patched
+
+---
+
+## The Takeaway
+
+Kubernetes security is not something you do once and forget. It's a practice. The platform changes, your workloads change, the threat landscape changes. But if you get these six areas in reasonable shape, you're ahead of the majority of clusters I've audited.
+
+Start with RBAC and Pod Security Standards — those two alone eliminate a huge category of risk. Add Network Policies as you go, get your secrets into a real vault, scan your images, and put Kyverno in front of it all as a safety net.
+
+You don't need to boil the ocean. Pick the highest-impact control and implement it this week. Then pick the next one. Small, steady progress compounds.
+
+If you're just starting out with a cluster, run `kubectl-score` or `kube-bench` against it today. You'll probably find things that surprise you, and that's fine — that's the beginning of the work.

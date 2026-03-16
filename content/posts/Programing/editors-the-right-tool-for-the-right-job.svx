@@ -1,0 +1,189 @@
+---
+title: "Editors: Why I Use Both Neovim AND JetBrains (And Why That's Not a Contradiction)"
+date: 2026-03-15
+thumbnail: "https://images.unsplash.com/photo-1552308995-2baac1ad5490?w=1200"
+author: hacker1db
+subtitle: "The myth of the one true editor, when Neovim shines vs when JetBrains is the right call, dotfiles culture, and how to build a workflow that uses the best of both."
+tags:
+  - "neovim"
+  - "jetbrains"
+  - "editors"
+  - "workflow"
+  - "dotfiles"
+  - "devsecops"
+series: []
+youtube: ""
+toc: true
+draft: false
+---
+
+# Editors: Why I Use Both Neovim AND JetBrains (And Why That's Not a Contradiction)
+
+Let me get the tribal war out of the way early: I use Neovim. I also use JetBrains IDEs. I have no internal conflict about this. They are different tools for different problems, and treating editor choice like a moral position is one of the silliest things we do as an industry.
+
+That said, I have genuine opinions about when each one is the right call, and I've spent enough time in both to give you something more useful than "it depends."
+
+---
+
+## The Neovim Side of My Life
+
+I came to Neovim after years of VS Code. The pitch was speed and terminal integration. The actual payoff was something I didn't expect: **the editing model changed how I think about text manipulation.**
+
+Vim motions are not just shortcuts. They're a language for describing edits. `ciw` (change inner word), `da"` (delete around quotes), `ggVGy` (select and yank entire file) — once these are in muscle memory, editing with anything else feels like you're wearing oven mitts.
+
+### What Neovim Is Great For
+
+**Config files, scripts, and quick edits.** When I need to edit a YAML pipeline config, tweak a shell script, or make a quick change to a Dockerfile, I'm in Neovim in under a second. No project to open, no indexing, no waiting.
+
+**Terminal-native workflows.** My entire workflow lives in the terminal. `tmux` gives me persistent sessions and split panes. Neovim opens right there in the terminal alongside my running processes, test output, and git log. This integration is seamless in a way that a GUI IDE cannot replicate.
+
+**Working on remote machines.** SSH into a server, open Neovim, edit configs, done. No GUI, no forwarding, no problem. JetBrains has remote development solutions but they're heavyweight. Neovim is just there.
+
+**Writing prose.** Yes, I write blog posts and documentation in Neovim. With `zen-mode.nvim` and `vim-pencil` for soft wrap, it's a distraction-free writing environment that I can pop in and out of without breaking my terminal flow.
+
+**Scripting and single-file work.** Python scripts, Bash one-offs, quick prototypes — anything where I'm in a single file or a flat directory, Neovim is faster than firing up an IDE.
+
+### My Neovim Setup
+
+I use `lazy.nvim` as my plugin manager. The core of my config:
+
+```lua
+-- Essential plugins
+{ "neovim/nvim-lspconfig" },          -- LSP integration
+{ "hrsh7th/nvim-cmp" },               -- completion
+{ "nvim-telescope/telescope.nvim" },  -- fuzzy finding everything
+{ "nvim-treesitter/nvim-treesitter"}, -- syntax and text objects
+{ "folke/which-key.nvim" },           -- discoverable keybinds
+{ "lewis6991/gitsigns.nvim" },        -- git blame/diff in buffer
+{ "stevearc/oil.nvim" },              -- file management in a buffer
+```
+
+My `<leader>` is `Space`. I have keybinds for everything I do frequently, and `which-key` surfaces them so I don't have to memorize the full tree.
+
+The whole config lives in my dotfiles repo, which I'll come back to.
+
+---
+
+## The JetBrains Side of My Life
+
+I use JetBrains IDEs (primarily Rider for .NET and IntelliJ for Java/Kotlin) for serious application development. Not because Neovim can't handle it — it can, with enough plugins — but because the JetBrains experience for large, complex projects is genuinely better in ways that matter for my work.
+
+### What JetBrains Is Great For
+
+**Large codebases with deep type hierarchies.** When I'm navigating a 200k-line .NET codebase, Rider's understanding of the code is deeper than any Neovim LSP setup I've configured. "Find usages" across a solution, refactoring that updates all call sites, type inference across partial classes — this stuff is rock-solid in Rider in a way that still occasionally hiccups in Neovim.
+
+**SonarLint integration.** This is the big one for security work. SonarLint in JetBrains IDEs gives me real-time security and quality feedback directly in the editor. It flags SQL injection patterns, hardcoded credentials, unsafe deserialization, weak crypto, and hundreds of other issues before I even run a linter. In a security engineer's workflow, having that feedback inline while writing code is genuinely valuable. I'm not waiting for a CI pipeline to catch something SonarLint would have told me in ten seconds.
+
+**Debugger.** The JetBrains debugger is excellent. Conditional breakpoints, evaluate expressions, memory views, step through async code — when I'm debugging something complex, the visual debugger in Rider or IntelliJ saves real time. Neovim has DAP integration and it works, but the JetBrains experience is more polished.
+
+**Database tooling.** DataGrip (or the database tools built into IntelliJ/Rider) for querying production-adjacent databases, viewing schemas, and writing complex queries is excellent. I haven't found a Neovim equivalent that comes close.
+
+**Test runners.** Running, debugging, and visualizing test results for a large test suite in JetBrains is clean and fast. The test tree with pass/fail state, the ability to click into a failing test and jump to the assertion — it's good UX for something I do dozens of times a day.
+
+---
+
+## The Dotfiles Culture
+
+Here's something that gets missed in editor debates: the dotfiles culture around Neovim is a feature, not just an aesthetic.
+
+When your editor config is a set of Lua files in a Git repo, you get:
+- Version history on your config ("why did I add this plugin?")
+- Easy setup on a new machine (`git clone && stow`)
+- Sharing with other developers
+- The ability to audit exactly what your editor is doing
+
+My dotfiles repo is organized with GNU `stow`:
+
+```
+dotfiles/
+  nvim/.config/nvim/
+    init.lua
+    lua/
+      plugins/
+      lsp/
+      keymaps.lua
+  tmux/.tmux.conf
+  zsh/.zshrc
+  git/.gitconfig
+```
+
+Running `stow nvim` from the dotfiles directory creates symlinks in `~/.config/nvim/`. New machine setup takes about 15 minutes. Everything works exactly as it did on the old machine.
+
+JetBrains has settings sync via JetBrains account, which is fine, but it's opaque. You can't read your settings as text, diff them, or script changes to them. The dotfiles model is just more transparent and composable.
+
+---
+
+## The Myth of One Editor to Rule Them All
+
+The "Neovim vs JetBrains" argument assumes you have to pick one. You don't. The people who insist you must commit to a single editor are the same people who insist you must use a single programming language for everything, or that tabs vs spaces is an argument worth having.
+
+The practical question is: **what is the cost of context-switching between editors?**
+
+For me, that cost is low. Both editors have Vim keybindings (JetBrains via the IdeaVim plugin, which is excellent). So my muscle memory works in both. The mental model for navigation — `gd` for go to definition, `K` for hover docs, `Space + f` for fuzzy find — is consistent because I've set it up that way.
+
+My IdeaVim config (`.ideavimrc`):
+
+```vim
+set which-key
+set NERDTree
+set multiple-cursors
+set commentary
+set surround
+set easymotion
+
+let mapleader = " "
+
+" Mirror my Neovim keybinds
+nnoremap <leader>ff <Action>(GotoFile)
+nnoremap <leader>fg <Action>(FindInPath)
+nnoremap <leader>fb <Action>(RecentFiles)
+nnoremap gd <Action>(GotoDeclaration)
+nnoremap gr <Action>(FindUsages)
+nnoremap K <Action>(QuickJavaDoc)
+```
+
+Same keybinds, different action implementations. When I switch from Neovim to Rider, my hands don't notice.
+
+---
+
+## How I Decide Which Editor to Open
+
+Here's my actual decision tree:
+
+- Config file, script, quick edit → Neovim
+- Writing prose (docs, blog, reports) → Neovim
+- Working on a remote server → Neovim
+- Single-file Python or Bash → Neovim
+- Large .NET or Java codebase → JetBrains
+- Need debugger → JetBrains
+- Need SonarLint security analysis → JetBrains
+- Need database tooling → JetBrains
+- Someone else needs to pair program and they're not a vim person → JetBrains (and I pretend the mouse exists)
+
+The pattern: Neovim for speed and terminal integration, JetBrains for depth and tooling ecosystem on complex projects.
+
+---
+
+## Why IDE Features Matter for Security Work
+
+I want to spend a moment on SonarLint specifically because it's underrated in security discussions.
+
+Most security tooling happens at the pipeline level: SAST scanners run in CI, dependency checks run on merge, container scans happen at build time. All of that is correct and necessary. But there's a lag: write code, push, wait for pipeline, see finding, fix it, push again.
+
+SonarLint brings a subset of that analysis into the editor in real time. When I'm writing code that touches user input, cryptography, authentication, or data access, SonarLint flags issues as I type. That feedback loop is orders of magnitude faster than a CI pipeline.
+
+Some developers dismiss SonarLint because it generates false positives. That's fair — it does. But the signal-to-noise ratio is high enough that I'd rather have the flags and dismiss the false positives than miss a real finding because I was waiting for the pipeline. Tune the rules, suppress the noise, and keep the useful signal.
+
+JetBrains makes this dead easy. There's a reason I reach for it for any serious application development.
+
+---
+
+## Takeaway
+
+You don't have to pick one editor. But you do have to pick the right one for each job.
+
+Invest in Neovim for the terminal-native speed and editing model. Invest in JetBrains for the deep language tooling and security feedback. Set up consistent keybinds across both so the context switch is cheap.
+
+The time you spend learning your editor — any editor — compounds over a career. Every friction point you remove from your editing workflow is a tax you stop paying, forever. Make that investment.
+
+And if anyone tells you you're not a real developer because you use an IDE, or because you use Neovim, or because you switch between them — they're optimizing for tribal identity, not for shipping good software.

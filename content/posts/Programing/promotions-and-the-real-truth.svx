@@ -1,0 +1,124 @@
+---
+title: "Promotions and the Real Truth"
+date: 2026-03-15
+thumbnail: "https://images.unsplash.com/photo-1565688527174-775059ac429c?w=1200"
+author: hacker1db
+subtitle: "The uncomfortable truths about how promotions actually work in tech — no sugar coating."
+tags:
+  - "career"
+  - "promotions"
+  - "tech"
+  - "leadership"
+  - "politics"
+series: []
+youtube: ""
+toc: true
+draft: false
+---
+
+# Promotions and the Real Truth
+
+I'm going to tell you things about promotions that your HR department won't, your manager might dance around, and that most career advice blogs are too worried about being liked to say outright.
+
+I've been promoted. I've been passed over. I've promoted people. I've watched brilliant engineers get stuck at the same level for years while people with average technical skills climbed the ladder. And after all of that, I have some opinions.
+
+Pour the coffee. This one's going to sting a little.
+
+## Technical Skill Is the Table Stakes, Not the Winning Hand
+
+Here's the most common mistake I see talented engineers make: they believe that if they just get good enough at the technical work, the promotion will follow naturally. They put their heads down, write excellent code, close tickets, and wait.
+
+And wait.
+
+And nothing happens.
+
+This is not because the system is fair and they weren't good enough. It's because technical excellence is the floor, not the ceiling. You need to be technically solid to be promotable. You do not get promoted for being technically solid.
+
+Think about it from your manager's perspective. They're looking up the org chart trying to justify why you belong at the next level. "They write really clean code" is not a promotion argument. "They led the redesign of our auth service, mentored two junior engineers through it, and presented the results to the architecture review board" — that's a promotion argument.
+
+The work needs to be visible. The impact needs to be articulable. And you need to make it easy for your manager to make the case.
+
+## Visibility Is Not Bragging — It's Survival
+
+I've watched introverted, high-integrity engineers lose promotions to people who were louder, more self-promotional, and frankly less technically sharp. It's infuriating. It's also reality.
+
+The visibility piece isn't about being obnoxious or taking credit for others' work. It's about making sure the right people know what you're doing and why it matters.
+
+Practical moves that work:
+
+**Write things down and share them.** Send a brief summary to your team after completing a complex project. Not "hey look at me" — more "here's what we did, here's what we learned, here's what comes next." This builds a paper trail of your impact and positions you as someone who thinks about the team, not just the ticket.
+
+**Talk in meetings.** I know. But if you're the person who does excellent work but never speaks up in the design review or the sprint retrospective, you are invisible to the people who don't read your PRs. Presence matters.
+
+**Update your manager regularly.** Don't wait for your 1-on-1 to surface important wins. A Slack message that says "finished the migration to the new auth service — cut latency by 40%, want to sync on next steps" keeps your work front of mind.
+
+## You Need Sponsors, Not Just Mentors
+
+Mentors give you advice. Sponsors put their reputation on the line for you in rooms you're not in. These are not the same thing, and confusing them costs people years.
+
+A mentor tells you what to work on to be promotable. A sponsor walks into the promotion calibration meeting and says "I think this person is ready and here's why." That distinction is everything.
+
+How do you get a sponsor? By doing great work in front of people who have influence and letting them see it. By volunteering for projects that are visible to senior leadership. By finding senior engineers or leaders whose work you genuinely respect and finding ways to add value to their initiatives.
+
+Sponsorship is earned, not asked for. But you can create the conditions for it.
+
+Also — sponsors have to believe in your potential, which means they have to actually know you. Eat lunch with senior people. Volunteer for cross-team projects. Show up to the optional architecture discussions. Proximity creates opportunity.
+
+## Timing and Politics Are Real
+
+I once watched a strong engineer get denied a promotion because the org was in the middle of a reorg and nobody wanted to set a precedent. The work was there. The impact was there. The timing was wrong.
+
+I've seen promotions go through in Q4 because the manager had budget to spend before year-end. I've seen them get blocked because two people at the same level were up for the same role and one had a stronger internal champion.
+
+This is not idealism. This is how organizations work.
+
+You can't control all of it, but you can:
+
+- **Understand your company's promotion cycle.** Most companies have specific windows when promotions are reviewed. Know when they are, and make sure you're making your case in the right window — not three weeks after it closed.
+- **Know who's in the calibration room.** Your manager advocates for you, but they're usually advocating against other managers with competing interests. Find out who else is in that conversation.
+- **Don't assume good work speaks for itself.** See above, re: visibility.
+
+## How to Actually Have the Promotion Conversation
+
+Most people have this conversation wrong. They wait until frustration boils over, then have an emotional conversation that sounds like an ultimatum. Don't do that.
+
+Have it early and often. Not "when do I get promoted" — that's a dead end. Instead:
+
+"I'm targeting a promotion to [level] in the next [timeframe]. What does that look like from where you sit? What would I need to demonstrate?"
+
+Then shut up and listen. Really listen. Take notes. Ask follow-up questions. Then do the things they said.
+
+Three months later: "We talked about [specific thing] being part of the path to promotion. Here's what I've done on that. Am I tracking the way you'd expect?"
+
+This does a few things. It keeps the conversation active. It holds both you and your manager accountable to a shared definition of what "ready" looks like. And it gives you data — if you keep doing the things they said and the promotion keeps not happening, now you have information you need to make a different decision.
+
+## When to Stay and When to Leave
+
+Staying too long at a company that won't promote you is one of the biggest career mistakes I see. The pattern looks like this: you're told you're almost ready, you wait, you're told you're still almost ready, you wait some more. Two years pass. You're still almost ready.
+
+At some point, "almost ready" is a management strategy, not a status update.
+
+Some honest signals that it's time to go:
+
+- You've had the promotion conversation multiple times with clear deliverables and they keep moving the goalposts.
+- People less experienced than you are being hired into the role above you from outside.
+- Your manager can't give you a specific, concrete answer about what "ready" means.
+- The role you want doesn't exist at your company and they're not creating it.
+
+Leaving is not failure. Sometimes the fastest way to get the title and comp you've earned is to get it somewhere that can see clearly what you're worth. The market often values you more accurately than your current employer.
+
+That said — don't leave in anger without a plan. Leave intentionally. Line up the next thing, negotiate from a position of strength, and leave on good terms. Tech is smaller than it looks.
+
+## The Part Nobody Wants to Say
+
+Some companies have broken promotion processes. Some managers are bad at advocating for their teams. Some organizations have implicit biases that advantage certain people over others.
+
+None of this is your fault. All of it is your problem to navigate.
+
+The advice I give to people who've been passed over when they shouldn't have been: document everything, have explicit conversations, and if nothing changes, vote with your feet. A company that can't recognize your value after you've made the case clearly is a company that won't become better at it next year.
+
+Your career is too long to spend years trying to convince people of your worth. Find people who can already see it.
+
+---
+
+**Takeaway:** If you're waiting for a promotion, stop waiting and start campaigning — in the good sense of that word. Map the path, make your work visible, find a sponsor, understand the cycle, and have the conversation directly. If you've done all of that and nothing's moved in 12-18 months, start looking. You owe yourself that much.

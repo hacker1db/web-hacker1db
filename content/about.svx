@@ -1,0 +1,43 @@
+---
+title: "About Me"
+date: 2021-05-15
+type:
+  - post
+  - posts
+---
+
+## $WhoIs
+
+Hey, I'm David (Hacker1db), an AppSec engineer, software engineer, and someone who genuinely believes security is a culture problem, not just a technical one.
+
+I'm a builder and a breaker. I build secure platforms and break the ones that aren't. I love diving deep into hard topics like cloud security, application security, and platform engineering, then coming back to the surface to share what I've found in a way that actually makes sense. By night (and early morning, and lunch break) you'll probably find me on a disc golf course, in the gym, or writing about the things I'm learning.
+
+## What I'm About
+
+**Security as a craft.** Application security, cloud security architecture, platform engineering, and building secure defaults that actually stick. I care about making security accessible to the teams who ship the code.
+
+**Teaching & mentoring.** Knowledge hoarded is knowledge wasted. I write, I speak, and I invest in helping others grow. If I can save someone the hours I spent figuring something out, that's a win.
+
+**Faith.** My faith is the anchor. Everything else flows from there.
+
+**Disc golf.** My therapy, my competition, and my excuse to be outside every single day.
+
+**Fitness & grit.** 4x/week in the gym, daily push-ups, and a deep belief that discipline in the body builds discipline everywhere else. Walters do hard things.
+
+**Coffee.** Life's too short for bad coffee.
+
+**Music & travel.** Two things that remind me the world is bigger than my screen.
+
+## Why This Blog
+
+I started hacker1db.dev because I wanted a space to write honestly about DevSecOps, career growth, and life without the corporate polish or AI generated filler. Expect practical security guidance, lessons from the trenches, and the occasional reflection on what it means to build a life with intention.
+
+My word for 2026 is **Grounded**, deeply rooted in faith, identity, and purpose so that external noise doesn't shift the foundation.
+
+> Live, Learn, Travel, Never forget your hobbies!
+
+## Stay Connected
+
+Want to get insider content and stay updated with my latest thoughts on cybersecurity, development, and life?
+
+**[Subscribe to my Newsletter](https://newsletter.hacker1db.dev/)** Get exclusive insights delivered to your inbox!

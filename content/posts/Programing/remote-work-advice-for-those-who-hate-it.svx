@@ -1,0 +1,104 @@
+---
+title: "Remote Work Advice for Those Who Hate It"
+date: 2026-03-15
+thumbnail: "https://images.unsplash.com/photo-1660722130895-21f0c850dc12?w=1200"
+author: hacker1db
+subtitle: "For everyone who got forced into remote work and is struggling — your frustration is valid, and here's how to survive it anyway."
+tags:
+  - "remote-work"
+  - "work-from-home"
+  - "career"
+  - "mental-health"
+series: []
+youtube: ""
+toc: true
+draft: false
+---
+
+# Remote Work Advice for Those Who Hate It
+
+Let me say something that remote work enthusiasts rarely say: remote work is not universally better. For some people, in some life situations, with certain personality types and working styles, it genuinely isn't the right fit. If you're reading this because you were pushed into remote work and you hate it, I'm not going to try to convince you that you're wrong for feeling that way.
+
+I've been working remotely since 2018, running a CyberSecurity team from home. I love it. But I've managed people who don't love it, and I've watched organizations force remote work on entire workforces overnight without any support structure or acknowledgment that this transition is hard for a lot of people. The least useful thing anyone can do is gaslight those people by pretending there's nothing to miss about working in person.
+
+So this post isn't about convincing you to love remote work. It's about surviving it with your sanity intact — and maybe, just maybe, finding a version of it that doesn't make you miserable.
+
+## Your Frustration Is Valid
+
+Offices aren't just about getting work done. They're about the texture of the workday — the small conversations, the energy of being around other people, the clear physical separation between work and not-work, the spontaneous collaboration that happens when you can tap someone on the shoulder. That stuff is real. It has value. And a video call does not replicate it.
+
+If you're an extrovert who gets energy from being around people, remote work doesn't just feel inconvenient — it can feel genuinely depleting. You're not imagining it. Social interaction isn't a nice-to-have for some people; it's a core need. Working from home when you're wired that way is like being asked to work in an environment that's systematically removing something you need to function.
+
+If your home isn't set up for work — if you have kids, a small space, a noisy roommate, a partner who also works from home — you're not just dealing with remote work, you're dealing with remote work under genuinely difficult conditions. That's harder. Acknowledge that it's harder.
+
+And if you're earlier in your career and missing the informal mentorship and osmotic learning that happens in an office — the overhearing of conversations, the watching of how senior people operate — that's a real loss too. Junior people in remote environments often get less unstructured development time and it shows.
+
+None of this means you're bad at your job. It means the situation is genuinely harder than people admit.
+
+## It's Not For Everyone, and That's OK
+
+Here's the honest truth: some people will never be happy working remotely full-time, no matter how well they optimize their setup. Some people need the office. Not because they lack discipline or can't manage their time — but because they're human beings who thrive on in-person social contact, who do their best thinking in collaborative environments, or who simply need the clear physical boundary that "going to work" provides.
+
+If that's you, say so. Advocate for yourself. A hybrid arrangement — even two or three days in an office — can be transformative for people who struggle with full remote. The worst thing you can do is silently grind through a work situation that's not working for you.
+
+But while you're figuring out whether change is possible, you still have to show up. So let's talk about how to make the present situation less miserable.
+
+## Strategies for Extroverts
+
+If you're an extrovert in remote work, the energy drain is real and you need to actively manage it rather than just hope it gets better.
+
+**Manufacture social interaction, don't wait for it.** Schedule virtual coffee chats with colleagues. Not to talk about work — just to talk. Treat these the same way you'd treat a lunch break at the office. Put them on the calendar and protect them.
+
+**Use video by default.** Audio-only calls are isolating. Seeing faces — even through a screen — activates something that pure audio doesn't. Make it a norm for yourself to be on camera, and encourage your team to do the same. It's a small thing that makes a meaningful difference.
+
+**Find your social outlet outside work.** This is critical. If your job used to meet most of your social needs and now it doesn't, you can't just accept that deficit — you need to fill it somewhere else. Join a gym. Join a rec sports league. Find a regular in-person community of any kind. The specific activity matters less than the regularity of it.
+
+**Protect your mornings and evenings for human contact.** Work from home can blur into endless solo hours if you're not deliberate about it. Make sure the bookends of your day involve actual human beings — not just colleagues on Slack, but people you care about in person.
+
+**Get out of the house daily.** Non-negotiable. Work from a coffee shop one afternoon a week. Take a real lunch break somewhere that isn't your home. The change of environment and the ambient presence of other humans does more good than it seems like it should.
+
+## How to Create the Social Interaction You're Missing
+
+The office gave you social contact at almost no cost. Remote work means paying for it — in effort, in planning, in intentionality. Here's how to not go broke.
+
+**Virtual standups with cameras on.** If your team does a daily standup, make it a video call and make it mildly social. Start with two minutes of actual human conversation before diving into work. This isn't wasted time — it's the tax you pay for not being in the same building.
+
+**Slack channels for non-work stuff.** #random, #hobbies, #weekend-plans — whatever your team culture allows. Having a channel where people share things that aren't work tickets gives you a small but real dose of the water cooler.
+
+**Work in proximity if not together.** Co-working spaces exist for a reason. A lot of people who can't go to an office still benefit enormously from being around other humans who are also working. You're not collaborating, you're just not alone. That matters.
+
+**Schedule peer learning sessions.** One of the things lost in remote work is the informal knowledge transfer that happens in an office. You can recreate some of it deliberately: weekly 30-minute sessions where someone on the team shares something they're working on, or where two people pair on a problem. It serves a professional purpose and a social one at the same time.
+
+## When to Advocate for Hybrid
+
+If your company has any flexibility at all, and if remote work is genuinely making you less effective or less healthy, advocate for hybrid. Here's how to do it well:
+
+**Come with data, not complaints.** "I'm unhappy working remotely" is easy to dismiss. "My collaboration on X project suffered because I couldn't work through problems in real time with the team, and here's what that cost" is harder to ignore.
+
+**Propose a specific arrangement.** Don't just say "I'd like to come in sometimes." Say "I'd like to be in the office Tuesdays and Thursdays for team collaboration days." Specificity makes it easier for a manager to say yes.
+
+**Tie it to outcomes, not preferences.** Even if it's really about your personal wellbeing — which is legitimate — frame it in terms of work quality and team effectiveness. That's what organizations respond to.
+
+**Normalize the conversation.** You are almost certainly not the only person on your team who feels this way. If you can have this conversation openly, you might be surprised how much company you have.
+
+## Making the Best of a Situation You Didn't Choose
+
+Even if hybrid isn't an option right now, even if you're stuck, there are things you can do to make remote work less miserable:
+
+**Stop fighting the situation and start designing it.** The energy you're spending being frustrated about working from home could be spent optimizing how you do it. Those aren't the same thing.
+
+**Find what you actually like about it.** Even people who hate remote work usually have a thing or two they appreciate — no commute, no open-plan office noise, being home when the kids get back from school. Hold onto those. They don't fix everything, but they're real.
+
+**Give yourself a proper setup.** A lot of people who say they hate remote work are working from a kitchen table on a laptop with no external monitor in a house full of noise. That's not remote work failing — that's an environment that was never designed for work. Invest in your setup and see if the experience changes.
+
+**Set hard stop times and hold them.** The lack of boundary between work and home is one of the biggest sources of remote work misery. Creating that boundary artificially — same time every day, laptop closes, notifications off — is not a complete solution but it helps significantly.
+
+**Talk to someone.** If the isolation of remote work is affecting your mental health in a real way, that's worth taking seriously and worth talking to someone about. A therapist, your manager, HR — whatever's appropriate. Don't just white-knuckle through it.
+
+## The Takeaway
+
+You don't have to love remote work to do it well. But doing it well — building the structures, creating the social contact deliberately, advocating for the arrangement that actually works for you — is worth the effort even if your end goal is to eventually work differently.
+
+The worst version of remote work is passive: accepting the isolation, letting the boundaries erode, waiting for it to get better on its own. The best version, even for people who'd rather be in an office, is intentional. Design the thing. Put in the effort. And keep pushing for the arrangement that actually lets you do your best work.
+
+You deserve to have that conversation, and you deserve to be heard when you have it.

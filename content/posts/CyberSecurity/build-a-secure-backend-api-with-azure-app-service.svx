@@ -1,0 +1,455 @@
+---
+title: "Build a Secure Backend API with Azure App Service"
+date: 2026-03-15
+thumbnail: "https://images.unsplash.com/photo-1563630482997-07d8d7fbc9df?w=1200"
+author: hacker1db
+subtitle: "A step-by-step guide to deploying a genuinely secure API on Azure App Service — covering managed identity, Key Vault, network restrictions, Entra ID auth, TLS, and Application Insights."
+tags:
+  - "azure"
+  - "app-service"
+  - "devsecops"
+  - "managed-identity"
+  - "key-vault"
+  - "entra-id"
+  - "terraform"
+  - "tls"
+series: []
+youtube: ""
+toc: true
+draft: false
+---
+
+# Build a Secure Backend API with Azure App Service
+
+Azure App Service is one of the fastest ways to get a backend API into production on Azure. It handles the infrastructure plumbing so you can focus on your application. But "fast to production" and "secure" are not the same thing, and the default configuration of App Service leaves a lot of security work for you to do.
+
+I've deployed a lot of APIs on App Service, and I've seen the spectrum — from configurations that are genuinely solid to ones that would make a security auditor cry. This post walks through what I consider the non-negotiable security baseline for any App Service API that handles real data.
+
+I'll show both Azure CLI commands and Terraform because in my experience, you start with the CLI to understand what you're doing and then automate with Terraform. Both matter.
+
+---
+
+## The Foundation: No Secrets in Your Application
+
+Before we get to any specific Azure service, the most important principle for App Service security is this: **your application should have zero secrets in its configuration, code, or environment variables.**
+
+No connection strings. No API keys. No certificates stored as base64 blobs in app settings. Nothing.
+
+The mechanism that makes this possible is Managed Identity plus Azure Key Vault. Let's set that up first.
+
+---
+
+## Managed Identity
+
+A managed identity gives your App Service a service principal in Microsoft Entra ID (formerly Azure AD) without you having to create or manage credentials. Azure handles the credential rotation. Your application gets an identity it can use to authenticate to other Azure services.
+
+### Azure CLI
+
+```bash
+# Create the App Service plan and app first
+az group create --name rg-myapi-prod --location eastus2
+
+az appservice plan create \
+  --name asp-myapi-prod \
+  --resource-group rg-myapi-prod \
+  --sku P1V3 \
+  --is-linux
+
+az webapp create \
+  --name myapi-prod \
+  --resource-group rg-myapi-prod \
+  --plan asp-myapi-prod \
+  --runtime "PYTHON:3.11"
+
+# Enable system-assigned managed identity
+az webapp identity assign \
+  --name myapi-prod \
+  --resource-group rg-myapi-prod
+```
+
+This returns a `principalId` — save it. You'll use it to grant permissions.
+
+### Terraform
+
+```hcl
+resource "azurerm_service_plan" "main" {
+  name                = "asp-myapi-prod"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  os_type             = "Linux"
+  sku_name            = "P1v3"
+}
+
+resource "azurerm_linux_web_app" "main" {
+  name                = "myapi-prod"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  service_plan_id     = azurerm_service_plan.main.id
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  site_config {
+    application_stack {
+      python_version = "3.11"
+    }
+    always_on = true
+  }
+}
+```
+
+---
+
+## Key Vault Integration
+
+Now we create a Key Vault and grant the App Service's managed identity access to it.
+
+### Azure CLI
+
+```bash
+# Create Key Vault with RBAC authorization (not legacy access policies)
+az keyvault create \
+  --name kv-myapi-prod \
+  --resource-group rg-myapi-prod \
+  --location eastus2 \
+  --enable-rbac-authorization true \
+  --sku standard
+
+# Get the App Service's managed identity principal ID
+PRINCIPAL_ID=$(az webapp identity show \
+  --name myapi-prod \
+  --resource-group rg-myapi-prod \
+  --query principalId -o tsv)
+
+KV_ID=$(az keyvault show \
+  --name kv-myapi-prod \
+  --resource-group rg-myapi-prod \
+  --query id -o tsv)
+
+# Grant the App Service read access to secrets
+az role assignment create \
+  --assignee $PRINCIPAL_ID \
+  --role "Key Vault Secrets User" \
+  --scope $KV_ID
+```
+
+### Terraform
+
+```hcl
+resource "azurerm_key_vault" "main" {
+  name                       = "kv-myapi-prod"
+  resource_group_name        = azurerm_resource_group.main.name
+  location                   = azurerm_resource_group.main.location
+  tenant_id                  = data.azurerm_client_config.current.tenant_id
+  sku_name                   = "standard"
+  enable_rbac_authorization  = true
+  purge_protection_enabled   = true
+  soft_delete_retention_days = 90
+}
+
+resource "azurerm_role_assignment" "app_kv_secrets_user" {
+  scope                = azurerm_key_vault.main.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = azurerm_linux_web_app.main.identity[0].principal_id
+}
+```
+
+### Accessing Secrets From Your Application
+
+With managed identity, your application authenticates to Key Vault without any credentials:
+
+```python
+from azure.identity import DefaultAzureCredential
+from azure.keyvault.secrets import SecretClient
+
+credential = DefaultAzureCredential()
+client = SecretClient(
+    vault_url="https://kv-myapi-prod.vault.azure.net/",
+    credential=credential
+)
+
+# No connection strings, no passwords — the identity does the auth
+db_connection_string = client.get_secret("database-connection-string").value
+```
+
+`DefaultAzureCredential` automatically uses the managed identity when running in App Service, and uses your developer credentials locally. Same code, no secrets in either environment.
+
+App Service also supports Key Vault references in application settings, which is even cleaner:
+
+```bash
+az webapp config appsettings set \
+  --name myapi-prod \
+  --resource-group rg-myapi-prod \
+  --settings DATABASE_URL="@Microsoft.KeyVault(SecretUri=https://kv-myapi-prod.vault.azure.net/secrets/database-connection-string/)"
+```
+
+The runtime resolves the reference at startup. Your app reads `os.environ["DATABASE_URL"]` and gets the secret value. Zero secrets in your deployment pipeline.
+
+---
+
+## Network Restrictions
+
+By default, your App Service is reachable from the entire internet. That's almost certainly not what you want for a backend API.
+
+### Restrict Inbound Traffic
+
+If your API sits behind an API Gateway, Azure Front Door, or Application Gateway, restrict App Service to only accept traffic from that upstream service.
+
+```bash
+# Allow only Azure Front Door service tag
+az webapp config access-restriction add \
+  --name myapi-prod \
+  --resource-group rg-myapi-prod \
+  --priority 100 \
+  --service-tag AzureFrontDoor.Backend \
+  --http-header X-Azure-FDID=your-front-door-id \
+  --rule-name "AllowFrontDoor"
+
+# Deny everything else
+az webapp config access-restriction add \
+  --name myapi-prod \
+  --resource-group rg-myapi-prod \
+  --priority 65000 \
+  --action Deny \
+  --rule-name "DenyAll"
+```
+
+### VNet Integration for Outbound Traffic
+
+If your API needs to talk to resources in a private VNet (databases, other services), use VNet integration so outbound traffic stays on the private network:
+
+```bash
+az webapp vnet-integration add \
+  --name myapi-prod \
+  --resource-group rg-myapi-prod \
+  --vnet myVNet \
+  --subnet app-service-subnet
+```
+
+In Terraform:
+
+```hcl
+resource "azurerm_app_service_virtual_network_swift_connection" "main" {
+  app_service_id = azurerm_linux_web_app.main.id
+  subnet_id      = azurerm_subnet.app_service.id
+}
+```
+
+---
+
+## Authentication with Microsoft Entra ID
+
+For APIs that serve internal users or other services, Entra ID (Azure AD) authentication is the right choice. App Service has built-in authentication (EasyAuth) that can handle this without a single line of auth code in your application.
+
+### Enable EasyAuth
+
+```bash
+az webapp auth update \
+  --name myapi-prod \
+  --resource-group rg-myapi-prod \
+  --enabled true \
+  --action Return401 \
+  --aad-client-id your-app-registration-client-id \
+  --aad-client-secret-setting-name MICROSOFT_PROVIDER_AUTHENTICATION_SECRET \
+  --aad-token-issuer-url "https://sts.windows.net/your-tenant-id/"
+```
+
+`--action Return401` means unauthenticated requests get a 401, not a redirect. That's what you want for an API.
+
+In Terraform:
+
+```hcl
+resource "azurerm_linux_web_app_slot" "main" {
+  # ... (within the web app resource)
+  auth_settings_v2 {
+    auth_enabled           = true
+    unauthenticated_action = "Return401"
+
+    active_directory_v2 {
+      client_id                  = var.entra_client_id
+      tenant_auth_endpoint       = "https://sts.windows.net/${var.tenant_id}/v2.0"
+      client_secret_setting_name = "MICROSOFT_PROVIDER_AUTHENTICATION_SECRET"
+    }
+
+    login {
+      token_store_enabled = true
+    }
+  }
+}
+```
+
+Once enabled, App Service validates the bearer token on every request before it reaches your application. Your API code receives `X-MS-CLIENT-PRINCIPAL` and `X-MS-CLIENT-PRINCIPAL-NAME` headers with the validated identity.
+
+---
+
+## TLS Configuration
+
+App Service provides a free managed TLS certificate for custom domains. Make sure you're using it correctly.
+
+### Force HTTPS
+
+```bash
+# Require HTTPS — redirect all HTTP to HTTPS
+az webapp update \
+  --name myapi-prod \
+  --resource-group rg-myapi-prod \
+  --https-only true
+```
+
+### Minimum TLS Version
+
+Don't accept TLS 1.0 or 1.1:
+
+```bash
+az webapp config set \
+  --name myapi-prod \
+  --resource-group rg-myapi-prod \
+  --min-tls-version 1.2
+```
+
+In Terraform:
+
+```hcl
+resource "azurerm_linux_web_app" "main" {
+  # ...
+  https_only = true
+
+  site_config {
+    minimum_tls_version = "1.2"
+    # ...
+  }
+}
+```
+
+TLS 1.3 is available and preferred, but 1.2 as a minimum is the current industry standard minimum. Anything below is a compliance and security issue.
+
+---
+
+## Logging with Application Insights
+
+You can't defend what you can't see. Application Insights gives you request telemetry, exception tracking, custom logging, and alerting.
+
+### Enable Application Insights
+
+```bash
+# Create Application Insights workspace
+az monitor app-insights component create \
+  --app myapi-prod-insights \
+  --resource-group rg-myapi-prod \
+  --location eastus2 \
+  --workspace myLogAnalyticsWorkspace
+
+# Get the connection string
+APPINSIGHTS_CONNECTION=$(az monitor app-insights component show \
+  --app myapi-prod-insights \
+  --resource-group rg-myapi-prod \
+  --query connectionString -o tsv)
+
+# Set it as an app setting (not a secret — connection strings are rotated differently)
+az webapp config appsettings set \
+  --name myapi-prod \
+  --resource-group rg-myapi-prod \
+  --settings APPLICATIONINSIGHTS_CONNECTION_STRING="$APPINSIGHTS_CONNECTION"
+```
+
+### In Your Application
+
+```python
+from opencensus.ext.azure.log_exporter import AzureLogHandler
+import logging
+import os
+
+logger = logging.getLogger(__name__)
+logger.addHandler(AzureLogHandler(
+    connection_string=os.environ['APPLICATIONINSIGHTS_CONNECTION_STRING']
+))
+
+# Or use the Azure Monitor OpenTelemetry distro (recommended for new projects)
+from azure.monitor.opentelemetry import configure_azure_monitor
+
+configure_azure_monitor()
+```
+
+### Log Diagnostic Settings
+
+Also configure App Service diagnostic logs to flow to your Log Analytics workspace:
+
+```bash
+APP_ID=$(az webapp show \
+  --name myapi-prod \
+  --resource-group rg-myapi-prod \
+  --query id -o tsv)
+
+WORKSPACE_ID=$(az monitor log-analytics workspace show \
+  --workspace-name myLogAnalyticsWorkspace \
+  --resource-group rg-myapi-prod \
+  --query id -o tsv)
+
+az monitor diagnostic-settings create \
+  --name myapi-diagnostics \
+  --resource $APP_ID \
+  --workspace $WORKSPACE_ID \
+  --logs '[{"category":"AppServiceHTTPLogs","enabled":true},{"category":"AppServiceConsoleLogs","enabled":true},{"category":"AppServiceAppLogs","enabled":true}]' \
+  --metrics '[{"category":"AllMetrics","enabled":true}]'
+```
+
+Now every HTTP request, application log, and console output goes to Log Analytics where you can query it, build dashboards, and set alerts.
+
+---
+
+## Putting It All Together: Security Checklist
+
+Before you call your App Service deployment production-ready, verify:
+
+- [ ] System-assigned managed identity enabled
+- [ ] No secrets in app settings — using Key Vault references
+- [ ] HTTPS only enforced
+- [ ] Minimum TLS version set to 1.2
+- [ ] Inbound access restrictions configured (allow only known sources)
+- [ ] VNet integration enabled if accessing private resources
+- [ ] Entra ID authentication enabled (if applicable)
+- [ ] Application Insights connected
+- [ ] Diagnostic logs flowing to Log Analytics
+- [ ] `WEBSITE_RUN_FROM_PACKAGE=1` set (run from package, not writeable filesystem)
+- [ ] Remote debugging disabled (it's on by default in some tiers)
+- [ ] FTP deployment disabled
+
+```bash
+# Disable FTP — you should be deploying via CI/CD, not FTP
+az webapp config set \
+  --name myapi-prod \
+  --resource-group rg-myapi-prod \
+  --ftps-state Disabled
+
+# Disable remote debugging
+az webapp config set \
+  --name myapi-prod \
+  --resource-group rg-myapi-prod \
+  --remote-debugging-enabled false
+
+# Run from package (read-only filesystem, better security posture)
+az webapp config appsettings set \
+  --name myapi-prod \
+  --resource-group rg-myapi-prod \
+  --settings WEBSITE_RUN_FROM_PACKAGE=1
+```
+
+---
+
+## The Honest Caveat
+
+App Service with all of this configured is significantly more secure than the defaults. But "secure App Service" is a component of a secure system, not a substitute for one. You still need:
+
+- A threat model for your application
+- Input validation in your API code
+- Authorization checks in your business logic
+- A dependency scanning pipeline (Dependabot, Snyk)
+- A process for rotating credentials that do exist
+- Regular review of Defender for Cloud recommendations
+
+Azure Defender for App Service is worth enabling — it provides threat detection (suspicious process execution, known malicious IPs, file integrity monitoring) that goes beyond what you can configure manually.
+
+**Your action item:** If you have an App Service deployment today, run `az webapp config show` and `az webapp auth show` against it and compare to this checklist. Fix the gaps one by one. The managed identity + Key Vault change alone eliminates an entire class of credential exposure risk.
+
+Build it secure from the start. Retrofitting security is always more expensive.

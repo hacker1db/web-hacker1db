@@ -1,0 +1,171 @@
+---
+title: "Notion vs Obsidian: An Honest Take From Someone Who's Used Both"
+date: 2026-03-15
+thumbnail: "https://images.unsplash.com/photo-1680182902724-91811676ab8c?w=1200"
+author: hacker1db
+subtitle: "A no-fanboy comparison of Notion and Obsidian covering local-first vs cloud, markdown vs blocks, plugins, pricing, collaboration, and privacy — to help you actually pick the right one."
+tags:
+  - "obsidian"
+  - "notion"
+  - "pkm"
+  - "tools"
+  - "productivity"
+series: []
+youtube: ""
+toc: true
+draft: false
+---
+
+# Notion vs Obsidian: An Honest Take From Someone Who's Used Both
+
+Every few months someone asks me "should I use Notion or Obsidian?" and every time I give the same unsatisfying answer: it depends.
+
+That answer used to frustrate me too, back when I was trying to figure out which one to commit to. I've spent significant time in both. I've moved data between them, cursed at both of them, and ultimately landed on a workflow that uses each for what it's actually good at.
+
+This is not a "Obsidian is the one true path" post. It's also not a Notion defense piece. Both tools are genuinely good. Both have real drawbacks. Let me save you the months of trial and error.
+
+---
+
+## The Fundamental Difference
+
+Before you compare features, understand the philosophical gap:
+
+**Notion** is a collaborative workspace that lives in the cloud. It thinks in databases, blocks, and pages. It's built for teams, sharing, and structured data.
+
+**Obsidian** is a local-first Markdown editor that thinks in files, links, and graphs. It's built for individuals, privacy, and long-term knowledge ownership.
+
+These are different tools solving different problems. The fact that both get called "note-taking apps" is part of why people get confused comparing them.
+
+---
+
+## Local-First vs Cloud
+
+This is the biggest practical difference and the one that matters most over a long time horizon.
+
+**Obsidian** stores everything as plain `.md` files on your local disk. Your vault is just a folder. You can open it in any text editor, back it up however you want, run it through scripts, version control it with Git, and it will work in 20 years regardless of whether Obsidian the company exists.
+
+**Notion** stores everything on Notion's servers. You access it through their app or browser. If Notion goes down, you're blocked. If Notion raises prices dramatically or shuts down, exporting your data is possible but messy (it exports to Markdown, but the structure doesn't translate cleanly). You're renting access to your own notes.
+
+For personal knowledge that I want to own long-term — security research, personal notes, career history, writing drafts — local-first matters a lot to me. I don't want a company in the middle of my thinking.
+
+For team documentation, project tracking, shared wikis — cloud makes total sense. You need everyone to see the same thing, and local files don't work for that.
+
+**Winner for personal knowledge:** Obsidian
+**Winner for team collaboration:** Notion
+
+---
+
+## Markdown vs Blocks
+
+Obsidian uses standard Markdown. If you know Markdown, you already know how to write in Obsidian. The files are portable, readable in any text editor, and play nicely with every dev tool that handles text.
+
+Notion uses a block-based editor. Blocks are powerful — you can have toggle lists, callouts, database views, embedded content, and more within a single page. But those blocks are not portable. Exporting a Notion page to Markdown loses a lot of the formatting, structure, and linked data.
+
+The block model is genuinely more expressive for structured content. Notion pages can look beautiful and contain databases, kanban boards, and rich embeds. Obsidian pages are... Markdown files. They look like Markdown files.
+
+But here's the tradeoff: Notion's expressiveness is coupled to Notion. Obsidian's simplicity is coupled to nothing. My Obsidian vault works in Neovim, VS Code, GitHub, Typora, and a terminal. My Notion pages work in Notion.
+
+For a developer who lives in the terminal and values text-based workflows, Markdown wins. For someone building a company wiki or a project dashboard with multiple collaborators, blocks win.
+
+**Winner for developer workflows:** Obsidian
+**Winner for structured/visual content:** Notion
+
+---
+
+## Plugins vs Integrations
+
+Obsidian has a massive community plugin ecosystem. At the time of writing, there are over 1,500 community plugins. Because your vault is local files, plugins can do a lot — run scripts, query your vault with SQL-like syntax via Dataview, draw diagrams, manage tasks, render code, integrate with external services, and more.
+
+The plugin quality varies wildly. Some are essential and rock-solid. Others are abandoned or buggy. You're responsible for evaluating what you install. But the best plugins (Dataview, Templater, Calendar, Kanban) are genuinely excellent and add functionality that no cloud tool would expose because it requires file system access.
+
+Notion has integrations, but they're more limited and surface-level. You can connect Notion to Zapier, Slack, GitHub, and a handful of others, but deep programmatic access to your content requires their API, which has rate limits and is gated behind their pricing tiers.
+
+If you want to write a script that processes your notes, queries your vault, or integrates with local tools — Obsidian wins by a mile. The files are right there on disk.
+
+**Winner for extensibility:** Obsidian, and it's not particularly close
+
+---
+
+## Pricing
+
+**Obsidian** is free for personal use. Sync (their encrypted sync service) costs $4/month. Publish (their hosted publishing service) costs $8/month. The core app is free forever.
+
+**Notion** has a free tier that's genuinely useful for individuals. The paid Plus plan is $10/month per person. Team plans start at $15/person/month. If you're a team of five, you're paying $75/month minimum.
+
+For an individual, Obsidian is essentially free (or $4/month if you want their sync). Notion's free tier is fine but hits limits quickly for heavy users.
+
+For teams, Notion's pricing is competitive with other collaborative tools. Obsidian doesn't really have a team product — you'd need to set up your own sync solution (Git, shared folder, etc.).
+
+**Winner for cost (individual):** Obsidian
+**Winner for cost (team, relative to alternatives):** Roughly equal to Confluence, cheaper than some
+
+---
+
+## Privacy
+
+Obsidian: your notes are on your disk. Unless you use their Sync service (which is end-to-end encrypted) or connect a third-party sync, no data leaves your machine. For notes that contain sensitive information — security research, client details, personal health, anything you'd be uncomfortable with a company reading — local-first is the only acceptable answer.
+
+Notion: everything is on their servers. Their privacy policy is reasonable for a SaaS company, but your data is on their infrastructure. They've had minor security incidents in the past. I'm not saying Notion is unsafe, but I wouldn't put sensitive client data, security vulnerability research, or personally identifying information in Notion without thinking carefully about it.
+
+**Winner for privacy:** Obsidian, unambiguously
+
+---
+
+## Collaboration
+
+This is where Notion wins and Obsidian doesn't even try to compete.
+
+Notion is genuinely excellent for teams. Real-time collaboration, comments, mentions, permissions, shared databases, page history, templates — it's a legitimate team wiki and project management tool. For onboarding docs, team runbooks, shared project trackers, and collaborative writing, Notion is hard to beat.
+
+Obsidian's collaboration story is weak. You can share a vault via Git (which works but requires everyone to know Git), or pay for their Sync service (which handles syncing but doesn't have real-time collab). There's no built-in commenting, no mention system, no permissions.
+
+If you're working with non-technical people who need to collaborate on docs, Notion is the obvious answer.
+
+**Winner for collaboration:** Notion, and it's not close
+
+---
+
+## When To Use Which
+
+Use **Obsidian** when:
+- You want to own your data long-term
+- You're building a personal knowledge base
+- You work in technical domains and value Markdown portability
+- You want to script and automate against your notes
+- Privacy matters for the content you're storing
+- You work primarily alone
+
+Use **Notion** when:
+- You need team collaboration
+- You're building a shared wiki or project tracker
+- You need databases, relational data, or structured views
+- Your audience is non-technical and needs a polished interface
+- You need to share content externally with a clean URL
+- You need embedded databases, kanban boards, or calendars within pages
+
+Use **both** when:
+- You want Obsidian for personal thinking and Notion for team-facing docs (this is what I do)
+- The overhead of maintaining two systems is worth the fit-for-purpose benefit
+
+---
+
+## My Current Setup
+
+I use Obsidian for everything personal: notes, research, drafts, career journaling, security research, book highlights via Readwise. It's my thinking layer.
+
+I use Notion for team-facing work: project documentation, shared runbooks, onboarding materials, things other people need to read and contribute to.
+
+The two don't overlap. If I write something in Obsidian that needs to become a team doc, I copy it to Notion manually. It's not seamless, but the mental model is clear enough that it doesn't cause confusion.
+
+---
+
+## Takeaway
+
+Stop trying to find the one note app to rule them all. Ask yourself: who is this for, where does the data live, and how long do I need it?
+
+Personal knowledge you want to own forever? Obsidian.
+Team documentation and collaboration? Notion.
+
+Both are legitimately good tools. Neither is "better." The right choice is the one that fits the actual problem you're solving.
+
+Pick based on your needs, not on what the productivity YouTubers are hyped about this month.

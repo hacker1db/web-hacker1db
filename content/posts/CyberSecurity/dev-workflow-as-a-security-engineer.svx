@@ -1,0 +1,263 @@
+---
+title: "Dev Workflow as a Security Engineer: What My Day Actually Looks Like"
+date: 2026-03-15
+thumbnail: "https://images.unsplash.com/photo-1672385503236-b265b253268e?w=1200"
+author: hacker1db
+subtitle: "A ground-level look at the daily dev workflow of a security engineer — tools, code review process, security automation, Git workflow, and incident response tooling."
+tags:
+  - "devsecops"
+  - "workflow"
+  - "security"
+  - "tools"
+  - "git"
+  - "terminal"
+series: []
+youtube: ""
+toc: true
+draft: false
+---
+
+# Dev Workflow as a Security Engineer: What My Day Actually Looks Like
+
+There's a version of "security engineer workflow" content out there that's all threat models and compliance frameworks. That's real work, but it's not the whole picture. A significant chunk of my day is writing code, reviewing code, running tools, and plumbing systems together.
+
+This is what my actual workflow looks like — the terminal setup, the editors, the scanners, the Git habits, and how I handle the pivot from "writing code" to "something is on fire." No polish, just what actually happens.
+
+---
+
+## The Terminal Is Home
+
+Everything starts in the terminal. I run `zsh` with a fairly minimal config — syntax highlighting, autosuggestions, and a prompt that shows me git status, current directory, and exit codes at a glance. I use `tmux` for session management.
+
+My standard tmux layout when working on a project:
+
+```
+Window 1: editor (Neovim)
+Window 2: git / short commands
+Window 3: running processes / logs
+Window 4: scratch / testing
+```
+
+Each window is one concern. I'm not hunting for a pane — I `Ctrl-b 2` to get to git, `Ctrl-b 3` to check logs, `Ctrl-b 1` to go back to the editor. It's muscle memory.
+
+I run `tmux` sessions named by project or context: `tmux new -s project-name`. Closing the terminal doesn't kill the session. I detach, come back later, and everything is exactly where I left it. For security work that sometimes involves long-running scans or monitoring sessions, this is essential.
+
+```bash
+# My tmux.conf essentials
+set -g prefix C-b
+set -g mouse on
+set -g history-limit 50000
+set -g base-index 1
+
+# Split panes with | and -
+bind | split-window -h
+bind - split-window -v
+
+# Vim-style pane navigation
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+```
+
+---
+
+## Tools I Actually Use
+
+### Editors
+
+For config files, scripts, quick edits, and any work on a remote machine: **Neovim**. For large application codebases, especially .NET with security-relevant logic: **JetBrains Rider** with SonarLint enabled.
+
+The IdeaVim plugin in Rider gives me Vim keybindings so the context switch is cheap. SonarLint in Rider catches security issues while I type — injection patterns, hardcoded secrets, weak crypto usage. Having that feedback loop in the editor rather than waiting for a CI scanner matters.
+
+### Scanning Tools
+
+My standard toolkit for code-level security work:
+
+- **Semgrep** — custom rules for our codebase patterns, runs locally and in CI
+- **Trivy** — container and dependency scanning, fast and reliable
+- **truffleHog** — secret detection in git history (run this on every repo I touch for the first time)
+- **checkov** — IaC scanning for Terraform/CloudFormation/Kubernetes configs
+- **OWASP Dependency-Check** — SCA for Java/Maven projects
+- **Bandit** — Python static analysis
+
+These don't live in my head as "security tools I should run." They're wired into my workflow at the right moments:
+
+```bash
+# Pre-commit hooks handle the inline stuff
+# This is in .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.0
+    hooks:
+      - id: gitleaks
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.86.0
+    hooks:
+      - id: terraform_checkov
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.5
+    hooks:
+      - id: bandit
+        args: ["-c", "pyproject.toml"]
+```
+
+Pre-commit catches the obvious stuff before it ever leaves my machine. CI catches what pre-commit misses at scale.
+
+### CLI Tools I Reach For Daily
+
+```bash
+jq          # JSON wrangling — every API response, log file, config
+yq          # YAML version of jq — Kubernetes configs, CI pipelines
+curl        # API testing, quick HTTP requests
+httpie      # curl but readable, great for exploring APIs
+gh          # GitHub CLI — PRs, issues, runs from the terminal
+aws / az    # Cloud CLIs for the environments I work in
+kubectl     # Kubernetes cluster work
+terraform   # IaC, everything goes through this
+```
+
+---
+
+## How I Review Code
+
+Code review is where most security findings happen in practice, not in automated scans. Automated scans catch known patterns. Code review catches logic flaws.
+
+My process when reviewing a PR with security implications:
+
+**Step 1: Read the description first.** What is this change trying to do? If I don't understand the intent, I can't evaluate whether the implementation is correct.
+
+**Step 2: Check the diff for the obvious stuff first.**
+- New environment variables (are any of these secrets?)
+- Authentication/authorization changes
+- Input handling — anything touching user-controlled data
+- Cryptography — any custom crypto is a red flag
+- Dependency additions — run `trivy fs` on the new dependencies
+- Infrastructure changes — run `checkov` on the modified IaC
+
+**Step 3: Pull the branch locally and run it.**
+
+```bash
+gh pr checkout 1234
+# Run the app or relevant test suite
+# Try the edge cases the tests don't cover
+```
+
+Reading a diff on GitHub is fine for small changes. For anything touching auth flows, data access, or external integrations, I want to run it. The diff lies through omission — you need to see the surrounding context.
+
+**Step 4: Think about abuse cases.** Not just "does this work correctly?" but "how could an adversary abuse this?" Mass assignment, IDOR, privilege escalation, race conditions — these don't show up in tests unless someone specifically wrote tests for them.
+
+**Step 5: Leave specific, actionable comments.** Not "this could be a security issue." Instead: "This endpoint doesn't validate that the `userId` in the request body matches the authenticated user — an attacker could modify another user's data by changing this value."
+
+---
+
+## How I Write Security Automation
+
+A big part of security engineering is building tools and automation, not just using them. Most of what I automate falls into a few categories:
+
+**Scheduled scans** — run security scans on a schedule and alert on new findings:
+
+```python
+# Simplified example: scheduled Semgrep scan with Slack notification
+import subprocess
+import json
+import requests
+import os
+
+def run_semgrep(target_dir: str) -> dict:
+    result = subprocess.run(
+        ["semgrep", "--config", "p/security-audit", "--json", target_dir],
+        capture_output=True,
+        text=True
+    )
+    return json.loads(result.stdout)
+
+def notify_slack(findings: list, webhook_url: str):
+    if not findings:
+        return
+    message = f":warning: Semgrep found {len(findings)} new findings\n"
+    for f in findings[:5]:  # Top 5
+        message += f"- `{f['path']}:{f['start']['line']}` — {f['check_id']}\n"
+    requests.post(webhook_url, json={"text": message})
+
+if __name__ == "__main__":
+    findings = run_semgrep("./src")
+    notify_slack(
+        findings.get("results", []),
+        os.environ["SLACK_WEBHOOK_URL"]
+    )
+```
+
+**Evidence collection** — compliance work often requires evidence that controls are working. I automate evidence collection for things like: "show me all repositories that have branch protection enabled," "show me all IAM users without MFA," "show me all containers running as root."
+
+**Alert enrichment** — when a security alert fires, I want context automatically attached before a human looks at it. Who owns this service? What did it do in the last hour? What's the blast radius? Scripting this saves real investigation time.
+
+---
+
+## My Git Workflow
+
+I'm opinionated about Git hygiene. Clean commits matter for security incident response — when something goes wrong, you need to be able to read the git log and understand what changed and why.
+
+```bash
+# My standard commit flow
+git fetch origin
+git checkout -b feature/short-description
+# ... work ...
+git add -p          # patch-add: review every hunk before staging
+git commit          # Opens editor for a real commit message
+```
+
+`git add -p` is the single most important habit I've developed. It forces me to review every change I'm staging. I've caught hardcoded credentials, debug logging with sensitive data, and commented-out test bypasses this way. If you're not using `git add -p`, start today.
+
+Commit messages follow conventional commits:
+
+```
+feat(auth): add PKCE support to OAuth flow
+
+Implements PKCE (Proof Key for Code Exchange) per RFC 7636.
+Required for public clients that cannot securely store client secrets.
+
+Closes #234
+```
+
+Why does this matter for security? Because when you're triaging an incident and need to understand what changed in the auth module in the last 90 days, a clean git history is the fastest path to answers.
+
+---
+
+## Incident Response From a Tooling Perspective
+
+When something fires, the workflow changes. I have a separate tmux session I call `ir` that I spin up when we're in incident response mode.
+
+The tools I reach for first:
+
+```bash
+# Cloud logs
+aws logs filter-log-events --log-group-name /app/prod --filter-pattern "ERROR"
+az monitor activity-log list --start-time $(date -d '2 hours ago' --iso-8601)
+
+# Process what I'm seeing
+cat application.log | jq 'select(.level == "ERROR")' | jq -r '[.timestamp, .message] | @tsv'
+
+# Timeline building
+git log --since="2 hours ago" --all --oneline
+```
+
+I keep a running notes file during incidents — timestamped observations, commands run, findings, hypotheses. This goes into Obsidian later as a post-incident note. The habit of writing as you investigate makes the post-incident review much easier and catches things you'd otherwise miss.
+
+---
+
+## A Note on Context Switching
+
+Security engineering involves a lot of context switching — from code review to incident response to automation work to documentation to team coordination. The tooling helps, but the real discipline is managing your attention.
+
+I block morning time for deep work (code review, writing automation). Afternoons for meetings and coordination. I keep a `Today` note in Obsidian that I update throughout the day, which acts as a working memory buffer so I can context switch without losing track of where I was.
+
+---
+
+## Takeaway
+
+The security engineer's dev workflow is less exotic than people expect. It's mostly the same tools every developer uses, with a few additions (scanners, secret detectors, automation) and a mindset layer that asks "how could this be abused?" before asking "does this work?"
+
+The habits that compound over time: `git add -p`, SonarLint in the IDE, pre-commit hooks, tmux sessions that survive terminal closes, and writing things down as you work.
+
+None of this is glamorous. It's just the infrastructure of doing the job well.

@@ -1,0 +1,115 @@
+---
+title: "How to Adult After College"
+date: 2026-03-15
+thumbnail: "https://images.unsplash.com/photo-1764173039056-3cc602fef942?w=1200"
+author: hacker1db
+subtitle: "The honest, no-fluff guide to surviving your first year out of college that nobody gave you."
+tags:
+  - "career"
+  - "adulting"
+  - "new-grad"
+  - "finance"
+  - "imposter-syndrome"
+series: []
+youtube: ""
+toc: true
+draft: false
+---
+
+# How to Adult After College
+
+Let me be the mentor I wish I had when I walked across that stage, diploma in hand, absolutely convinced I had it figured out. I didn't. Nobody does. But there's a difference between not having it figured out and being completely blindsided by reality — and that's what I want to help you avoid.
+
+This is the talk I give every new hire I onboard. Coffee's on me. Let's get into it.
+
+## Your First Paycheck Will Shock You (And Not in the Good Way)
+
+You got the offer letter. $80,000 a year. You did the math — that's like $6,600 a month. You're already mentally furnishing your apartment.
+
+Then the first paycheck hits and it's... not that.
+
+Welcome to federal taxes, state taxes, FICA, health insurance premiums, 401k contributions, and whatever else your employer decided to pull out before the money ever touched your account. A $80k salary might net you somewhere around $4,200-4,800 a month depending on where you live and what elections you made. If you're in California or New York, shave off more.
+
+Here's what you actually need to do on day one of your new job, before you sign up for anything:
+
+**Do the 50/30/20 thing, but make it real.** Fifty percent of your take-home goes to needs — rent, utilities, groceries, transportation. Thirty percent to wants — eating out, streaming services, hobbies. Twenty percent to savings and debt. That's the baseline. You won't nail it perfectly, but having a framework matters.
+
+**Your 401k match is free money, take it.** If your company matches up to 4% of your salary, contribute at least 4%. Not doing this is literally leaving a pay raise on the table. Do it on day one. Your future self will thank you with actual words.
+
+**Build a $1,000 emergency fund first, then build to 3 months.** Before you buy the nice monitor setup for your home office, before the weekend trips, before the new wardrobe — build a cushion. The world will throw a flat tire, a vet bill, or a medical co-pay at you when you least expect it.
+
+## Setting Up Your First Apartment Without Losing Your Mind
+
+Moving into your own place is genuinely exciting. It's also a logistical nightmare if you've never done it. A few things nobody tells you:
+
+**You need more than you think, and you need it immediately.** Shower curtain liner, toilet paper, dish soap, a pot and a pan, basic cleaning supplies — get these before you sleep there the first night. The number of people who have shown up to their new apartment with a mattress and nothing else is staggering.
+
+**Renters insurance is not optional.** It costs roughly $15-20 a month. It covers your stuff if the apartment floods, burns, or gets broken into. Your landlord's insurance covers the building — your PlayStation, laptop, and clothes are your problem. Fix this.
+
+**Read your lease.** The whole thing. I know. But understand what it says about breaking the lease early, what they can deduct from your security deposit, and what the noise policy is. Future-you will be annoyed if past-you ignored this.
+
+**Your apartment is going to feel empty and weird at first.** That's normal. You don't have to fill it all at once. Buy furniture gradually. Facebook Marketplace and Craigslist are your friends for things like couches and dressers. Save the budget items for things you use every day.
+
+## Imposter Syndrome Is Real and It's Lying to You
+
+You will sit in your first standup and someone will use an acronym you don't know. You will be in a code review and feel like everyone can tell you don't belong. You will open a Jira board full of tickets that might as well be written in Klingon.
+
+That feeling has a name: imposter syndrome. And I need you to hear me clearly — **it does not mean you don't belong**.
+
+Here's what's actually happening: you just jumped from an environment where you were measured and graded on discrete, contained problems to one where the complexity is open-ended, the codebase has seventeen years of tech debt, and everyone seems to know things you don't. They do know things you don't. But you also know things they don't — including how to learn fast, which is the most valuable skill you have right now.
+
+The cure for imposter syndrome isn't feeling more confident. It's doing the work and letting the evidence accumulate. Every ticket you close, every PR you get merged, every question you answer in Slack — that's data. You belong because you show up and do the work.
+
+Ask questions freely in your first 90 days. You have a window where nobody expects you to know everything. Use it aggressively. After six months, the window starts to close, so ask now while the asking is free.
+
+## Building Professional Habits That Actually Stick
+
+Your career is a long game. The habits you build in year one tend to calcify. Build good ones.
+
+**Own your calendar.** Block time for deep work. Guard it. If you let meetings colonize every hour of your day, you will end your career wondering where the time went.
+
+**Take notes. On everything.** Meetings, 1-on-1s, architecture decisions, things you learned debugging a weird issue at 2pm on a Tuesday. A searchable log of your own growth is priceless. It's also invaluable at review time when you need to remember what you actually did this year.
+
+**Under-promise and over-deliver.** In college, if you missed a deadline the consequence was a grade. At work, someone else's project is waiting on yours. Build your reputation as someone who says what they'll do and does what they say. It compounds.
+
+**Don't disappear when you're stuck.** When you hit a blocker, spend thirty minutes genuinely trying to solve it yourself. If you're still stuck, ask for help. The failure mode I see most in new grads is either asking immediately without trying (which gets annoying) or spending three days stuck and silent (which burns time). Find the middle.
+
+## Learn to Cook Three Things
+
+I'm serious. Not because it's romantic or whatever. Because buying lunch every day costs you roughly $15-20 per meal in most cities, which is $300-400 a month, which is $3,600-4,800 a year. That's a Roth IRA contribution with money left over.
+
+You don't need to be a chef. You need three or four reliable meals you can make on a weeknight in under 30 minutes. Start here:
+
+- **Sheet pan everything** — chicken thighs, broccoli, olive oil, salt, 400 degrees for 25 minutes. Done.
+- **Pasta with whatever's in the fridge** — this is a life skill, not a recipe.
+- **Eggs in every form** — scrambled, fried, omelette. Protein, fast, cheap. Learn these.
+- **Rice cooker + protein + vegetable** — a formula, not a recipe. Buy a rice cooker. You will use it forever.
+
+Meal prep Sunday is real. Even just making lunches for Monday-Wednesday gives you headspace during the week and saves real money.
+
+## Your First 1-on-1 With Your Boss
+
+This meeting is an opportunity that most new grads fumble by treating it like a status update. Your manager is not asking "what did you do this week" — they're trying to figure out if you're okay, what you need, and what's blocking you.
+
+Come prepared with:
+
+1. **One or two things you learned or accomplished** — keeps the conversation grounded.
+2. **A question about priorities** — "What should I be focused on in my first 90 days that you consider most important?" This shows you're thinking about impact, not just tasks.
+3. **Something you're uncertain about** — not a complaint, but a genuine "I'm not sure how to approach X, any guidance?" This builds trust and gets you actual help.
+4. **Feedback request** — "Is there anything you'd like to see me do differently?" Ask this early and often. Don't wait for the annual review to find out you've been missing the mark.
+
+Your manager wants you to succeed. Most of the time, they genuinely do. Make it easy for them to help you by showing up engaged, honest, and curious.
+
+## The Real Talk
+
+The honest version of this advice is that nobody has it figured out. The colleagues who look confident and put-together are running the same internal monologue you are. The senior engineers who seem to know everything are Googling things constantly and reading Stack Overflow like the rest of us.
+
+The advantage you have right now is hunger. You're new, you're motivated, and you haven't been worn down by organizational politics yet. Use that. Ask every question. Take every opportunity to learn. Show up for the team even when it's inconvenient.
+
+The people who make it in this industry aren't necessarily the smartest people in the room. They're the ones who stayed curious, stayed humble, and kept showing up.
+
+---
+
+**Takeaway:** Pick one thing from this list and go do it today. Not all six. One. Open a high-yield savings account if you don't have one. Learn to make one meal. Put your 401k contribution on the calendar. Small moves, consistently executed, beat grand plans every time.
+
+You've got this. And if you're ever stuck — find a mentor. Ask them the awkward questions. That's what we're here for.
