@@ -11,7 +11,7 @@ tags:
   - "co-working"
   - "travel"
   - "creativity"
-series: []
+series: ["Working from Home"]
 youtube: ""
 toc: true
 draft: false
