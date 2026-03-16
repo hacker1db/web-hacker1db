@@ -1,0 +1,389 @@
+---
+title: "Building a Secure DevOps Pipeline"
+date: 2026-03-15
+thumbnail: "https://images.unsplash.com/photo-1763568258143-904ea924ac53?w=1200"
+author: hacker1db
+subtitle: "A hands-on walkthrough of building security into CI/CD pipelines with real YAML examples across GitHub Actions, Azure DevOps, and GitLab CI."
+tags:
+  - "ci-cd"
+  - "devsecops"
+  - "github-actions"
+  - "azure-devops"
+  - "gitlab-ci"
+  - "sast"
+  - "container-scanning"
+  - "iac"
+series: []
+youtube: ""
+toc: true
+draft: false
+---
+
+# Building a Secure DevOps Pipeline
+
+I want to start with something that took me too long to internalize early in my career: **the pipeline is the best security control you have**. Not the firewall. Not the WAF. Not the quarterly pen test. The pipeline — because it's the one place where every change to your codebase and infrastructure must pass through, and it's the one place where you can enforce rules consistently without relying on humans to remember.
+
+This post is a practical walkthrough. We're going to build out a security-integrated pipeline across the three most common CI/CD platforms: GitHub Actions, Azure DevOps, and GitLab CI. You'll see real YAML. You'll see how to plug in security tools at each stage. And I'll give you my honest take on where teams get this wrong.
+
+## The Security Pipeline Stages
+
+Before we look at platform-specific YAML, let's agree on what we're building toward. A mature secure pipeline has these stages, roughly in order:
+
+1. **Pre-commit hooks** — fast checks on the developer's machine before code is even pushed
+2. **Secret scanning** — catch hardcoded credentials immediately
+3. **SAST** — static code analysis for vulnerability patterns
+4. **SCA** — dependency vulnerability scanning
+5. **IaC scanning** — check infrastructure-as-code for misconfigurations
+6. **Container scanning** — scan Docker images for OS and package vulnerabilities
+7. **DAST** — dynamic scanning of a running application (usually in a later stage)
+
+Not every pipeline needs all of these from day one. But this is the target state. Let's build toward it.
+
+## Pre-Commit Hooks
+
+Before anything hits CI, you can catch a large class of issues on the developer's machine using pre-commit hooks. The `pre-commit` framework is my go-to for this.
+
+```yaml
+# .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: detect-private-key
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.0
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.83.5
+    hooks:
+      - id: terraform_validate
+      - id: terraform_tflint
+      - id: checkov
+        args:
+          - --args=--quiet
+```
+
+Install it in your project with `pre-commit install` and every commit will run these checks locally. The key ones here: `detect-private-key` is a blunt instrument but catches the obvious stuff, and `gitleaks` is more sophisticated — it uses entropy analysis and pattern matching to catch secrets.
+
+Pre-commit hooks are not a substitute for CI checks. Developers can bypass them with `--no-verify`. Treat them as a fast feedback loop, not an enforcement mechanism.
+
+## GitHub Actions
+
+### Secret Scanning + SAST + SCA
+
+Here's a GitHub Actions workflow that covers the core scanning stages:
+
+```yaml
+# .github/workflows/security.yml
+name: Security Scanning
+
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  secret-scan:
+    name: Secret Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  sast:
+    name: SAST - Semgrep
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Semgrep
+        run: |
+          semgrep ci \
+            --config=auto \
+            --sarif \
+            --output=semgrep.sarif
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+
+      - name: Upload SARIF results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: semgrep.sarif
+        if: always()
+
+  sca:
+    name: SCA - Dependency Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Trivy for dependencies
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: fs
+          scan-ref: .
+          format: sarif
+          output: trivy-sca.sarif
+          severity: HIGH,CRITICAL
+
+      - name: Upload SARIF results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-sca.sarif
+        if: always()
+
+  iac-scan:
+    name: IaC Scanning - Checkov
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: infrastructure/
+          framework: terraform
+          output_format: sarif
+          output_file_path: checkov.sarif
+          soft_fail: false
+```
+
+A few things worth noting here. First, I'm uploading results as SARIF to GitHub's Security tab — this gives you a central place to triage findings without leaving GitHub. Second, `soft_fail: false` on Checkov means a failed IaC check will fail the pipeline. You may want `soft_fail: true` initially while you're reducing your baseline findings.
+
+### Container Scanning
+
+```yaml
+  container-scan:
+    name: Container Scanning
+    runs-on: ubuntu-latest
+    needs: [sast, sca]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t myapp:${{ github.sha }} .
+
+      - name: Run Trivy container scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: myapp:${{ github.sha }}
+          format: sarif
+          output: trivy-container.sarif
+          severity: HIGH,CRITICAL
+          exit-code: 1
+
+      - name: Upload SARIF results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-container.sarif
+        if: always()
+```
+
+## Azure DevOps
+
+Azure DevOps pipelines use a slightly different YAML structure but the same concepts apply. Here's an equivalent pipeline:
+
+```yaml
+# azure-pipelines-security.yml
+trigger:
+  branches:
+    include:
+      - main
+      - develop
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: SecurityScanning
+    displayName: Security Scanning
+    jobs:
+      - job: SecretScan
+        displayName: Secret Scanning
+        steps:
+          - checkout: self
+            fetchDepth: 0
+
+          - script: |
+              curl -sSfL https://raw.githubusercontent.com/gitleaks/gitleaks/main/scripts/install.sh | sh -s -- -b /usr/local/bin
+              gitleaks detect --source . --verbose --exit-code 1
+            displayName: Run Gitleaks
+
+      - job: SAST
+        displayName: SAST - Semgrep
+        steps:
+          - checkout: self
+
+          - script: |
+              pip install semgrep
+              semgrep ci --config=auto --sarif --output=semgrep.sarif || true
+            displayName: Run Semgrep
+            env:
+              SEMGREP_APP_TOKEN: $(SEMGREP_APP_TOKEN)
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: semgrep.sarif
+              artifactName: semgrep-results
+            condition: always()
+
+      - job: SCA
+        displayName: SCA - Trivy
+        steps:
+          - checkout: self
+
+          - script: |
+              curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+              trivy fs . \
+                --format sarif \
+                --output trivy-sca.sarif \
+                --severity HIGH,CRITICAL \
+                --exit-code 1
+            displayName: Run Trivy Filesystem Scan
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: trivy-sca.sarif
+              artifactName: trivy-sca-results
+            condition: always()
+
+      - job: IaCScan
+        displayName: IaC Scanning - Checkov
+        steps:
+          - checkout: self
+
+          - script: |
+              pip install checkov
+              checkov -d infrastructure/ \
+                --framework terraform \
+                --output sarif \
+                --output-file-path checkov.sarif \
+                --hard-fail-on HIGH,CRITICAL
+            displayName: Run Checkov
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: checkov.sarif
+              artifactName: checkov-results
+            condition: always()
+```
+
+One thing I appreciate about Azure DevOps is the artifact publishing — you can always retrieve scan results even when jobs fail, which makes post-failure investigation much easier.
+
+## GitLab CI
+
+GitLab has native security scanning built into its Ultimate tier, but here's an open-source-only equivalent:
+
+```yaml
+# .gitlab-ci.yml
+stages:
+  - security
+
+variables:
+  DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+
+secret-scan:
+  stage: security
+  image: zricethezav/gitleaks:latest
+  script:
+    - gitleaks detect --source . --verbose --exit-code 1
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+
+sast-semgrep:
+  stage: security
+  image: semgrep/semgrep:latest
+  script:
+    - semgrep ci --config=auto --sarif --output gl-sast-report.sarif
+  variables:
+    SEMGREP_APP_TOKEN: $SEMGREP_APP_TOKEN
+  artifacts:
+    when: always
+    reports:
+      sast: gl-sast-report.sarif
+    paths:
+      - gl-sast-report.sarif
+    expire_in: 1 week
+
+sca-trivy:
+  stage: security
+  image:
+    name: aquasec/trivy:latest
+    entrypoint: [""]
+  script:
+    - trivy fs . --format sarif --output gl-dependency-scanning-report.sarif --severity HIGH,CRITICAL --exit-code 1
+  artifacts:
+    when: always
+    reports:
+      dependency_scanning: gl-dependency-scanning-report.sarif
+    paths:
+      - gl-dependency-scanning-report.sarif
+    expire_in: 1 week
+
+iac-checkov:
+  stage: security
+  image: bridgecrew/checkov:latest
+  script:
+    - checkov -d infrastructure/ --framework terraform --output sarif --output-file-path checkov.sarif
+  artifacts:
+    when: always
+    paths:
+      - checkov.sarif
+    expire_in: 1 week
+
+container-scan:
+  stage: security
+  image:
+    name: aquasec/trivy:latest
+    entrypoint: [""]
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2376
+    DOCKER_TLS_CERTDIR: "/certs"
+  script:
+    - docker build -t $DOCKER_IMAGE .
+    - trivy image $DOCKER_IMAGE --severity HIGH,CRITICAL --exit-code 1
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+```
+
+GitLab's native SARIF report support means findings surface directly in merge request views, which is a nice experience for developers.
+
+## Common Mistakes I See
+
+**Running everything serially.** SAST, SCA, and secret scanning can all run in parallel. If you're running them one after another, you're adding unnecessary time to every PR. Use pipeline parallelism aggressively.
+
+**Failing the build on every finding from day one.** If you're adding security scanning to a legacy codebase, you will have hundreds of findings. Don't block all merges immediately — you'll create an emergency and get the tools ripped out. Establish a baseline, suppress known/accepted findings, and set break-the-build only for new critical findings above your baseline.
+
+**Ignoring scan results.** A scan that runs but whose results nobody looks at is theater. Build a triage workflow before you build the scanning workflow.
+
+**Not pinning tool versions.** `uses: aquasecurity/trivy-action@master` is convenient but will break your pipeline when the tool ships a breaking change. Pin to a specific version or SHA and update deliberately.
+
+**Storing secrets in pipeline YAML.** Your CI/CD system has a secrets store. Use it. Never put API keys, tokens, or credentials in pipeline YAML files that live in version control.
+
+## Building the Right Foundation
+
+Start with secret scanning and SCA. Both are fast, low false-positive-rate, and immediately actionable. From there, layer in SAST with careful tuning. Then IaC and container scanning.
+
+The goal is a pipeline that developers trust — one that blocks real problems, generates minimal noise, and gives clear, actionable feedback when it does block. A pipeline that cries wolf will be bypassed or disabled. A pipeline that's precise and fair becomes a legitimate safety net that teams actually appreciate.
+
+---
+
+**Takeaway:** Security in CI/CD is not about adding friction — it's about moving the feedback loop left so developers catch security issues the same way they catch broken tests: immediately, with clear context, before anything ships. The YAML examples above are starting points. Adapt them to your stack, tune them to your noise tolerance, and treat them as living infrastructure that improves over time.

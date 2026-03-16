@@ -1,0 +1,339 @@
+---
+title: "Building a Secure API 90 Percent of the Time"
+date: 2026-03-15
+thumbnail: "https://images.unsplash.com/photo-1763568258659-70b5dc69158e?w=1200"
+author: hacker1db
+subtitle: "A practical guide to building APIs that are secure by default — covering input validation, auth patterns, rate limiting, logging, and error handling."
+tags:
+  - "api-security"
+  - "devsecops"
+  - "golang"
+  - "python"
+  - "input-validation"
+  - "rate-limiting"
+series: []
+youtube: ""
+toc: true
+draft: false
+---
+
+# Building a Secure API 90 Percent of the Time
+
+Let me be upfront about the title. You cannot build a perfectly secure API. Anyone who tells you otherwise is selling something. But you absolutely can build one that's secure 90% of the time — one that handles the common attacks, fails safely, and gives attackers a genuinely hard time.
+
+That 90% matters enormously. The vast majority of real-world breaches happen because of known, preventable issues: missing auth checks, no rate limiting, verbose error messages that reveal internals, unvalidated input. The exotic zero-days are real, but they're not where most organizations get hurt.
+
+This post is about building the foundation right. It's the stuff I wish more teams treated as non-negotiable table stakes.
+
+---
+
+## Start With Input Validation — and Be Paranoid About It
+
+Your API receives data from the network. The network is hostile. Treat every byte of input as potentially adversarial until proven otherwise.
+
+The rule I follow: **validate early, validate strictly, reject anything that doesn't conform.**
+
+### Schema Validation
+
+Don't write your own validators. Use a schema library and define your contracts explicitly.
+
+In Python with FastAPI and Pydantic:
+
+```python
+from pydantic import BaseModel, EmailStr, Field, validator
+from typing import Optional
+
+class CreateUserRequest(BaseModel):
+    email: EmailStr
+    username: str = Field(..., min_length=3, max_length=32, pattern=r'^[a-zA-Z0-9_]+$')
+    age: Optional[int] = Field(None, ge=0, le=150)
+
+    @validator('username')
+    def username_not_reserved(cls, v):
+        reserved = {'admin', 'root', 'system', 'api'}
+        if v.lower() in reserved:
+            raise ValueError('Username is reserved')
+        return v
+```
+
+Pydantic rejects requests that don't match the schema before your handler even runs. Type coercion, length limits, regex patterns — all declared in one place, enforced automatically.
+
+In Go with a JSON schema approach:
+
+```go
+type CreateUserRequest struct {
+    Email    string `json:"email" validate:"required,email"`
+    Username string `json:"username" validate:"required,min=3,max=32,alphanum"`
+    Age      *int   `json:"age,omitempty" validate:"omitempty,min=0,max=150"`
+}
+
+func (h *Handler) CreateUser(c *gin.Context) {
+    var req CreateUserRequest
+    if err := c.ShouldBindJSON(&req); err != nil {
+        c.JSON(400, gin.H{"error": "invalid request body"})
+        return
+    }
+    if err := h.validator.Struct(req); err != nil {
+        c.JSON(400, gin.H{"error": "validation failed"})
+        return
+    }
+    // proceed
+}
+```
+
+Notice in the Go example: the error message says "validation failed," not the specific field that failed. I'll come back to why in the error handling section.
+
+### Don't Trust Path Parameters Either
+
+Path parameters get validated too. Don't assume a UUID in the URL is actually a UUID.
+
+```python
+from uuid import UUID
+
+@app.get("/users/{user_id}")
+def get_user(user_id: UUID):  # FastAPI validates this is a valid UUID
+    ...
+```
+
+If someone passes `../../etc/passwd` as a path parameter, you want your framework to reject it at the boundary, not let it flow into your database query.
+
+---
+
+## Auth and Authz: Get the Basics Right
+
+Authentication (who are you?) and authorization (what are you allowed to do?) are two distinct problems and both have to be airtight.
+
+### Authentication
+
+Use a battle-tested library. Don't roll your own JWT implementation.
+
+```python
+# Using python-jose for JWT validation
+from jose import JWTError, jwt
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+SECRET_KEY = "loaded-from-env-not-hardcoded"
+ALGORITHM = "HS256"
+
+def get_current_user(token: str = Depends(oauth2_scheme)):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id: str = payload.get("sub")
+        if user_id is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+    return user_id
+```
+
+Key things here: the algorithm is explicitly specified (no `alg: none`), the secret is loaded from the environment, and any JWT error results in the same generic 401 — not a detailed error about what went wrong.
+
+### Authorization
+
+Once you know who someone is, you still need to decide what they can do. Role-based access control (RBAC) is the minimum. For most APIs, you also need object-level authorization checks.
+
+```go
+func (h *Handler) GetDocument(c *gin.Context) {
+    userID := c.MustGet("userID").(string)
+    docID := c.Param("id")
+
+    doc, err := h.db.GetDocument(docID)
+    if err != nil {
+        c.JSON(404, gin.H{"error": "not found"})
+        return
+    }
+
+    // Object-level authorization check — EVERY TIME
+    if doc.OwnerID != userID && !h.hasPermission(userID, "documents:read:all") {
+        c.JSON(403, gin.H{"error": "forbidden"})
+        return
+    }
+
+    c.JSON(200, doc.ToResponse())
+}
+```
+
+This pattern — fetch, then verify ownership, then return — is non-negotiable. Build it into a helper or middleware if you're doing it a lot, but never skip the check.
+
+---
+
+## Rate Limiting: Protect Yourself From the Firehose
+
+An unprotected API is an invitation for credential stuffing, enumeration, and abuse. Rate limiting is table stakes.
+
+### Token Bucket in Go with Redis
+
+```go
+import "github.com/go-redis/redis_rate/v10"
+
+func RateLimitMiddleware(limiter *redis_rate.Limiter) gin.HandlerFunc {
+    return func(c *gin.Context) {
+        key := "rate:" + c.ClientIP()
+        res, err := limiter.Allow(c.Request.Context(), key, redis_rate.PerMinute(60))
+        if err != nil {
+            c.AbortWithStatus(500)
+            return
+        }
+        if res.Allowed == 0 {
+            c.Header("Retry-After", strconv.Itoa(int(res.RetryAfter.Seconds())))
+            c.AbortWithStatusJSON(429, gin.H{"error": "rate limit exceeded"})
+            return
+        }
+        c.Next()
+    }
+}
+```
+
+A few things to think about with rate limiting:
+
+- **Different limits for different endpoints.** Auth endpoints should be stricter (5 req/min per IP) than read endpoints (100 req/min).
+- **Rate limit by user ID, not just IP.** IPs can be shared (corporate NAT) or spoofed (X-Forwarded-For manipulation).
+- **Return `Retry-After` headers.** It's spec-compliant and helps legitimate clients back off gracefully.
+- **Don't rate limit based only on `X-Forwarded-For`** without validating it comes from a trusted proxy.
+
+---
+
+## Logging: You Can't Defend What You Can't See
+
+Logging is a security control. If you don't have good logs, you're flying blind when something goes wrong — and something will go wrong.
+
+### What to Log
+
+Every request should log:
+- Timestamp (UTC, always UTC)
+- Request ID (generated per request, returned in response headers)
+- User ID (if authenticated)
+- Method, path, status code, latency
+- Client IP
+
+Never log:
+- Passwords
+- Full authorization tokens
+- Credit card numbers, SSNs, or other PII
+- Request bodies by default (too risky, too verbose)
+
+```python
+import logging
+import uuid
+from fastapi import Request
+
+logger = logging.getLogger(__name__)
+
+async def logging_middleware(request: Request, call_next):
+    request_id = str(uuid.uuid4())
+    request.state.request_id = request_id
+
+    response = await call_next(request)
+
+    logger.info(
+        "request",
+        extra={
+            "request_id": request_id,
+            "method": request.method,
+            "path": request.url.path,
+            "status_code": response.status_code,
+            "client_ip": request.client.host,
+            "user_id": getattr(request.state, "user_id", None),
+        }
+    )
+
+    response.headers["X-Request-ID"] = request_id
+    return response
+```
+
+Use structured logging (JSON output) so your logs are machine-parseable. Tools like Datadog, Splunk, and CloudWatch Logs Insights work much better with structured data than with free-form strings.
+
+---
+
+## Error Handling: Fail Safely and Say Little
+
+Error messages are information. Information in an error message is a gift to an attacker.
+
+### The Pattern
+
+Return generic messages to clients. Log the details server-side.
+
+```go
+func (h *Handler) GetUser(c *gin.Context) {
+    user, err := h.db.GetUser(c.Param("id"))
+    if err != nil {
+        if errors.Is(err, sql.ErrNoRows) {
+            // Don't reveal whether the user exists or not
+            c.JSON(404, gin.H{"error": "not found"})
+            return
+        }
+        // Log the real error internally
+        h.logger.Error("failed to get user",
+            zap.String("user_id", c.Param("id")),
+            zap.Error(err),
+        )
+        // Return a generic message to the client
+        c.JSON(500, gin.H{"error": "internal server error"})
+        return
+    }
+    c.JSON(200, user.ToResponse())
+}
+```
+
+Notice: a 404 for "user not found" and a 404 for "you don't have permission to see this user" look the same to the client. That's intentional. You don't want to let someone enumerate valid user IDs by watching whether you return a 403 or a 404.
+
+### Stack Traces
+
+Never return stack traces to clients in production. Configure your framework accordingly. In Python:
+
+```python
+app = FastAPI()
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.exception("unhandled exception", exc_info=exc)
+    return JSONResponse(
+        status_code=500,
+        content={"error": "internal server error"}
+    )
+```
+
+---
+
+## Security Headers: Free Wins
+
+If your API serves JSON, these headers cost you nothing and help:
+
+```python
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
+
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    response.headers["Cache-Control"] = "no-store"
+    return response
+```
+
+`Cache-Control: no-store` is particularly important for API responses that contain user data — you don't want sensitive responses cached by proxies or browsers.
+
+---
+
+## The 10% You Won't Cover
+
+Here's the honest part. Even if you implement everything above, there's a 10% that's genuinely hard:
+
+- **Business logic vulnerabilities** — these require deep domain knowledge to find and fix.
+- **Supply chain attacks** — your dependencies have vulnerabilities you don't control.
+- **Zero-days** in your language runtime or framework.
+- **Misconfigurations** in the infrastructure your API runs on.
+
+That 10% is why you also need threat modeling, dependency scanning, penetration testing, and a security incident response plan. But none of that is a substitute for the fundamentals. Get the 90% right first.
+
+**Your action item:** Take your next API endpoint from scratch and run through this checklist before you merge it: input validation, auth/authz check, rate limiting configured, logging in place, errors handled safely. Five things. Make it a PR checklist item. Build the habit.
+
+The foundation matters. Build it right.

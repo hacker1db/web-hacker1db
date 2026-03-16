@@ -1,0 +1,181 @@
+---
+title: "Use the Right Tool for the Job: Stop Forcing One Tool to Do Everything"
+date: 2026-03-15
+thumbnail: "https://images.unsplash.com/photo-1674460039193-700b9e35c172?w=1200"
+author: hacker1db
+subtitle: "Stop forcing one tool to do everything. Real examples of when using the wrong tool cost hours, and a framework for choosing tools based on the problem rather than tribal loyalty."
+tags:
+  - "tools"
+  - "workflow"
+  - "productivity"
+  - "obsidian"
+  - "neovim"
+  - "jetbrains"
+  - "devsecops"
+series: []
+youtube: ""
+toc: true
+draft: false
+---
+
+# Use the Right Tool for the Job: Stop Forcing One Tool to Do Everything
+
+I once spent three hours trying to manage a complex project in Obsidian before admitting I needed a proper project management tool. I once spent two hours in Neovim wrestling with a refactor that JetBrains would have done in 30 seconds. I once tried to use Excel as a lightweight database and spent an afternoon on what a five-line SQLite query would have handled instantly.
+
+Every developer has versions of these stories. We have a tool we're comfortable with, we reach for it by default, and we pay the tax of misfit when the problem doesn't match the tool.
+
+This post is about developing the judgment to pick the right tool before you've wasted the afternoon.
+
+---
+
+## The Root Problem: Tribal Loyalty
+
+We don't usually admit it, but a lot of tool choices are tribal. You use Neovim because you're a certain kind of developer who uses Neovim. You use Notion because your company standardized on it. You use VS Code because that's what you learned on. You use the Mac Terminal because switching to iTerm2 feels like admitting something.
+
+Tribal loyalty to tools is comfortable and low-effort. It's also frequently wrong. The tool you're loyal to was designed for a set of problems. When you encounter a problem outside that set, using the tool anyway is just stubbornness.
+
+The alternative isn't using every tool for every problem. It's having a small set of high-quality tools and knowing which one fits which problem.
+
+---
+
+## Obsidian vs Notion: Different Problems
+
+I've written about this in more depth elsewhere, but the summary is: **these are not the same tool with different aesthetics.** Using the wrong one costs real time.
+
+### When I Reach for Obsidian
+
+I'm writing my security research notes on a new attack technique I've been reading about. I want to link this note to my existing notes on the related CVEs, the affected frameworks, and my previous writeup on defense strategies. I want those links to be permanent, to work offline, and to be part of my personal knowledge graph that I've been building for years.
+
+Notion cannot do this correctly for me. Everything I write in Notion is on their servers, not connected to my local file system, not accessible from Neovim, not easily queryable with scripts, and not something I own in the way I own a directory of Markdown files.
+
+### When I Reach for Notion
+
+I'm writing onboarding documentation for a new team member. I want them to be able to comment on it, suggest edits, and see the latest version. I want to embed a database of the tools they'll need with links and notes. I want to share a URL with them before they have access to our company systems.
+
+Obsidian cannot do this correctly for me. It doesn't have real-time collaboration, doesn't generate shareable URLs easily, and requires the reader to have Obsidian installed and the vault synced.
+
+### The Mistake I Made
+
+Early in building my PKM system, I tried to use Obsidian for everything — including team documentation and project tracking. I set up elaborate Dataview queries to track task status, tried to share vaults with colleagues (nightmare), and built a tagging system so complex that I stopped using it.
+
+The cost: weeks of setup, ongoing maintenance, and ultimately a migration back to Notion for team-facing work. If I'd thought clearly about "who is the audience and where does the data need to live?" from the start, I'd have used each tool for the right thing immediately.
+
+---
+
+## Neovim vs JetBrains: Not an Either/Or
+
+This one I see argued about constantly online. "Why would you use an IDE when Neovim can do everything?" or conversely, "Neovim is just a text editor, you need a real IDE."
+
+Both positions miss the point. Let me give you concrete examples.
+
+### Where Neovim Won
+
+I'm editing a Kubernetes manifest. The file is already open in my terminal session. I need to change a resource limit, update an image tag, and add an annotation. In Neovim: open file (already open), `ci"` on the image tag, type new tag, `gg` to go to top, `/resource` to find the resource block, make changes. Total time: 45 seconds.
+
+The alternative: find the file in JetBrains' file tree, wait for the YAML plugin to finish parsing, navigate to the right section, use mouse or arrow keys. Probably 3 minutes.
+
+Neovim is faster here because **the file is already in my terminal context.** The overhead of opening an IDE is not worth it for a targeted edit to a config file.
+
+### Where JetBrains Won
+
+I'm doing a security review of a large .NET codebase I've never seen before. I need to understand all the places where user input flows into database queries. SonarLint immediately flags several potential SQL injection points. I use "Find Usages" to trace where a suspicious method is called from. I use the refactoring tools to see what changing the method signature would affect. I use the debugger to step through the auth middleware with a crafted request.
+
+Neovim can do pieces of this. With LSP, I have go-to-definition and find-references. With DAP, I have a debugger. But the integration and reliability of these features in Rider is higher, the SonarLint integration is unique to JetBrains, and the cognitive overhead of the workflow is lower.
+
+### The Decision
+
+I've landed on a simple heuristic: **Neovim for speed and terminal integration, JetBrains for depth on complex application code.** The context switch is cheap because I use IdeaVim in JetBrains, so my muscle memory works in both.
+
+Trying to use only Neovim for large .NET codebases meant constantly fighting LSP reliability and missing security findings that SonarLint would have caught. Trying to use only JetBrains meant slow config edits, poor terminal integration, and no Vim experience on remote machines. Using both costs nothing but a small mental model for which to open.
+
+---
+
+## Choosing the Right Database
+
+Here's one that doesn't get talked about enough: developers reach for Postgres or MySQL by default, even when simpler options are correct.
+
+I once helped debug a home automation project that used Postgres to store sensor readings. The author chose Postgres because they "always use Postgres." The requirements: local machine, ~1,000 rows per day, single user, read-mostly, no concurrency, simple queries.
+
+SQLite would have been better in every dimension: no server to manage, no connection pool, single file on disk, trivially backupable, faster for this access pattern, and zero configuration. The Postgres choice added operational overhead for no benefit.
+
+The right data storage tool depends on:
+
+| Factor | SQLite | Postgres | Redis | DynamoDB |
+|--------|--------|----------|-------|----------|
+| Concurrency | Low | High | High | High |
+| Scale | Single machine | Multi-server | In-memory | Cloud-native |
+| Complexity | Very low | Medium | Medium | High |
+| Query flexibility | Good | Excellent | Limited | Limited |
+| Right for | Local apps, embedded, scripts | Web apps, APIs | Caching, sessions | Serverless scale |
+
+SQLite is the correct answer for a surprising number of problems that people default to Postgres for. "Use SQLite until you have a reason not to" is reasonable advice for early-stage projects.
+
+---
+
+## Choosing the Right Language
+
+The same logic applies to programming languages. Python is not always the right scripting language. Bash is not always wrong for complex logic. Go is not always overkill.
+
+Real example: I needed to parse a large JSON file, extract fields, and write a CSV. My instinct was Python. A colleague pointed out that `jq` could do this in one line:
+
+```bash
+jq -r '.[] | [.id, .name, .email] | @csv' users.json > users.csv
+```
+
+vs the Python version I was about to write (15-20 lines). The `jq` approach is faster to write, has no dependencies, runs anywhere, and is immediately readable to anyone who knows `jq`.
+
+The right language is the one that solves the problem with the least overhead for the context. For data transformation on the CLI, `jq` and `awk` often beat Python. For anything requiring a real type system or complex logic, Python or a compiled language beats Bash. For anything with a long runtime and high concurrency, Go or Rust beats Python.
+
+The tribal "I write Python, so I write Python for everything" position costs time on problems where Python is the wrong fit.
+
+---
+
+## A Framework for Tool Selection
+
+When I'm deciding what tool to use for a problem, I ask:
+
+1. **Who is the audience?** Just me? My team? External stakeholders? Tool requirements change dramatically based on audience.
+
+2. **How long does this need to last?** Throwaway script vs long-lived production code vs permanent personal notes have very different requirements.
+
+3. **What are the collaboration requirements?** Solo work is different from team work. Team work is different from public-facing work.
+
+4. **What's the maintenance overhead?** A tool that requires a running server is different from a tool that's a single file on disk.
+
+5. **What do I already have in context?** If I'm in the terminal, opening Neovim is zero overhead. If I'm already in JetBrains, staying there saves a context switch.
+
+6. **What does the problem actually need?** Not what tool do I know, but what capabilities does this specific problem require.
+
+These questions surface the constraints and usually point to an obvious answer. The cases where it's genuinely ambiguous are rare — and in those cases, pick either one, start, and switch if the fit is bad.
+
+---
+
+## Practical Examples: Wrong Tool Costs
+
+**The wrong editor for a refactor.** I spent 2 hours in Neovim renaming a class and updating all its references across a large C# codebase. My LSP kept missing some call sites. In JetBrains Rider, this is a single rename refactoring that takes 30 seconds and finds every reference. Cost: 1.5 hours.
+
+**The wrong notes tool for team documentation.** I maintained a team runbook in Obsidian for six months, sharing the vault via a shared folder. New team members couldn't find it, couldn't edit it without installing Obsidian, and the sync was unreliable. Migrating to Notion took half a day. Cost of not migrating sooner: ongoing friction for the entire team for months.
+
+**The wrong scripting language for a one-liner.** I wrote a 30-line Python script to extract fields from log files. Realized later that `awk '{print $3, $7}' app.log` did exactly what I needed. Cost: 20 minutes plus maintenance overhead on a script I didn't need.
+
+**The wrong project management tool.** Tried to manage a complex 6-month project (multiple workstreams, dependencies, stakeholders) in Todoist. Todoist is excellent for personal task management but lacks the visualization and dependency tracking needed for project management. Should have used Linear or Jira from the start. Cost: weeks of workaround friction.
+
+---
+
+## The Underlying Principle
+
+Tools have affordances — things they make easy — and constraints — things they make hard. The right tool is the one whose affordances match your problem and whose constraints don't get in the way.
+
+Knowing your tools deeply enough to understand their affordances and constraints requires using them. Use Obsidian until you know what it's good for. Use Neovim until you know when it's faster than an IDE. Use SQLite until you know when you need Postgres.
+
+That knowledge is the foundation for making good choices. Without it, you're either picking by default or picking by tribe. Neither is how good engineers work.
+
+---
+
+## Takeaway
+
+Build a small toolkit of high-quality tools. Learn each one well enough to understand its strengths and limits. Develop the judgment to match the tool to the problem rather than forcing the problem into the tool you already have open.
+
+The cost of using the wrong tool is real and cumulative. The benefit of matching tool to problem compounds over time as your judgment improves.
+
+Stop defending your editor. Start asking whether it's the right one for this specific problem.

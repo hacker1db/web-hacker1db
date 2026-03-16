@@ -1,0 +1,107 @@
+---
+title: "The Path Forward - The Path to Leading"
+date: 2026-03-15
+thumbnail: "https://plus.unsplash.com/premium_photo-1727209458121-d0cc133abb72?w=1200"
+author: hacker1db
+subtitle: "What nobody warns you about when you move from individual contributor to team lead — and why it changes everything."
+tags:
+  - "leadership"
+  - "management"
+  - "career"
+  - "IC-to-lead"
+  - "team-lead"
+series: []
+youtube: ""
+toc: true
+draft: false
+---
+
+# The Path Forward - The Path to Leading
+
+I remember the exact moment I realized my job had fundamentally changed.
+
+It was a Tuesday morning, six weeks into my first lead role. My team was stuck on an infrastructure problem I could have solved myself in a couple of hours. I knew exactly what to do. My fingers were itching to pull up the terminal and just fix it.
+
+Instead, I opened a Slack DM to the engineer who owned that area and typed: "Want to pair on this one? I have some ideas but want to work through it with you."
+
+It took three times as long as doing it myself. But she learned something. And the next time a similar issue came up, she handled it without me.
+
+That's the job. And it took me longer than I'd like to admit to fully accept that.
+
+## What You Think the Job Is vs. What It Actually Is
+
+When most ICs think about becoming a lead, they picture doing the same work but with more responsibility and a fancier title. Maybe you'll be the person who makes the final call on architecture decisions. Maybe you'll be the one whose code review comments actually matter. You'll still be coding — just, you know, leading while you do it.
+
+This is almost entirely wrong.
+
+The transition from IC to lead is not a promotion in the traditional sense. It's a career change. The skills that made you excellent as an individual contributor — deep technical focus, clean code, fast problem solving, personal output — are no longer your primary value. Your new job is to multiply the output of other people.
+
+Let that sit for a second. You are no longer measured by what you build. You are measured by what your team builds.
+
+This is disorienting at first. The feedback loops change. When you were an IC, you could point to code you shipped and say "I did that." As a lead, your best days are the ones where the team is humming along without you and you barely touched the keyboard. Success becomes invisible, and that takes adjustment.
+
+## The Skills Gap Nobody Warns You About
+
+Technical leads are almost universally promoted for their technical skills. That makes sense — you want experienced people guiding the technical direction of a team. But here's the gap: technical leadership requires a completely different skill set that nobody trained you for.
+
+**Conflict resolution.** Two engineers disagree about the right approach. Loudly. In a public Slack channel. Now what? You need to de-escalate, facilitate a discussion, potentially make a call and explain your reasoning, and keep both people feeling heard and respected. This is not covered in any CS curriculum.
+
+**Delivering difficult feedback.** Someone on your team is not meeting expectations. You need to tell them that clearly, specifically, and kindly — in a way that actually helps them improve rather than just making them feel bad. This is genuinely hard. Most new leads either avoid it (bad) or deliver it clumsily and damage the relationship (also bad).
+
+**Prioritization under ambiguity.** As an IC, your manager filtered the noise for you. As a lead, you're the filter. The business wants five things urgently. You have capacity for two. You need to reason about tradeoffs, communicate decisions clearly, and own the consequences.
+
+**Managing up.** Your relationship with your own manager changes. You're now the person who surfaces problems before they blow up, who negotiates for headcount, who pushes back when the org asks too much of your team. Political savvy becomes a job requirement.
+
+None of this comes naturally to most engineers. All of it can be learned. But you have to be honest with yourself that you're a beginner again, and that's uncomfortable when you just spent years becoming a senior IC.
+
+## Learning to Let Go of the Code
+
+I'll be blunt: some engineers make terrible leads because they can't stop being engineers. They rewrite their team members' code in code reviews rather than teaching. They take the juicy tickets for themselves because they know they can do it faster and better. They spend half their week in the terminal instead of in conversations.
+
+The result is a team that doesn't grow, a lead who's burning out trying to do two jobs, and code that only one person truly understands.
+
+Letting go of the code is one of the hardest parts of this transition. Your identity, for years, has been wrapped up in your technical ability. The code is where you feel confident. Meetings and people management are messier, slower, less satisfying in the short term.
+
+Here's the reframe that helped me: the code you write as a lead is a liability if it creates a single point of failure. Your most important technical contribution is the architecture your team builds together and the culture of quality that makes it sustainable. That's legacy. A function you wrote that nobody else understands is a time bomb.
+
+Get comfortable being a multiplier rather than a maker. It's a different kind of satisfaction, but it runs deeper.
+
+## Your Job Is Now People
+
+You can have all the right processes, the best tooling, a perfect Jira board, and a solid roadmap — and your team will still underperform if the people aren't okay.
+
+Leads who understand this early have teams that punch above their weight. Leads who treat people management as an HR formality have teams that quietly disengage.
+
+The practical version of this:
+
+**Know what motivates each person on your team.** Not everyone wants the same thing. Some engineers want technical challenges. Some want stability and predictability. Some are trying to get a promotion. Some are managing hard things outside of work. You need to know the difference, because what looks like underperformance is sometimes a person who needs a different kind of work — or a conversation.
+
+**Protect your team's time aggressively.** Every meeting that shouldn't exist, every interruption that could have been an email, every fire drill that wasn't actually urgent — that's deep work time you're stealing from your engineers. Your job includes saying no to things on behalf of the team.
+
+**Give feedback constantly, not just at review time.** Real-time, specific, kind feedback is how people grow. Waiting for the annual review to tell someone they've been missing the mark is cruel and useless. Have the small conversations early and often.
+
+**Celebrate the wins publicly and give credit loudly.** When your team ships something great, say so, and name the people who made it happen. When things go wrong, own the miss as a team lead in public and have the harder conversation privately.
+
+## The Loneliness Nobody Talks About
+
+This one surprised me and I don't see it written about enough.
+
+When you become a lead, you step out of the peer group you've been in for years. The engineers on your team now have a power dynamic with you — even if you try to minimize it, they know you're writing their reviews. They'll self-censor around you. The easy camaraderie of being peers changes.
+
+At the same time, you're not quite part of the management layer yet. You're in between. You know too much about what's actually happening on the ground to buy into all the optimistic narratives, but you're not senior enough to change the things that frustrate you.
+
+You need to find other leads at your level — peer relationships with people navigating the same transition — or you will feel very alone in this work. Find a cohort. Build a support network. Talk to other leads about what's hard.
+
+And find a mentor who's a few levels above you. Not to vent, but to get perspective. The person who helped me most in my first lead role was a director who'd seen everything I was struggling with and could tell me honestly what was normal and what I needed to actually fix.
+
+## Should You Even Do This?
+
+The IC path is legitimate and valuable. Staff engineers and principal engineers have enormous impact without ever managing people. If you genuinely love the technical work and people management sounds like your nightmare, listen to that. A reluctant manager is usually a bad one.
+
+But if you feel the pull — if you get energy from developing other people, if you care about culture and process, if you want to shape how a team operates — then yes. Do it. It's hard and it's different and there are days I missed being an IC.
+
+But watching someone on your team give their first conference talk on something you helped them learn, or seeing a junior engineer grow into a senior over two years, or shipping something the whole team built together — that hits different than any code I've written.
+
+---
+
+**Takeaway:** If you're thinking about moving into leadership, start practicing the skills now. Mentor junior engineers. Lead a project. Facilitate a team discussion. Run a retrospective. See how it feels to get your satisfaction from other people's success. If that energizes you, you're ready. If it drains you, that's information worth having before you make the jump.

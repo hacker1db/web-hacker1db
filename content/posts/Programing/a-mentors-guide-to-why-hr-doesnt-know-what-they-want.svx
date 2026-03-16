@@ -1,0 +1,123 @@
+---
+title: "A Mentor's Guide to Why HR Doesn't Know What They Want"
+date: 2026-03-15
+thumbnail: "https://plus.unsplash.com/premium_photo-1663054308844-b521b7381fca?w=1200"
+author: hacker1db
+subtitle: "The disconnect between what HR writes in job postings and what engineering teams actually need — and how to navigate it."
+tags:
+  - "hiring"
+  - "career"
+  - "mentorship"
+  - "HR"
+  - "job-search"
+series: []
+youtube: ""
+toc: true
+draft: false
+---
+
+# A Mentor's Guide to Why HR Doesn't Know What They Want
+
+I want to be clear upfront: I'm not writing this to bash HR professionals. Most of the HR folks I've worked with are sharp, well-intentioned people dealing with an impossible translation problem. The gap isn't usually about competence. It's about structural disconnect.
+
+But I've watched too many qualified candidates self-select out of jobs they would have crushed because the posting said "5 years of Kubernetes experience" for a role where the team was still running docker-compose. I've watched hiring managers complain they can't find candidates while HR was filtering out everyone who didn't have three certifications and a CompSci degree.
+
+The system has a seam. If you're a candidate, you need to know how to read through it. If you're a mentor, you need to help people navigate it. If you're a hiring manager, you need to do something about it.
+
+Let's talk about all three.
+
+## Why Job Descriptions Are Wish Lists
+
+Here's the origin story of most job postings.
+
+A hiring manager needs to fill a role. They send HR a vague description of what they need. HR looks at previous job descriptions in the system, maybe pulls in a template, maybe benchmarks against what competitors are posting. They add standard language about communication skills and team player and results-oriented. They look at what tools the team uses and list them all. They think about the ideal candidate — the most experienced, most credentialed, most experienced version of the role — and they write that person down.
+
+What gets published is not "who we'd hire." It's "who we'd hire if we lived in a perfect world with unlimited budget and a magical candidate pool."
+
+Then that posting goes live and sits between you and a real conversation.
+
+A few specific patterns to watch for:
+
+**The experience inflation problem.** "5+ years of experience with [technology that's been around for 3 years]." This is a copy-paste error that nobody caught. It often means "we want someone who really knows this" not "we literally need 5 years." Don't disqualify yourself over years numbers unless they're wildly out of reach.
+
+**The certification checklist.** Some roles genuinely need specific certifications — regulated industries, government contracts, certain compliance frameworks. Most don't. A job posting with six required certifications often means "we listed everything we could think of" not "you must have all of these." Especially in startup or growth-stage companies, certifications are often a proxy for "we want someone experienced" not a hard gate.
+
+**The impossible combination.** "Must have deep expertise in AWS, Azure, and GCP, plus Kubernetes, Terraform, Ansible, Chef, and Puppet, plus security compliance experience." No single human is a senior expert in all of that. This is a posting that reflects every problem the team has ever faced rather than a coherent role description.
+
+## How to Read Between the Lines
+
+When I mentor someone who's job searching, I teach them to look at job postings the way I look at security audit findings: the specific is less important than the underlying concern.
+
+**Look at the "nice to have" vs "required" split.** Everything in the required section is negotiable. The nice to haves are the actual wish list. If you have 60-70% of the required skills, you are often a viable candidate. If you have a few of the nice-to-haves on top of that, you're in good shape.
+
+**Read the responsibilities, not the requirements.** The requirements section describes the ideal candidate. The responsibilities section describes what you'll actually be doing. These are the questions to answer: Can I do these things? Have I done things like them? If yes, apply.
+
+**Look at the company stage.** A Series A startup that lists 8 years of experience for an "entry-level" DevOps role is showing you they don't know what they want — yet. Early-stage companies often have poorly calibrated postings because the hiring manager has never hired for this role before. That's actually an opportunity for the right candidate, because the bar is "can you do the work" not "do you match this checklist."
+
+**Google the actual team.** LinkedIn, GitHub, conference talks, blog posts. Find the people who currently work there. What's their background? What technologies do they actually write about? This tells you far more about the role than the job posting does.
+
+## What to Do With a "No" on the Checklist
+
+One of the things I tell every person I mentor: if you meet 70% of the requirements and you're genuinely excited about the role, apply. The worst outcome is no response. The best is a conversation where you get to make the case for yourself.
+
+Cover letters are mostly ignored, but when they're read, they matter. If you're missing something obvious on the checklist, address it directly and confidently:
+
+"I don't have professional experience with Kubernetes specifically, but I've been running containerized workloads with Docker Swarm for two years and have been building homelab clusters with K3s for the past six months. I'm familiar with the concepts and confident in my ability to ramp quickly."
+
+That's infinitely better than hoping the recruiter doesn't notice. It shows self-awareness, it reframes the gap as a ramp rather than a wall, and it gives the reader something specific to evaluate.
+
+## How Mentors Can Actually Help
+
+If you're mentoring someone through a job search, the job posting is your first teaching tool.
+
+**Decode it together.** Read through a posting side by side and identify which requirements are truly load-bearing vs. which ones are wish list noise. Help them see the difference between "we need someone who can do X" and "someone once put X on a template and it's been there ever since."
+
+**Build the narrative.** The checklist items are prompts, not requirements. Help your mentee build a narrative that addresses the underlying concern each item represents. "5 years of AWS" means "we need someone who can own our cloud infrastructure." If they can make that case, the years are almost irrelevant.
+
+**Prepare them for the HR screen vs. the technical screen.** These are different conversations. The HR recruiter is pattern-matching against the posting. The technical interviewer is evaluating actual capability. Help them clear the HR screen with the right keywords and then show real depth in the technical conversation.
+
+**Normalize rejection.** The number of qualified candidates who are filtered out by automated screening before a human ever sees their resume is enormous. A rejection at the application stage often says nothing about the candidate's fit for the role. It says something about their resume's keyword density. That's a fixable problem.
+
+## How Hiring Managers Can Work Better With HR
+
+This one's for the people on the other side of the table.
+
+If you're frustrated that you can't find the right candidates, I want to offer a gentle challenge: are you finding them, or are your postings filtering them out?
+
+**Write a job posting based on what the person actually needs to do on day one, day 30, and day 90.** Not based on what your last person's resume looked like. Not based on a template. What does success look like in this role? Work backward from there.
+
+**Be explicit about what's required vs. what's preferred.** If Kubernetes is required to do the job, say so. If it's something you'd love but would train the right person on, say that. Most candidates take job postings literally.
+
+**Talk to your HR partner early.** Don't send them a bullet list and disappear. Walk them through what you actually need. Explain the work. Give examples. The more they understand the role, the better they can source and screen for it.
+
+**Calibrate on a real candidate together.** Before you post the role, describe a specific person you'd definitely hire. What do they have? What would you be willing to teach? That conversation shapes a much better posting than any template.
+
+**Expand where you look.** If you need security-minded engineers and you're only sourcing from traditional job boards, you're missing the people posting about their home labs on GitHub, the ones contributing to open source security tools, the ones speaking at local BSides conferences. Meet people where they actually are.
+
+## The Skills That Actually Matter vs. What's Listed
+
+In over a decade of interviewing and hiring for engineering and DevSecOps roles, here's what I've learned actually predicts success in a role, regardless of what's on the posting:
+
+**Learning agility.** Can you pick up a new technology when the team adopts one? This is more valuable than knowing the current stack perfectly. I would hire a fast learner with 60% of the stack knowledge over a slow learner with 100% every time.
+
+**Communication.** Can you explain what you're working on to a non-engineer? Can you ask for help without it being a crisis? Can you write a postmortem that's honest and useful? These are rare skills in technical people and they scale with career growth.
+
+**Debugging mindset.** Not "do you know the codebase" but "when you hit something you don't understand, what do you do?" The answer I want: form a hypothesis, gather data, test the hypothesis, repeat. Engineers who can debug systematically are engineers who can contribute to any codebase.
+
+**Ownership.** Do you see a problem and act on it, or do you wait to be assigned? This is visible in interviews if you know how to look for it. Ask about a time they went beyond their assigned scope and what motivated them.
+
+**Security awareness.** In a world where every engineer is also a security surface, some baseline awareness of how things go wrong is increasingly non-negotiable. Not expert-level, but not oblivious.
+
+None of these are on most job postings. Almost all of them matter more than the specific framework version.
+
+## The Bigger Picture
+
+The job posting is a flawed document, written by committee, filtered through compliance requirements, constrained by templates, and optimized for a perfect candidate who doesn't exist. It is not a precise specification of who you need to be.
+
+Read it as a starting point. Read it with a mentor if you can. Read between the lines to find the actual problems the team is trying to solve. Then make the case that you can solve them.
+
+And if you're on the other side of this table — hiring manager, recruiter, HR partner — remember that the best candidate for your team might be the person who had the courage to apply with 70% of the checklist. Don't let the wish list become a wall.
+
+---
+
+**Takeaway:** The next time you read a job posting and feel underqualified, go line by line and ask "is this truly required to do the job, or is this a wish?" For the things that are truly required, assess honestly. For the rest, don't count yourself out. And if you're mentoring someone, walk them through this exercise before they talk themselves out of applying.

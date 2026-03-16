@@ -1,0 +1,190 @@
+---
+title: "Your PKM Workflow: How I Actually Manage Knowledge Without Losing My Mind"
+date: 2026-03-15
+thumbnail: "https://images.unsplash.com/photo-1642697283420-194938fcc339?w=1200"
+author: hacker1db
+subtitle: "A walk through my personal knowledge management system using Obsidian, Readwise, Reader, Todoist, and Neovim — how information flows from capture to creation."
+tags:
+  - "pkm"
+  - "obsidian"
+  - "readwise"
+  - "todoist"
+  - "neovim"
+  - "productivity"
+series: []
+youtube: ""
+toc: true
+draft: false
+---
+
+# Your PKM Workflow: How I Actually Manage Knowledge Without Losing My Mind
+
+I used to be that person with 47 open browser tabs, a notes app full of half-finished thoughts, and a mental model of "I'll remember it later." Spoiler: I never remembered it later.
+
+Over the past few years I've built a knowledge management workflow that actually works for me. It's not perfect. It's not some mystical "second brain" that writes blog posts for me. But it helps me think, connect ideas, and get things done without the cognitive overhead of remembering where I put everything.
+
+Here's how it works.
+
+## The Philosophy: Capture Everything, Organize Later
+
+Before I get into the tools, the philosophy matters. The goal of a PKM system is not to have a beautiful, perfectly organized vault. The goal is to reduce friction between having an idea or encountering useful information and being able to retrieve and act on it later.
+
+If your system requires too much work to capture, you won't capture. If it's too hard to find things, you won't use it. The system has to be fast to put in and fast to pull out.
+
+My system has four stages: **Capture, Organize, Connect, Create.**
+
+---
+
+## The Tools
+
+### Readwise + Reader: The Intake Pipe
+
+Everything I read flows through Readwise Reader first. Articles, PDFs, newsletters, web pages — if I'm reading it intentionally, it goes into Reader. The killer feature is that highlights sync automatically to Readwise, which then pushes everything into Obsidian via the official Readwise plugin.
+
+The workflow looks like this:
+
+1. I save an article to Reader from my phone, browser, or RSS feed
+2. I read and highlight in Reader
+3. Highlights sync to Readwise within minutes
+4. Readwise pushes a formatted note into my Obsidian vault under `3.Resources/Readwise/`
+
+The Readwise plugin creates one file per source with YAML frontmatter, the highlight text, and my notes inline. It also handles books from Kindle — every highlight I make in a Kindle book shows up in Obsidian automatically. That alone is worth the subscription price.
+
+**What I like:** Zero friction. I don't have to do anything manually to get highlights into Obsidian. It just works.
+
+**What I don't love:** The auto-generated notes are raw. They need processing. But that's a feature, not a bug — it forces me to revisit and actually think about what I captured.
+
+### Obsidian: The Thinking Layer
+
+Obsidian is where I actually *think*. It's not a capture tool for me — that's Reader. Obsidian is where I take the raw captured material and turn it into something useful.
+
+My vault structure follows a loose PARA-influenced system:
+
+```
+0.Quick Notes/
+1.Projects/
+2.Areas/
+3.Resources/
+  Readwise/
+4.Archive/
+```
+
+The `0.Quick Notes/` folder is my inbox. When I have a quick thought, a meeting note, something I want to come back to, it goes in there as a new file with the date in the title. No organizing, no tagging, just capture. I process this inbox weekly.
+
+The real magic in Obsidian for me is the **graph view and backlinks**. When I'm writing a note about, say, JWT authentication, I'll link to my notes on OAuth, session management, and anything else that connects. Over time, the graph becomes a map of how I think about a domain. It's genuinely useful for finding connections I'd otherwise miss.
+
+**Plugins I actually use:**
+
+- **Readwise Official** — syncs highlights automatically
+- **Templater** — every new note starts with a template (date, tags, status)
+- **Dataview** — I query my vault like a database (show me all notes tagged `#security` modified in the last 30 days)
+- **Recent Files** — sidebar showing what I was working on recently
+- **Vim mode** — because of course
+
+Here's my basic note template via Templater:
+
+```markdown
+---
+created: 2026-03-15
+tags: []
+status: seedling
+---
+
+# Your PKM Workflow
+
+## Notes
+
+## Links
+```
+
+The `status` field goes from `seedling` (raw capture) to `growing` (actively developing) to `evergreen` (stable reference note). I don't obsess over this taxonomy, but it helps me know at a glance how mature a note is.
+
+### Todoist: The Action Layer
+
+Here's where a lot of PKM systems fall apart: they're great at storing knowledge but terrible at translating that into *action*. I keep Obsidian and Todoist separate on purpose.
+
+Obsidian is for thinking. Todoist is for doing.
+
+When I'm in Obsidian and I realize something needs to happen — a follow-up, a thing to research, a task — I add it to Todoist via the quick-add shortcut (`Cmd+Shift+A` on Mac). I don't try to manage tasks in Obsidian. I've tried. It's a mess.
+
+Todoist gives me:
+- Inbox for quick capture
+- Projects that map to my PARA structure
+- Labels for context (`@computer`, `@phone`, `@waiting`)
+- Natural language date parsing that actually works
+- A daily review workflow that keeps me on track
+
+My weekly review process connects the two: I review my Todoist projects, then open the related Obsidian areas and see if there are notes to process, links to make, or things to capture.
+
+### Neovim: The Creation Layer
+
+When I'm writing anything longer than a quick note — blog posts, documentation, reports, READMEs — I switch to Neovim. Not because Obsidian's editor is bad (it's fine), but because Neovim is where I'm fastest and most comfortable writing.
+
+I have a simple workflow:
+
+1. Draft the structure in Obsidian (headings, bullet points, rough outline)
+2. Open the file in Neovim for actual writing (`nvim` from terminal, or via my dotfiles shortcut)
+3. Use `zen-mode.nvim` for distraction-free writing
+4. Push back to Obsidian when done (they share the same vault directory)
+
+The key insight here: **Obsidian and Neovim work on the same files.** The vault is just a folder of Markdown files on disk. I can open any Obsidian note in Neovim, edit it, save it, and Obsidian reflects the changes immediately. No sync needed, no export/import dance.
+
+My Neovim writing setup:
+
+```lua
+-- In lazy.nvim config
+{ "folke/zen-mode.nvim", opts = { window = { width = 0.75 } } },
+{ "preservim/vim-pencil" },  -- soft wrap for prose
+{ "junegunn/goyo.vim" },     -- distraction-free mode
+```
+
+---
+
+## How Information Flows
+
+Let me trace a real example. I'm reading a paper on supply chain security in Reader on my phone during lunch.
+
+1. **Capture:** I highlight the key sections in Reader. Add a note: "connect this to our SBOM work."
+2. **Sync:** By the time I'm back at my desk, the highlights are in Obsidian under `3.Resources/Readwise/Supply Chain Security Paper.md`
+3. **Organize:** During my weekly review, I move the processed note from Readwise into `2.Areas/Security/Supply Chain/` and clean it up
+4. **Connect:** I link it to my existing notes on SBOMs, the SLSA framework, and my blog post draft on software supply chain risk
+5. **Create:** When I sit down to write the blog post, I open Neovim, pull from the connected notes, and write
+
+The whole flow happens naturally. Nothing gets lost in a browser tab graveyard.
+
+---
+
+## What Doesn't Work (Honest Assessment)
+
+No sugar coating: my system has weak spots.
+
+**Daily notes are a graveyard.** I've tried daily notes in Obsidian multiple times. They become a dumping ground that I never review. I've abandoned them in favor of a simple weekly note.
+
+**The inbox gets backed up.** `0.Quick Notes/` can pile up if I skip my weekly review. When it's backed up, the whole system feels heavy. Weekly review is non-negotiable if you want this to work.
+
+**Readwise costs money.** It's $7.99/month. Worth it for me, but not free. If budget is a concern, you can manually copy highlights, just with much more friction.
+
+**It took time to build.** The workflow I described took about 18 months to evolve to its current state. If you're starting fresh, don't try to replicate this on day one. Start simple: capture app + one notes app. Add layers when the pain of not having them is obvious.
+
+---
+
+## Getting Started
+
+If you want to build something similar:
+
+1. Pick **one** place to capture everything (Readwise Reader, Apple Notes, Bear — doesn't matter, pick one)
+2. Pick **one** place to think (Obsidian is my recommendation for technical people who like Markdown)
+3. Pick **one** place to track actions (Todoist, Things, OmniFocus — again, pick one)
+4. Connect them over time, not all at once
+
+The tools are secondary to the habit. A $0 system you use every day beats a $50/month system you use twice a week.
+
+---
+
+## Takeaway
+
+PKM is not about having the perfect system. It's about reducing the tax on your brain so you can think about the things that actually matter. My workflow took years to refine and it still has rough edges.
+
+But compared to 47 open tabs and a sticky note graveyard? This is miles better. Start somewhere, iterate, and don't let perfect be the enemy of functional.
+
+If you're building something similar, I'd genuinely love to hear what's working for you. Hit me up.

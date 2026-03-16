@@ -1,0 +1,202 @@
+---
+title: "Get Better at the Keyboard: The Investment That Compounds Every Day"
+date: 2026-03-15
+thumbnail: "https://plus.unsplash.com/premium_photo-1771254265971-12f3a173c0c1?w=1200"
+author: hacker1db
+subtitle: "Your hands touch the keyboard thousands of times a day — investing in that skill compounds over a career. Touch typing, vim motions, mechanical keyboards, ergonomics, and the resources that actually helped."
+tags:
+  - "keyboard"
+  - "productivity"
+  - "vim"
+  - "touch-typing"
+  - "ergonomics"
+  - "tools"
+series: []
+youtube: ""
+toc: true
+draft: false
+---
+
+# Get Better at the Keyboard: The Investment That Compounds Every Day
+
+Here's a rough calculation: if you type for 6 hours a day, 5 days a week, 48 weeks a year, you're at the keyboard for around 1,440 hours annually. Over a 30-year career, that's 43,000 hours.
+
+Every fraction of a percent improvement in how effectively you use those hours compounds into real time. More importantly, every source of friction you eliminate from your interaction with the keyboard reduces cognitive load — which means more mental capacity for the actual thinking work.
+
+I've spent years optimizing this. Here's what's actually made a difference.
+
+---
+
+## Touch Typing: The Foundation
+
+If you're a developer who looks at the keyboard while typing, this is the highest-leverage thing you can change. I'm not going to sugarcoat it: if you don't touch type, you have a handicap that limits how fast you can translate thought into text, and that friction affects your work every single day.
+
+Touch typing is not about speed, though speed comes with it. It's about **removing the visual interrupt.** When you have to look at the keyboard, you break eye contact with the screen. You break your focus. You interrupt the flow of thought-to-code. That interruption is a small tax on every keystroke, and it adds up.
+
+Learning to touch type as an adult feels awkward and slow. For the first few weeks, you're slower than you were hunting and pecking. This is normal. Push through it.
+
+### Resources That Actually Help
+
+**Keybr.com** — this is the one I recommend without reservation. It doesn't start with the standard QWERTY lesson layout. It introduces letters adaptively based on where you're struggling, so you're always working just above your current skill level. It measures your accuracy and speed per key and identifies weaknesses. This is how I went from a wobbly 45 WPM typist to a consistent 80+ WPM.
+
+**Monkeytype.com** — pure practice. Once you have the basics, Monkeytype is where you build speed. It has code practice modes (typing actual code syntax, not prose), which is more relevant to developer work than standard typing tests.
+
+**typelit.io** — typing while reading actual literature. Good for sustained practice sessions without the "gamification" feel of speed tests.
+
+My honest timeline: I spent 20 minutes a day on Keybr for about 3 months before touch typing felt natural. After 6 months, I wasn't thinking about it anymore. That investment paid for itself within the first year.
+
+---
+
+## Vim Motions: The Biggest Multiplier
+
+After touch typing, Vim motions are the most impactful keyboard investment for a developer. I've written about Neovim before, but I want to be specific about the motion system here because it's often misunderstood.
+
+Vim motions are not shortcuts in the conventional sense. They're a **composable language for editing text.**
+
+The structure is: `[count] [operator] [motion]`
+
+- `d3w` — delete 3 words
+- `ci"` — change inside quotes
+- `ya{` — yank around curly braces
+- `>ap` — indent a paragraph
+
+Once you internalize this grammar, you can compose operations you've never explicitly learned. `d` is delete, `c` is change, `y` is yank. `w` is word, `p` is paragraph, `"` is inside quotes. Combine them in any order.
+
+### The Learning Curve Is Real But Finite
+
+The Vim motion learning curve is steep at the start but finite. There's a ceiling: learn the roughly 20-30 most common operators and motions, and you have 90% of the value. You don't need to learn every obscure command.
+
+**vimtutor** — run `vimtutor` in your terminal. It's built in. Do it once. Takes 30 minutes. Covers the essentials.
+
+**Vim Adventures** (vim-adventures.com) — a game that teaches Vim motions through gameplay. Genuinely good for the basics, especially for people who learn better by doing than by reading.
+
+**The Primeagen on YouTube** — his Vim content is practical and fast-paced. Especially his "Vim as your editor" series.
+
+**Practical Vim by Drew Neil** — the book I recommend for going deeper. Not required for most developers, but excellent if you want to understand the full model.
+
+### You Don't Have to Use Neovim
+
+This is important: **you can use Vim motions without using Vim.** Every major editor has a Vim keybinding mode:
+
+- VS Code: `vscodevim` extension
+- JetBrains: `IdeaVim` plugin (excellent, configurable)
+- Emacs: `evil-mode`
+- Obsidian: built-in Vim mode
+
+The investment in Vim motions transfers across every editor you use for the rest of your career. That's the compounding.
+
+---
+
+## Keyboard Shortcuts: Your Editor's Native Language
+
+Beyond Vim motions, each tool you use daily has its own keyboard shortcut system. Every time you reach for the mouse for something you do ten times a day, you're paying a small tax.
+
+I approach shortcut learning the same way I approach learning anything: one at a time, until it's muscle memory, then the next one.
+
+My process:
+1. Notice when I reach for the mouse for something repetitive
+2. Look up the keyboard shortcut
+3. Use it exclusively for one week (even when it's slower)
+4. It's now in muscle memory
+
+For any tool you spend significant time in, there's a shortcut cheat sheet worth printing or keeping open for a few weeks. Some that made the biggest difference for me:
+
+**Terminal / Shell:**
+```
+Ctrl+R         — reverse history search (find that command from last week)
+Ctrl+A / Ctrl+E — beginning/end of line
+Ctrl+W         — delete word backward
+Alt+.          — insert last argument of previous command
+!!             — repeat last command (useful: sudo !!)
+```
+
+**tmux:**
+```
+Ctrl+b [       — enter scroll mode (Vim keys to navigate)
+Ctrl+b z       — zoom current pane to full screen
+Ctrl+b {/}     — swap panes
+Ctrl+b ,       — rename current window
+```
+
+**macOS / general:**
+```
+Cmd+Shift+.    — show hidden files in Finder
+Cmd+Space      — Spotlight / Raycast (if you're not using Raycast, start)
+Ctrl+Cmd+Space — emoji picker (useful for quick visual communication)
+```
+
+---
+
+## Mechanical Keyboards: Not Just Aesthetics
+
+I'm going to be honest: I was dismissive of the mechanical keyboard hobby for years. It seemed like an expensive thing to have opinions about.
+
+Then I got a mechanical keyboard and understood what the fuss was about. It's not primarily aesthetics. It's **feedback and consistency.**
+
+Standard laptop keyboards and membrane keyboards have mushy, inconsistent key feel. You're never quite sure when a keypress registered. Mechanical keyboards have a defined actuation point, consistent feel, and (depending on the switch) tactile feedback at exactly the moment the key registers.
+
+The result: you make fewer typos. Your fingers learn exactly how much force is needed. The consistency reduces the micro-corrections your brain makes constantly on a mushy keyboard.
+
+### What Actually Matters When Choosing
+
+**Switch type:** The three main categories:
+- **Linear** (Cherry MX Red, Gateron Yellow) — smooth travel, no bump. Good for gaming, fast typing. Low fatigue.
+- **Tactile** (Cherry MX Brown, Zealio V2) — bump at actuation point. Good feedback for typing. My preference.
+- **Clicky** (Cherry MX Blue, Buckling spring) — audible click at actuation. Satisfying. Will make you enemies in open offices.
+
+**Form factor:** 65% or TKL (tenkeyless) keyboards remove the numpad and give you more desk space and keep your mouse closer to your typing position. I don't use the numpad. A 65% board is smaller and cheaper.
+
+**Build quality:** Aluminum cases sound and feel better than plastic. Programmable via QMK or VIA firmware, which lets you customize every key.
+
+My current setup: Keychron Q2 with Gateron brown switches. Programmable, aluminum body, hotswappable switches. It's not a $500 enthusiast board, but it's a massive improvement over the Apple Magic Keyboard I used before.
+
+---
+
+## Ergonomics: The Long Game
+
+This is the part nobody wants to talk about because it's not as fun as switch comparisons, but it matters more.
+
+**RSI (Repetitive Strain Injury) is a real career risk for developers.** I know people whose careers have been significantly impacted by wrist and shoulder injuries from years of poor ergonomics. Don't wait until it hurts.
+
+Key adjustments I've made:
+
+**Keyboard height:** Your wrists should be roughly neutral (not bent up or down) when typing. If your desk is too high, your wrists bend up. This strains the tendons. Get a keyboard tray, lower the desk, or use a wrist rest.
+
+**Mouse position:** Should be at the same height as the keyboard, close to it. Reaching for the mouse rotates your shoulder inward and strains it over time. Another reason Vim motions matter: less reaching for the mouse.
+
+**Split keyboards:** The ergonomic endgame for many people. A split keyboard (ZSA Moonlander, Kinesis Advantage, Dactyl Manuform) lets each hand rest at a natural angle instead of turned inward toward the keyboard center. The learning curve is significant, but the ergonomic benefit is real. I've been considering this step for a while.
+
+**Typing breaks:** I use Stretchly (open source, cross-platform) to force short breaks every 25 minutes. It sounds annoying. After the first week, you stop noticing it and start looking forward to the stretch reminder.
+
+---
+
+## My Personal Journey
+
+I started typing properly (by home-row standards) around 2019. Before that I was a reasonably fast hunt-and-peck typist who'd spent years "getting by." My real Vim journey started around 2020 when I got tired of VS Code being slow on large files and finally committed to learning Neovim properly.
+
+The honest timeline:
+- Touch typing: 3 months to functional, 6 months to comfortable
+- Vim basics: 2 weeks to functional, 3 months to natural
+- Vim motions as default: about 1 year before they truly replaced mouse habits
+
+None of this is fast. All of it is worth it.
+
+---
+
+## Where to Start
+
+If you take one thing from this post, make it this: **start with touch typing if you don't already.** Go to Keybr.com, spend 20 minutes a day for a month, and you'll have a foundation that everything else builds on.
+
+After that: pick one editor, install the Vim plugin, and commit to using motions for one month. It will be frustrating. That frustration is the friction of change, not evidence that it's the wrong approach.
+
+Your hands are at the keyboard for tens of thousands of hours over your career. That investment compounds. Make it intentionally.
+
+---
+
+## Takeaway
+
+The keyboard is your primary interface with your work. Treating it like an afterthought costs you more than you realize — not just in speed, but in cognitive load, physical health, and the quality of the thought-to-code translation.
+
+Touch type. Learn Vim motions. Use keyboard shortcuts. Get a decent keyboard. Protect your wrists. Do it now, not after you've already developed bad habits.
+
+The time you spend learning will return to you for the rest of your career, compounded daily.

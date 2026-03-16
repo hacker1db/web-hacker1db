@@ -1,0 +1,261 @@
+---
+title: "Dangling DNS and Abandoned Cloud Services: The Subdomain Takeover Problem"
+date: 2026-03-15
+thumbnail: "https://images.unsplash.com/photo-1667984390553-7f439e6ae401?w=1200"
+author: hacker1db
+subtitle: "How abandoned cloud resources and stale DNS records let attackers serve content on your domain — and what to do about it."
+tags:
+  - "dns"
+  - "subdomain-takeover"
+  - "azure"
+  - "gcp"
+  - "cloud-security"
+  - "recon"
+series: []
+youtube: ""
+toc: true
+draft: false
+---
+
+# Dangling DNS and Abandoned Cloud Services: The Subdomain Takeover Problem
+
+Here's a scenario I want you to think about. Your company ran a marketing campaign two years ago. The campaign used a subdomain — `campaign2023.yourcompany.com` — that pointed to an Azure App Service. The campaign ended, someone deleted the App Service, but nobody cleaned up the DNS record. The CNAME still points to `campaign2023.azurewebsites.net`.
+
+An attacker runs a subdomain enumeration scan on your domain. They find `campaign2023.yourcompany.com`. They check the target — `campaign2023.azurewebsites.net` — and discover it's unclaimed. So they register it. Now they're serving content from your subdomain. Phishing pages, malware, credential harvesting — on your domain, with your brand, with a valid TLS certificate that browsers trust.
+
+This is subdomain takeover, and it's more common than most organizations realize. Let me walk you through how it works, how to find it, and how to prevent it.
+
+---
+
+## How Dangling DNS Records Happen
+
+The mechanics are straightforward, and they happen because cloud infrastructure is easy to provision and easy to forget.
+
+1. Team provisions a cloud resource (App Service, CDN endpoint, Cloud Run service, Blob storage static site, etc.)
+2. DNS is configured to point a subdomain to that resource's cloud hostname
+3. Project ends, team is disbanded, or the resource is decommissioned
+4. The cloud resource is deleted
+5. The DNS record is *not* deleted
+6. The subdomain now points to a cloud hostname that's unclaimed and available for anyone to register
+
+The cloud provider's hostname becomes a CNAME target that exists in DNS but resolves to nothing — or worse, resolves to a generic "this resource doesn't exist" page that an attacker can claim.
+
+Different cloud providers have different windows and mechanisms for this, but the vulnerability class is consistent.
+
+---
+
+## Real-World Examples by Cloud Platform
+
+### Azure App Service
+
+Azure App Service apps get a hostname like `myapp.azurewebsites.net`. If you delete the App Service but leave a CNAME pointing to it, that `azurewebsites.net` hostname is immediately available for anyone to register.
+
+```bash
+# Check if a CNAME target is claimable
+dig CNAME campaign2023.yourcompany.com
+# Returns: campaign2023.yourcompany.com. CNAME campaign2023old.azurewebsites.net.
+
+curl -I https://campaign2023old.azurewebsites.net
+# HTTP/2 404 — resource doesn't exist, but the hostname is unclaimed
+```
+
+An attacker can go to the Azure portal, create an App Service named `campaign2023old`, and immediately serve content from `campaign2023.yourcompany.com`. Azure's app service naming is global and first-come, first-served.
+
+### Azure CDN / Front Door
+
+Same problem, different service. CDN endpoints get hostnames like `myendpoint.azureedge.net`. If you decommission the CDN profile but leave the CNAME in DNS, the `azureedge.net` hostname can be claimed.
+
+Azure Front Door custom domains present a slightly different variant — the verification TXT record (`_dnsauth`) can sometimes be replayed if not properly cleaned up.
+
+```bash
+# Look for dangling CDN records
+dig myendpoint.azureedge.net
+# NXDOMAIN or "ResourceNotFound" response means it's potentially claimable
+```
+
+### GCP Cloud Run
+
+Cloud Run services get URLs like `myservice-abc123-uc.a.run.app`. These are globally unique per-project per-service, so the exact format includes a random suffix. This makes direct takeover harder for Cloud Run itself — but if you've mapped a custom domain via a load balancer, the load balancer's IP or hostname becomes the takeover target.
+
+More commonly with GCP, the risk is around Firebase Hosting, App Engine custom domains, and Global Load Balancer frontend addresses that get released back to the IP pool.
+
+```bash
+# Check for dangling records pointing to GCP services
+dig api.yourcompany.com
+# Returns an IP that resolves to a GCP "404 Not Found" page
+# That IP may have been released from your project
+```
+
+### Other Common Takeover Targets
+
+- **GitHub Pages** — `username.github.io` CNAMEs after account deletion
+- **Heroku** — unclaimed app names on `herokuapp.com`
+- **Fastly** — unclaimed service names
+- **Shopify** — abandoned store subdomains
+- **Zendesk** — unclaimed support subdomains
+
+Tools like [can-i-take-over-xyz](https://github.com/EdOverflow/can-i-take-over-xyz) maintain a list of services and their takeover status/fingerprints.
+
+---
+
+## How to Detect Dangling Records
+
+### Manual DNS Auditing
+
+Start by enumerating all your DNS records. If you use Route53, Azure DNS, or GCP Cloud DNS, you can export them via API:
+
+```bash
+# Azure DNS — list all records in a zone
+az network dns record-set list \
+  --resource-group myRG \
+  --zone-name yourcompany.com \
+  --output table
+
+# GCP Cloud DNS — list all records
+gcloud dns record-sets list \
+  --zone=yourcompany-com \
+  --format="table(name,type,rrdatas)"
+```
+
+For each CNAME record, check if the target resolves to something that's actually yours. If you get NXDOMAIN, a generic cloud provider 404, or a "this service doesn't exist" page, that's a potential dangling record.
+
+### Automated Scanning with Subzy or Nuclei
+
+`subzy` is purpose-built for subdomain takeover detection:
+
+```bash
+# Install
+go install -v github.com/LukaSikic/subzy@latest
+
+# Run against a list of subdomains
+subzy run --targets subdomains.txt --hide-fails --verify-ssl
+
+# subdomains.txt format — one per line
+campaign2023.yourcompany.com
+api-old.yourcompany.com
+staging.yourcompany.com
+```
+
+Nuclei has a large template library for cloud service takeovers:
+
+```bash
+# Run nuclei subdomain takeover templates
+nuclei -l subdomains.txt -t ~/nuclei-templates/takeovers/ -o takeover-results.txt
+```
+
+Generate your subdomain list from certificate transparency logs using `subfinder` or `amass`:
+
+```bash
+subfinder -d yourcompany.com -silent -o subdomains.txt
+```
+
+### A Simple Bash Audit Script
+
+Here's a script I use to do a quick check for obviously dangling CNAMEs:
+
+```bash
+#!/usr/bin/env bash
+# dangling-cname-check.sh
+# Usage: ./dangling-cname-check.sh subdomains.txt
+
+SUBDOMAIN_FILE=$1
+DANGLING_SERVICES=(
+  "azurewebsites.net"
+  "azureedge.net"
+  "cloudapp.azure.com"
+  "trafficmanager.net"
+  "a.run.app"
+  "appspot.com"
+  "github.io"
+  "herokuapp.com"
+)
+
+echo "Subdomain,CNAME_Target,Status"
+
+while IFS= read -r subdomain; do
+  cname=$(dig +short CNAME "$subdomain" 2>/dev/null | tr -d '.')
+
+  if [[ -z "$cname" ]]; then
+    continue
+  fi
+
+  for service in "${DANGLING_SERVICES[@]}"; do
+    if [[ "$cname" == *"$service"* ]]; then
+      # Check if target resolves
+      response=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "https://$subdomain" 2>/dev/null)
+      if [[ "$response" == "404" || "$response" == "000" ]]; then
+        echo "$subdomain,$cname,POTENTIALLY_DANGLING"
+      fi
+    fi
+  done
+done < "$SUBDOMAIN_FILE"
+```
+
+---
+
+## How to Prevent Subdomain Takeovers
+
+### Process Controls
+
+The root cause is almost always a process gap: infrastructure is decommissioned without a corresponding DNS cleanup step. Fix the process:
+
+1. **Add DNS review to your offboarding checklist.** When a service is decommissioned, DNS records pointing to it are part of the work.
+2. **Require DNS record justification in ticketing.** Every CNAME should have a corresponding ticket or runbook that references the service it points to.
+3. **Periodic DNS audits.** Schedule a quarterly review of all external DNS records. Automate what you can.
+
+### Technical Controls
+
+**Use Azure Static Web Apps custom domain verification.** For Azure specifically, custom domains require a verification TXT record before the CNAME takes effect. This doesn't prevent the problem entirely, but it adds friction.
+
+**Reserve hostnames before decommissioning.** For Azure App Services, before you delete a service, consider whether you need to keep the hostname reserved. Azure lets you map custom domains without an active service in some configurations.
+
+**Monitor for DNS changes.** Services like Detectify or your own monitoring can alert on new/changed DNS records. A sudden change to a CNAME target should trigger a review.
+
+**Prefer A records with static IPs where possible.** A records pointing to IPs you control are harder to take over than CNAMEs pointing to third-party cloud hostnames — though released IPs can be reassigned by cloud providers.
+
+### For GCP Specifically
+
+GCP's Domain Verification resource lets you protect your domain from unauthorized use in GCP services. If you've verified ownership of `yourcompany.com` in Google Search Console, you can configure GCP to prevent projects you don't own from creating resources with your domain's custom domains.
+
+```bash
+# Verify your domain in GCP (done once per domain)
+gcloud domains verify yourcompany.com
+```
+
+---
+
+## Building an Ongoing Detection Workflow
+
+One-time audits aren't enough. DNS records change constantly. Here's a lightweight continuous monitoring approach:
+
+```bash
+#!/usr/bin/env bash
+# Schedule this via cron weekly
+# Run subdomain enumeration
+subfinder -d yourcompany.com -silent -o /tmp/current-subdomains.txt
+
+# Compare with last run
+if [ -f /tmp/previous-subdomains.txt ]; then
+  comm -13 <(sort /tmp/previous-subdomains.txt) <(sort /tmp/current-subdomains.txt) > /tmp/new-subdomains.txt
+  echo "New subdomains found:"
+  cat /tmp/new-subdomains.txt
+fi
+
+# Run takeover check on all current subdomains
+subzy run --targets /tmp/current-subdomains.txt --hide-fails > /tmp/takeover-check.txt
+grep -v "Not Vulnerable" /tmp/takeover-check.txt | mail -s "Subdomain Takeover Alert" security@yourcompany.com
+
+cp /tmp/current-subdomains.txt /tmp/previous-subdomains.txt
+```
+
+Not pretty, but it works. Wrap it in a proper pipeline when you have the time.
+
+---
+
+## The Takeaway
+
+Subdomain takeovers are embarrassing, avoidable, and they keep happening because the remediation (clean up DNS records when you delete cloud resources) feels boring and low-priority. Until someone is serving a phishing page from `login.yourcompany.com` and your incident response team is scrambling.
+
+The fix isn't complicated. Run a subdomain enumeration on your own domains today. Check every CNAME target. Delete or update any records pointing to resources you no longer own. Add DNS cleanup to your decommission checklists. Schedule a recurring audit.
+
+Your DNS is part of your attack surface. Treat it that way.
