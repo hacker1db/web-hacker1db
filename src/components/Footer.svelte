@@ -40,8 +40,8 @@
 			return {
 				name: t.tag,
 				count: t.count,
-				icon,
 				...colorSet,
+				icon,
 			};
 		})
 	);
