@@ -128,7 +128,7 @@ I tested this against an internal staging environment after reading this chapter
 
 ## The Lab Environment
 
-The book comes with a virtual lab environment using deliberately vulnerable APIs — vAPI, crAPI (Completely Ridiculous API), and DVGA (Damn Vulnerable GraphQL Application). Setting them up took an afternoon, but the investment was worth it.
+The book comes with a virtual lab environment using deliberately vulnerable APIs — vAPI, crAPI (Completely Ridiculous API), and DVGA (Deliberately Vulnerable GraphQL Application). Setting them up took an afternoon, but the investment was worth it.
 
 Practicing against real (deliberately broken) APIs instead of just reading about vulnerabilities is how this knowledge actually sticks. I cannot overstate how much more I retained from the hands-on exercises compared to the explanatory text. The text explains the *why*; the labs make the *how* visceral.
 
