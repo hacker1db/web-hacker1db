@@ -41,7 +41,9 @@
 				name: t.tag,
 				count: t.count,
 				icon,
-				...colorSet,
+				color: colorSet.color,
+				bg: colorSet.bg,
+				border: colorSet.border,
 			};
 		})
 	);

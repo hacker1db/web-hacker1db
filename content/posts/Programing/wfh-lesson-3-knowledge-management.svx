@@ -11,7 +11,7 @@ tags:
   - "PKM"
   - "obsidian"
   - "second-brain"
-series: []
+series: ["Working from Home"]
 youtube: ""
 toc: true
 draft: false

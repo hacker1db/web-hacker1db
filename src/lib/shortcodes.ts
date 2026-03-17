@@ -117,7 +117,7 @@ export function processShortcodes(content: string, frontmatter: PostMatter): str
 	processedContent = processedContent.replace(
 		/\{\{<\s*ref\s+"([^"]+)"\s*>\}\}/g,
 		(_match, refPath: string) => {
-			const cleanPath = refPath.replace(/\.md$/, '').replace(/^\//, '');
+			const cleanPath = refPath.replace(/\.md$/, '').replace(/^\//, '').replace(/^posts\//, '');
 			return `/posts/${cleanPath}`;
 		}
 	);
@@ -126,7 +126,7 @@ export function processShortcodes(content: string, frontmatter: PostMatter): str
 	processedContent = processedContent.replace(
 		/\{\{<\s*relref\s+"([^"]+)"\s*>\}\}/g,
 		(_match, refPath: string) => {
-			const cleanPath = refPath.replace(/\.md$/, '').replace(/^\//, '');
+			const cleanPath = refPath.replace(/\.md$/, '').replace(/^\//, '').replace(/^posts\//, '');
 			return `/posts/${cleanPath}`;
 		}
 	);
