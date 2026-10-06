@@ -10,7 +10,7 @@ tags:
   - "productivity"
   - "home-office"
   - "routine"
-series: []
+series: ["Working from Home"]
 youtube: ""
 toc: true
 draft: false

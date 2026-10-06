@@ -20,6 +20,17 @@ export interface Post {
 	excerpt?: string;
 }
 
+export interface SearchablePost {
+	slug: string;
+	title: string;
+	subtitle?: string;
+	category?: string;
+	tags?: string[];
+	series?: string[];
+	excerpt?: string;
+	date: string;
+}
+
 export interface SiteConfig {
 	title: string;
 	description: string;

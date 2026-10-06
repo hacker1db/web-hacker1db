@@ -1,27 +1,41 @@
-import svelte from 'eslint-plugin-svelte';
+import js from '@eslint/js';
 import ts from 'typescript-eslint';
+import svelte from 'eslint-plugin-svelte';
+import globals from 'globals';
 
 export default [
+	js.configs.recommended,
 	...ts.configs.recommended,
 	...svelte.configs['flat/recommended'],
 	{
+		languageOptions: {
+			globals: {
+				...globals.browser,
+				...globals.node,
+			},
+		},
 		rules: {
 			'@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
 			'@typescript-eslint/no-explicit-any': 'error',
-			'svelte/require-each-key': 'off',
-			'svelte/no-navigation-without-resolve': 'off',
-			'svelte/no-at-html-tags': 'off'
-		}
+		},
 	},
 	{
 		files: ['**/*.svelte'],
 		languageOptions: {
 			parserOptions: {
-				parser: ts.parser
-			}
-		}
+				parser: ts.parser,
+			},
+		},
+		rules: {
+			// Project uses goto() and <a href> directly throughout — not using resolve()
+			'svelte/no-navigation-without-resolve': 'off',
+			// {@html} is used intentionally for code blocks and footer content
+			'svelte/no-at-html-tags': 'off',
+			// Each blocks without keys are pre-existing throughout the codebase
+			'svelte/require-each-key': 'warn',
+		},
 	},
 	{
-		ignores: ['.svelte-kit/', 'build/', 'node_modules/', '.vercel/', '.next/']
-	}
+		ignores: ['.svelte-kit/', 'build/', '.vercel/', 'node_modules/'],
+	},
 ];
