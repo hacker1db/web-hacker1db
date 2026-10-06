@@ -1,29 +1,29 @@
-# Hacker1db.dev Blog
+
+# Hacker1db.Dev Blog
 
 A modern, fast blog built with SvelteKit, TypeScript, and MDsveX. Previously built with Hugo, now migrated to a fully modern stack for better performance and developer experience.
 
 ![SvelteKit](https://img.shields.io/badge/SvelteKit-2.x-orange?logo=svelte)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)
 ![MDsveX](https://img.shields.io/badge/MDsveX-0.x-purple)
-![npm](https://img.shields.io/badge/npm-10-red?logo=npm)
+![Bun](https://img.shields.io/badge/bun-1.x-black?logo=bun)
 
 ## Quick Start
 
 ### Prerequisites
 
-- Node.js 18+
-- npm
+- [Bun](https://bun.sh) 1.x
 
 ### Installation & Development
 
 1. **Install dependencies**
    ```bash
-   npm install
+   bun install
    ```
 
 2. **Start the development server**
    ```bash
-   npm run dev
+   bun run dev
    ```
 
 3. **Open your browser**
@@ -33,17 +33,17 @@ A modern, fast blog built with SvelteKit, TypeScript, and MDsveX. Previously bui
 
 1. **Build for production**
    ```bash
-   npm run build
+   bun run build
    ```
 
 2. **Preview production build**
    ```bash
-   npm run preview
+   bun run preview
    ```
 
 3. **Static export** (for static hosting)
    ```bash
-   npm run build
+   bun run build
    # The static site will be in the 'build' directory
    ```
 
@@ -85,12 +85,12 @@ A modern, fast blog built with SvelteKit, TypeScript, and MDsveX. Previously bui
 
 | Command | Description |
 |---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build optimized production bundle |
-| `npm run preview` | Preview production build locally |
-| `npm run lint` | Run ESLint for code quality |
-| `npm run check` | Run Svelte type checking |
-| `npm run format` | Format code with Prettier |
+| `bun run dev` | Start development server |
+| `bun run build` | Build optimized production bundle |
+| `bun run preview` | Preview production build locally |
+| `bun run lint` | Run ESLint for code quality |
+| `bun run check` | Run Svelte type checking |
+| `bun run format` | Format code with Prettier |
 
 ## Features
 
@@ -188,12 +188,12 @@ The migration includes comprehensive support for Hugo shortcodes:
 
 ### Netlify
 
-1. Build the static site: `npm run build`
+1. Build the static site: `bun run build`
 2. Upload the `build` directory to [Netlify](https://netlify.com)
 
 ### GitHub Pages
 
-1. Build the static site: `npm run build`
+1. Build the static site: `bun run build`
 2. Deploy the `build` directory to GitHub Pages
 
 ### Other Static Hosts
@@ -205,18 +205,18 @@ The site exports to static files in the `build` directory and can be deployed to
 ### Local Development
 
 1. Clone the repository
-2. Install dependencies: `npm install`
-3. Start development server: `npm run dev`
+2. Install dependencies: `bun install`
+3. Start development server: `bun run dev`
 4. Make changes and see them reflected instantly
 
 ### Adding Dependencies
 
 ```bash
-# Add a new dependency
-npm install package-name
+# Add A New Dependency
+bun add package-name
 
-# Add a development dependency
-npm install -D package-name
+# Add A Development Dependency
+bun add -d package-name
 ```
 
 ## License
@@ -239,3 +239,4 @@ This project is open source and available under the [MIT License](LICENSE).
 ---
 
 Built with SvelteKit, MDsveX, TypeScript, and Vite
+
