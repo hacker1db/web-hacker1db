@@ -88,7 +88,7 @@ This does again require that you take the time to understand how these more lock
    - This includes those from your editor i.e Visual Studio or Jet Brains these are meant to give you a starter template to get up and running but are not production ready.
 6. Secure or confidential information being copied over the container
    - The example here is `ssh keys or certificates`, Trivy scanner will highlight this for you.
-7. Dependency hell of nested packages - In some cases where packages are required of other packages these are the culprits. Meaning that you may have to locate the outdated version and update it to a secure version of it because the maintainers have not been to update the upstream package that you actually are required to run the application.
+7. Dependency complexity of nested packages - In some cases where packages are required of other packages these are the culprits. Meaning that you may have to locate the outdated version and update it to a secure version of it because the maintainers have not been to update the upstream package that you actually are required to run the application.
    In the world of C#, this takes on the _deps.json_ located in the bin/{either debug or release} folder or in the Javascript world node modules bringing in some required package that has an open [CVE](https://cve.mitre.org/).
    I bring these files up as the simple fix generally is to find the dependency and override the outdated vulnerable version.
 
