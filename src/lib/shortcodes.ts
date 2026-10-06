@@ -160,7 +160,8 @@ export function processFrontmatter(data: FrontmatterData, content?: string): Pos
 		category: data.category || '',
 		hideSubtitleInCard: Boolean(data.hideSubtitleInCard || hasSubtitleParam),
 		thumbnail: data.thumbnail as string || '',
-		youtube: data.youtube as string || ''
+		youtube: data.youtube as string || '',
+		draft: data.draft === true
 	};
 
 	return processed;

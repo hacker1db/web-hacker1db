@@ -1,51 +1,34 @@
-import fs from 'fs';
-import path from 'path';
 import matter from 'gray-matter';
 import type { Post } from './types';
 import { processShortcodes, processFrontmatter } from './shortcodes';
 
-const postsDirectory = path.join(process.cwd(), 'content/posts');
+// Bundled at build time so dynamic server routes can read posts without filesystem access.
+const postFiles = import.meta.glob<string>('/content/posts/**/*.{md,mdx,svx}', {
+	query: '?raw',
+	import: 'default',
+	eager: true
+});
+
+const postSources = new Map<string, string>();
+for (const [filePath, source] of Object.entries(postFiles)) {
+	const fileName = filePath.split('/').pop() ?? '';
+	if (fileName.startsWith('_index.')) continue;
+	const slug = filePath.replace(/^\/content\/posts\//, '').replace(/\.(svx|mdx?)$/, '');
+	if (!postSources.has(slug) || filePath.endsWith('.svx')) {
+		postSources.set(slug, source);
+	}
+}
 
 export function getAllPostSlugs(): string[] {
-	const allFiles: string[] = [];
-
-	function getFilesRecursively(dir: string): void {
-		const files = fs.readdirSync(dir);
-
-		for (const file of files) {
-			const fullPath = path.join(dir, file);
-			const stat = fs.statSync(fullPath);
-
-			if (stat.isDirectory()) {
-				getFilesRecursively(fullPath);
-			} else if (
-				(file.endsWith('.md') || file.endsWith('.mdx') || file.endsWith('.svx')) &&
-				!file.startsWith('_index.')
-			) {
-				const relativePath = path.relative(postsDirectory, fullPath);
-				const slug = relativePath.replace(/\.(svx|mdx?)$/, '');
-				allFiles.push(slug);
-			}
-		}
-	}
-
-	if (fs.existsSync(postsDirectory)) {
-		getFilesRecursively(postsDirectory);
-	}
-
-	return allFiles;
+	return Array.from(postSources.keys());
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
 	try {
-		let fullPath = path.join(postsDirectory, `${slug}.svx`);
-		if (!fs.existsSync(fullPath)) {
-			fullPath = path.join(postsDirectory, `${slug}.mdx`);
+		const fileContents = postSources.get(slug);
+		if (fileContents === undefined) {
+			return null;
 		}
-		if (!fs.existsSync(fullPath)) {
-			fullPath = path.join(postsDirectory, `${slug}.md`);
-		}
-		const fileContents = fs.readFileSync(fullPath, 'utf8');
 		const { data, content } = matter(fileContents);
 
 		const processedData = processFrontmatter(data, content);
@@ -77,7 +60,7 @@ export async function getAllPosts(): Promise<Post[]> {
 	const posts = await Promise.all(slugs.map((slug) => getPostBySlug(slug)));
 
 	return posts
-		.filter((post): post is Post => post !== null)
+		.filter((post): post is Post => post !== null && !post.data.draft)
 		.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 }
 

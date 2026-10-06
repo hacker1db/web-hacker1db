@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { getAllPostSlugs, getPostBySlug } from '$lib/posts';
+import { getAllPosts, getPostBySlug } from '$lib/posts';
 import { createHighlighter } from 'shiki';
 import { marked } from 'marked';
 
@@ -36,15 +36,15 @@ function getHighlighter() {
 }
 
 export async function entries() {
-	const slugs = getAllPostSlugs();
-	return slugs.map((slug) => ({ slug }));
+	const posts = await getAllPosts();
+	return posts.map(({ slug }) => ({ slug }));
 }
 
 export async function load({ params }: { params: { slug: string } }) {
 	const slug = params.slug.replace(/\/$/, '');
 	const post = await getPostBySlug(slug);
 
-	if (!post) {
+	if (!post || post.data.draft) {
 		throw error(404, 'Post not found');
 	}
 

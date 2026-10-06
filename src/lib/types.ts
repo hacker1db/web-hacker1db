@@ -11,6 +11,7 @@ export interface PostMatter {
 	hideSubtitleInCard?: boolean;
 	thumbnail?: string;
 	youtube?: string;
+	draft?: boolean;
 }
 
 export interface Post {
@@ -33,6 +34,7 @@ export interface SearchablePost {
 
 export interface SiteConfig {
 	title: string;
+	siteUrl: string;
 	description: string;
 	author: string;
 	homeSubtitle: string;

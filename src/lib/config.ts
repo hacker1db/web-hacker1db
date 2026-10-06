@@ -3,6 +3,7 @@ import { getSocialLinksFromConfig } from './socialIcons';
 
 export const siteConfig: SiteConfig = {
 	title: 'Hacker1db.dev blog',
+	siteUrl: 'https://hacker1db.dev',
 	description: 'Hack Your Life One Day At a Time',
 	author: 'hacker1db',
 	homeSubtitle:
