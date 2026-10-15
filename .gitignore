@@ -6,8 +6,8 @@ node_modules/
 
 # Package managers
 yarn.lock
-pnpm-lock.yaml
 package-lock.json
+bun.lock
 
 # Testing
 coverage/

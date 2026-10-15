@@ -14,7 +14,7 @@
     "format": "prettier --write .",
     "deploy": "vercel --prod",
     "deploy:preview": "vercel",
-    "ci": "bun run check && bun run lint && bun run build"
+    "ci": "pnpm check && pnpm lint && pnpm build"
   },
   "dependencies": {
     "@sveltejs/adapter-vercel": "^5.7.3",
@@ -46,6 +46,7 @@
     "svelte-check": "^4.2.1",
     "tailwindcss": "^4.1.8",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.44.1"
+    "typescript-eslint": "^8.44.1",
+    "vite-plus": "^1.2.0"
   }
 }
