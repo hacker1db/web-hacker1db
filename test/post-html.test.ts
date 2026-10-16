@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import { marked } from 'marked';
 import { remark } from 'remark';
 import remarkHtml from 'remark-html';
-import { sanitizePostHtml } from '../src/lib/post-html';
+import { sanitizePostHtml } from '../src/lib/post-html.ts';
 
 test('post HTML removes active markup and unsafe URLs after Markdown conversion', () => {
 	const html = sanitizePostHtml(marked.parse('<script>alert(1)</script>\n\n<img src="x" onerror="alert(1)">\n\n[bad](javascript:alert(1))') as string);

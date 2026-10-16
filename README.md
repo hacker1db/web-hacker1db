@@ -6,24 +6,25 @@ A modern, fast blog built with SvelteKit, TypeScript, and MDsveX. Previously bui
 ![SvelteKit](https://img.shields.io/badge/SvelteKit-2.x-orange?logo=svelte)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)
 ![MDsveX](https://img.shields.io/badge/MDsveX-0.x-purple)
-![Bun](https://img.shields.io/badge/bun-1.x-black?logo=bun)
+![pnpm](https://img.shields.io/badge/pnpm-10-orange?logo=pnpm)
 
 ## Quick Start
 
 ### Prerequisites
 
-- [Bun](https://bun.sh) 1.x
+- Node.js 22+
+- pnpm 10
 
 ### Installation & Development
 
 1. **Install dependencies**
    ```bash
-   bun install
+   pnpm install
    ```
 
 2. **Start the development server**
    ```bash
-   bun run dev
+   pnpm dev
    ```
 
 3. **Open your browser**
@@ -33,17 +34,17 @@ A modern, fast blog built with SvelteKit, TypeScript, and MDsveX. Previously bui
 
 1. **Build for production**
    ```bash
-   bun run build
+   pnpm build
    ```
 
 2. **Preview production build**
    ```bash
-   bun run preview
+   pnpm preview
    ```
 
 3. **Static export** (for static hosting)
    ```bash
-   bun run build
+   pnpm build
    # The static site will be in the 'build' directory
    ```
 
@@ -85,12 +86,13 @@ A modern, fast blog built with SvelteKit, TypeScript, and MDsveX. Previously bui
 
 | Command | Description |
 |---------|-------------|
-| `bun run dev` | Start development server |
-| `bun run build` | Build optimized production bundle |
-| `bun run preview` | Preview production build locally |
-| `bun run lint` | Run ESLint for code quality |
-| `bun run check` | Run Svelte type checking |
-| `bun run format` | Format code with Prettier |
+| `pnpm dev` | Start development server |
+| `pnpm build` | Build optimized production bundle |
+| `pnpm preview` | Preview production build locally |
+| `pnpm lint` | Run ESLint for code quality |
+| `pnpm check` | Run Svelte type checking |
+| `pnpm test` | Run unit tests |
+| `pnpm format` | Format code with Prettier |
 
 ## Features
 
@@ -186,14 +188,21 @@ The migration includes comprehensive support for Hugo shortcodes:
 2. Import your repository in [Vercel](https://vercel.com)
 3. Deploy automatically with zero configuration
 
+GitHub Actions runs type checks, ESLint, unit tests, a build, and SonarQube Cloud analysis on each pull request. It also deploys same-repository pull requests to the Vercel Preview environment and posts the URL on the PR. Configure these GitHub repository settings first:
+
+- Variables: `SONAR_ORGANIZATION`, `SONAR_PROJECT_KEY` from your SonarQube Cloud project.
+- Secrets: `SONAR_TOKEN`, `VERCEL_TOKEN`, `VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID`.
+
+Forked pull requests still run the local checks, but the SonarQube scan and Vercel deployment are skipped because GitHub does not provide these secrets to forked PR workflows. If the Vercel Git integration is also enabled, it may create a second preview deployment for the same PR.
+
 ### Netlify
 
-1. Build the static site: `bun run build`
+1. Build the static site: `pnpm build`
 2. Upload the `build` directory to [Netlify](https://netlify.com)
 
 ### GitHub Pages
 
-1. Build the static site: `bun run build`
+1. Build the static site: `pnpm build`
 2. Deploy the `build` directory to GitHub Pages
 
 ### Other Static Hosts
@@ -205,18 +214,18 @@ The site exports to static files in the `build` directory and can be deployed to
 ### Local Development
 
 1. Clone the repository
-2. Install dependencies: `bun install`
-3. Start development server: `bun run dev`
+2. Install dependencies: `pnpm install`
+3. Start development server: `pnpm dev`
 4. Make changes and see them reflected instantly
 
 ### Adding Dependencies
 
 ```bash
-# Add A New Dependency
-bun add package-name
+# Add a new dependency
+pnpm add package-name
 
-# Add A Development Dependency
-bun add -d package-name
+# Add a development dependency
+pnpm add -D package-name
 ```
 
 ## License
