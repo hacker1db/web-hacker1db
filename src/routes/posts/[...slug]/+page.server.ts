@@ -2,6 +2,7 @@ import { error } from '@sveltejs/kit';
 import { getAllPostSlugs, getPostBySlug } from '$lib/posts';
 import { createHighlighter } from 'shiki';
 import { marked } from 'marked';
+import { sanitizePostHtml } from '$lib/post-html';
 
 let highlighterPromise: ReturnType<typeof createHighlighter> | null = null;
 
@@ -88,7 +89,7 @@ export async function load({ params }: { params: { slug: string } }) {
 	});
 
 	// Convert remaining markdown (headings, paragraphs, lists, etc.) to HTML
-	contentHtml = await marked.parse(contentHtml);
+	contentHtml = sanitizePostHtml(await marked.parse(contentHtml));
 
 	return {
 		post: {
