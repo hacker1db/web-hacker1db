@@ -12,7 +12,7 @@ A modern, fast blog built with SvelteKit, TypeScript, and MDsveX. Previously bui
 
 ### Prerequisites
 
-- Node.js 22+
+- Node.js 22.18+
 - pnpm 10
 
 ### Installation & Development
