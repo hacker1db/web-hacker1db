@@ -11,11 +11,11 @@ toc: true
 
 # Building Secure REST APIs in Go: A Developer's Guide to Security-First Design
 
-After building APIs that handle millions of requests daily, I've learned that security can't be an afterthought. In this guide, I'll share battle-tested patterns for building secure REST APIs in Go from the ground up.
+After building APIs that handle millions of requests daily, I've learned that security can't be an afterthought. These are the patterns I use to build secure REST APIs in Go from the start.
 
-## Security-First API Architecture
+## Security-first API architecture
 
-### The Foundation: Secure by Default
+### The foundation: secure by default
 
 When I start a new API project, security considerations drive the initial architecture decisions. Here's my standard project structure:
 
@@ -44,9 +44,9 @@ secure-api/
 └── deployments/
 ```
 
-## Authentication and Authorization
+## Authentication and authorization
 
-### JWT Implementation with Security Best Practices
+### JWT implementation with security best practices
 
 ```go
 package auth
@@ -167,7 +167,7 @@ func generateJTI() string {
 }
 ```
 
-### Role-Based Access Control (RBAC)
+### Role-based access control (RBAC)
 
 ```go
 package auth
@@ -274,9 +274,9 @@ func RequirePermission(rbac *RBACManager, permission Permission) func(http.Handl
 }
 ```
 
-## Input Validation and Sanitization
+## Input validation and sanitization
 
-### Comprehensive Validation Framework
+### Validation framework
 
 ```go
 package validation
@@ -415,9 +415,9 @@ func SanitizeString(input string) string {
 }
 ```
 
-## Security Middleware Stack
+## Security middleware stack
 
-### Comprehensive Security Headers
+### Security headers
 
 ```go
 package middleware
@@ -565,7 +565,7 @@ func getClientIP(r *http.Request) string {
 }
 ```
 
-### Rate Limiting Implementation
+### Rate limiting implementation
 
 ```go
 package middleware
@@ -673,9 +673,9 @@ func (rl *RateLimiter) cleanup() {
 }
 ```
 
-## Database Security
+## Database security
 
-### Secure Database Connection and Queries
+### Secure database connection and queries
 
 ```go
 package database
@@ -800,9 +800,9 @@ func (repo *UserRepository) logAuditEvent(userID, action, details string) error 
 }
 ```
 
-## Error Handling and Security
+## Error handling and security
 
-### Secure Error Response System
+### Secure error response system
 
 ```go
 package handlers
@@ -904,9 +904,9 @@ var (
 )
 ```
 
-## Complete Secure Handler Example
+## Complete secure handler example
 
-### User Authentication Handler
+### User authentication handler
 
 ```go
 package handlers
@@ -1082,9 +1082,9 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-## Security Testing
+## Security testing
 
-### Automated Security Tests
+### Automated security tests
 
 ```go
 package handlers_test
@@ -1170,9 +1170,9 @@ func TestAuthHandler_Security(t *testing.T) {
 }
 ```
 
-## Production Deployment Security
+## Production deployment security
 
-### Docker Security Configuration
+### Docker security configuration
 
 ```dockerfile
 # Multi-stage build for security
@@ -1216,7 +1216,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 ENTRYPOINT ["/main"]
 ```
 
-## Key Takeaways
+## Key takeaways
 
 Building secure APIs in Go requires attention to detail at every layer:
 
@@ -1224,12 +1224,12 @@ Building secure APIs in Go requires attention to detail at every layer:
 2. **Input Validation**: Never trust user input - validate and sanitize everything  
 3. **Error Handling**: Don't leak sensitive information in error messages
 4. **Rate Limiting**: Protect against brute force and DoS attacks
-5. **Security Headers**: Implement comprehensive security headers
+5. **Security Headers**: Set CSP, HSTS, frame, and content-type headers on every response
 6. **Database Security**: Use prepared statements and connection pooling
 7. **Logging & Monitoring**: Log security events without exposing sensitive data
 
-Remember: security is not a feature you add at the end—it's a foundational principle that should guide every design decision from day one.
+Security has to shape your design decisions from day one. Bolting it on at the end doesn't work.
 
 ---
 
-*Want to stay updated on the latest security practices and Go development patterns? Subscribe to my [newsletter](https://newsletter.hacker1db.dev) for weekly deep-dives and real-world examples.*
+*If you want more security practices and Go development patterns, subscribe to my [newsletter](https://newsletter.hacker1db.dev) for weekly deep-dives and real-world examples.*

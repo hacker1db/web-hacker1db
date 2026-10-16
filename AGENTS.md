@@ -13,7 +13,7 @@ Personal technical blog built with SvelteKit, deployed to Vercel. Covers cyberse
 | Markdown | mdsvex (`.svx` files), gray-matter |
 | Syntax Highlighting | Shiki |
 | Deployment | Vercel (`@sveltejs/adapter-vercel`, Node 22) |
-| Package Manager | pnpm / bun |
+| Package Manager | pnpm |
 
 Path aliases: `$lib` → `src/lib/`, `$components` → `src/components/`
 

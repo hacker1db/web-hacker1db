@@ -1,6 +1,6 @@
 ---
 title: "Five Things to Help With Work From Home"
-date: 2023-03-11T16:47:15-08:00
+date: 2023-03-11
 thumbnail: "https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?w=600&h=350&fit=crop"
 draft: false
 subtitle: Remote Work
@@ -13,74 +13,74 @@ tags:
   - Remote work
 ---
 
-# Remote Work
+# Remote work
 
-Working from home (WFH) is no longer a luxury or a temporary solution; it's a way of life for many of us. As a DevSecOps engineer, I’ve spent countless hours working remotely, balancing security, collaboration, and productivity. While WFH offers flexibility, it also presents unique challenges—especially in security-focused roles. Here are five practical tips to help you thrive in a remote work environment.
-
----
-
-## 1. Secure Your Home Office Network
-
-Your home network might not have the same protective measures as your company’s office, making it a potential vulnerability. Here’s how to secure it:
-
-- **Use a VPN**: Always connect to your company’s VPN to encrypt your internet traffic.
-- **Update Your Router Firmware**: Outdated firmware can expose your network to attackers.
-- **Enable WPA3 Encryption**: Use the latest Wi-Fi encryption protocol for maximum security.
-- **Segment Your Network**: Create a separate Wi-Fi network for work devices to isolate them from IoT gadgets.
-
-As DevSecOps professionals, we know the importance of proactive security measures. Apply this same vigilance to your home network.
+Working from home (WFH) isn't a temporary arrangement anymore. For a lot of us it's just how we work. As a DevSecOps engineer I've done a lot of remote work, and while the flexibility is great, it brings its own problems, especially in a security role. Here are five things that have helped me.
 
 ---
 
-## 2. Streamline Collaboration with the Right Tools
+## 1. Secure your home office network
 
-Effective communication and collaboration are vital for remote teams. Equip yourself with the right tools:
+Your home network probably doesn't have the same protections as your company's office network, which makes it a weak spot. Here's how to lock it down:
 
-- **Version Control Systems (VCS)**: Use GitHub, GitLab, or Bitbucket for collaborative coding with proper branching strategies.
-- **Secure Messaging Apps**: Tools like Slack or Microsoft Teams are essential but configure them with multi-factor authentication (MFA).
-- **Kanban Boards**: Platforms like Jira or Trello keep everyone aligned on project progress.
-- **Video Conferencing**: Use platforms with end-to-end encryption (e.g., Zoom with E2EE enabled) for sensitive discussions.
+- **Use a VPN**: Always connect to your company's VPN to encrypt your internet traffic.
+- **Update your router firmware**: Outdated firmware can expose your network to attackers.
+- **Enable WPA3 encryption**: It's the latest Wi-Fi encryption protocol.
+- **Segment your network**: Create a separate Wi-Fi network for work devices to isolate them from IoT gadgets.
 
----
-
-## 3. Adopt Secure Coding Practices
-
-Your home setup may not have the same defenses as your office environment, so ensure your coding habits prioritize security:
-
-- **Pre-Commit Hooks**: Tools like `pre-commit` or Git hooks can enforce coding standards and prevent committing secrets.
-- **Secret Management**: Use tools like HashiCorp Vault or 1Password to securely store sensitive credentials.
-- **Automate Security Scans**: Integrate tools like Snyk or SonarQube into your CI/CD pipeline.
-- **Principle of Least Privilege**: Limit access to repositories and tools to those who absolutely need it.
+Treat your home network with the same care you'd give a network at work.
 
 ---
 
-## 4. Optimize Your Physical Workspace
+## 2. Use the right collaboration tools
 
-A comfortable and distraction-free workspace can significantly improve productivity:
+Remote teams depend on good communication. Here's what I'd set up:
 
-- **Ergonomic Setup**: Invest in an adjustable chair, a monitor riser, and a quality keyboard and mouse.
-- **Dual Monitors**: If your work involves coding or managing dashboards, a second monitor is a game-changer.
-- **Good Lighting**: Use natural light or an adjustable desk lamp to reduce eye strain.
-- **Noise-Canceling Headphones**: These are invaluable during virtual meetings or focus-heavy tasks.
-
----
-
-## 5. Set Boundaries to Avoid Burnout
-
-Remote work can blur the line between personal and professional life. Protect your mental health with these practices:
-
-- **Define Work Hours**: Clearly communicate your availability to your team and stick to a set schedule.
-- **Take Regular Breaks**: Use the Pomodoro Technique or similar methods to maintain focus without overworking.
-- **Log Off Completely**: Disconnect from work accounts and notifications after hours to recharge.
-- **Engage in Continuous Learning**: Use downtime to enhance your skills with platforms like Pluralsight, Udemy, or Coursera.
+- **Version control systems (VCS)**: Use GitHub, GitLab, or Bitbucket for collaborative coding with proper branching strategies.
+- **Secure messaging apps**: Use Slack or Microsoft Teams, and turn on multi-factor authentication (MFA).
+- **Kanban boards**: Jira or Trello keep everyone on the same page about project status.
+- **Video conferencing**: Use tools with end-to-end encryption (e.g., Zoom with E2EE enabled) for sensitive discussions.
 
 ---
 
-## Final Thoughts
+## 3. Adopt secure coding practices
 
-Working from home offers incredible flexibility but also unique challenges, especially in security-critical roles like DevSecOps. By securing your network, leveraging the right tools, adopting secure coding practices, optimizing your workspace, and setting clear boundaries, you can succeed in a remote environment while maintaining productivity and peace of mind.
+Your home setup may not have the same defenses as the office, so your coding habits have to pick up the slack:
 
-Whether you’re implementing zero trust architectures or troubleshooting CI/CD pipelines, your well-being and security are just as critical as the code you write.
+- **Pre-commit hooks**: Tools like `pre-commit` or Git hooks can enforce coding standards and prevent committing secrets.
+- **Secret management**: Store credentials in HashiCorp Vault or 1Password.
+- **Automate security scans**: Integrate tools like Snyk or SonarQube into your CI/CD pipeline.
+- **Principle of least privilege**: Only give repository and tool access to people who need it.
 
-What strategies have worked for you in your WFH journey? Share your insights in the comments below!
+---
+
+## 4. Set up your physical workspace
+
+A comfortable, quiet workspace makes a real difference in how much you get done:
+
+- **Ergonomic setup**: Invest in an adjustable chair, a monitor riser, and a quality keyboard and mouse.
+- **Dual monitors**: If you write code or watch dashboards, a second monitor helps a lot.
+- **Good lighting**: Use natural light or an adjustable desk lamp to reduce eye strain.
+- **Noise-canceling headphones**: Worth it for virtual meetings and focus-heavy work.
+
+---
+
+## 5. Set boundaries to avoid burnout
+
+When your office is in your house, work time and personal time bleed together. A few things that help:
+
+- **Define work hours**: Tell your team when you're available and stick to a set schedule.
+- **Take regular breaks**: The Pomodoro Technique or something like it keeps you focused without overworking.
+- **Log off completely**: Sign out of work accounts and silence notifications after hours.
+- **Keep learning**: Use downtime to build skills on Pluralsight, Udemy, or Coursera.
+
+---
+
+## Final thoughts
+
+WFH gives you a lot of flexibility, but in a security role like DevSecOps it also gives you more to watch. Lock down your network, use the right tools, keep your coding habits secure, set up a decent workspace, and set boundaries so you don't burn out.
+
+Your well-being and your security matter as much as the code you write.
+
+What has worked for you working from home? Let me know in the comments.
 

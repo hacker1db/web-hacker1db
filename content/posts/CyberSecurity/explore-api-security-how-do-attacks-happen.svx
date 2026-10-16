@@ -3,7 +3,7 @@ title: "Explore API Security - How Do Attacks Happen"
 date: 2026-03-15
 thumbnail: "https://images.unsplash.com/photo-1630442923896-244dd3717b35?w=1200"
 author: hacker1db
-subtitle: "A practitioner's breakdown of the OWASP API Security Top 10 — what the attacks actually look like and what you can do about them."
+subtitle: "A practitioner's breakdown of the OWASP API Security Top 10, with what the attacks actually look like and what you can do about them."
 tags:
   - "api-security"
   - "owasp"
@@ -17,21 +17,21 @@ toc: true
 draft: false
 ---
 
-# Explore API Security - How Do Attacks Happen
+# Explore API security - how do attacks happen
 
 If you've spent any time in DevSecOps, you already know APIs are the new perimeter. They've eaten the old monolithic app model, and now almost every interesting piece of software is really just a collection of endpoints talking to each other. That's powerful. It's also a huge attack surface.
 
-I want to walk through the most common API attack patterns — not from a theoretical "here's what the standard says" perspective, but from a "here's what it actually looks like when someone is trying to break your stuff" angle. We'll lean heavily on the [OWASP API Security Top 10](https://owasp.org/www-project-api-security/) because it's the best practical reference we have, but I'll show you what these attacks look like with real curl commands and what you, as a developer or security engineer, can do about them.
+I want to walk through the most common API attack patterns from a "here's what it actually looks like when someone is trying to break your stuff" angle, not a theoretical "here's what the standard says" one. We'll lean heavily on the [OWASP API Security Top 10](https://owasp.org/www-project-api-security/) because it's the best practical reference we have, but I'll show you what these attacks look like with real curl commands and what you, as a developer or security engineer, can do about them.
 
-No sugar coating it: most of these vulnerabilities exist because APIs are built fast, by teams under pressure, and security is an afterthought. Let's change that.
+No sugar coating it. Most of these vulnerabilities exist because APIs are built fast, by teams under pressure, and security is an afterthought. Let's change that.
 
 ---
 
 ## BOLA - Broken Object Level Authorization
 
-This is number one on the OWASP list for a reason. BOLA (also called IDOR — Insecure Direct Object Reference) is devastatingly simple. Your API takes an object ID from the user and returns data. You check if the user is authenticated. You don't check if the user is *authorized* to see *that specific object*.
+This is number one on the OWASP list for a reason. BOLA (also called IDOR, Insecure Direct Object Reference) is dead simple. Your API takes an object ID from the user and returns data. You check if the user is authenticated. You don't check if the user is *authorized* to see *that specific object*.
 
-### What It Looks Like
+### What it looks like
 
 Say you have a ride-sharing app. A logged-in user fetches their own ride history:
 
@@ -47,11 +47,11 @@ curl -H "Authorization: Bearer eyJhbGciOi..." \
   https://api.example.com/v1/rides/10022
 ```
 
-If your API returns someone else's ride data — their pickup location, destination, payment info — you have a BOLA vulnerability. And I've seen this in production at surprisingly large companies.
+If your API returns someone else's ride data (their pickup location, destination, payment info), you have a BOLA vulnerability. And I've seen this in production at surprisingly large companies.
 
-### The Fix
+### The fix
 
-Every single time you fetch an object by ID, you must verify the requesting user owns or is authorized to access that object. It's not optional. It's not a "nice to have."
+Every single time you fetch an object by ID, you must verify the requesting user owns or is authorized to access that object. It's not optional.
 
 ```python
 # Bad
@@ -65,17 +65,17 @@ if ride.user_id != current_user.id:
 return ride
 ```
 
-Use UUIDs instead of sequential integers — it's not a fix, but it raises the bar. The real fix is authorization checks at the data layer, every time.
+Use UUIDs instead of sequential integers. That's not a fix, but it raises the bar. The real fix is authorization checks at the data layer, every time.
 
 ---
 
-## Broken Authentication
+## Broken authentication
 
 Authentication issues are broad, but the ones I see most often in APIs fall into a few buckets: weak tokens, tokens that never expire, and APIs that accept credentials in places they shouldn't.
 
-### What It Looks Like
+### What it looks like
 
-JWT with `alg: none` — yes, this still happens:
+JWT with `alg: none`. Yes, this still happens:
 
 ```bash
 # Attacker crafts a token with no signature
@@ -95,9 +95,9 @@ curl -X POST https://api.example.com/v1/auth/login \
   -d '{"email":"user@example.com","password":"Password123"}'
 ```
 
-No lockout, no CAPTCHA, no anomaly detection — thousands of attempts per minute, undetected.
+No lockout, no CAPTCHA, no anomaly detection. That's thousands of attempts per minute, and nobody notices.
 
-### The Fix
+### The fix
 
 - Validate JWT `alg` explicitly in your server-side library. Never accept `none`.
 - Set token expiry. Short-lived access tokens (15 minutes) with refresh tokens are the pattern.
@@ -107,11 +107,11 @@ No lockout, no CAPTCHA, no anomaly detection — thousands of attempts per minut
 
 ---
 
-## Excessive Data Exposure
+## Excessive data exposure
 
-This one is subtle and pervasive. Your backend model has 30 fields. You serialize the whole object and send it to the client. The UI only uses 8 of those fields. The other 22 — including internal flags, hashed passwords, admin notes, PII — are just sitting there in the response.
+This one is subtle, and it's everywhere. Your backend model has 30 fields. You serialize the whole object and send it to the client. The UI only uses 8 of those fields. The other 22, including internal flags, hashed passwords, admin notes, and PII, are just sitting there in the response.
 
-### What It Looks Like
+### What it looks like
 
 ```bash
 curl -H "Authorization: Bearer ..." \
@@ -135,7 +135,7 @@ Response:
 
 The frontend needed `id`, `email`, and `name`. Everything else is a gift to an attacker.
 
-### The Fix
+### The fix
 
 Define explicit response schemas. Don't serialize your ORM models directly to JSON. Use DTOs (Data Transfer Objects) or response schemas that only include what the client actually needs.
 
@@ -155,11 +155,11 @@ In Python with FastAPI, use `response_model` and define it explicitly. In Go, de
 
 ---
 
-## Mass Assignment
+## Mass assignment
 
 You accept a JSON body from the user and bind it directly to your model. The user figures out what fields the model has and sends fields you didn't intend them to set. Like `is_admin: true`.
 
-### What It Looks Like
+### What it looks like
 
 Registration endpoint:
 
@@ -171,7 +171,7 @@ curl -X POST https://api.example.com/v1/users/register \
 
 If your framework binds all incoming JSON fields to the model, the attacker just promoted themselves to admin and gave themselves credits.
 
-### The Fix
+### The fix
 
 Allowlist the fields you accept from user input. Never bind raw request bodies directly to your database models.
 
@@ -196,7 +196,7 @@ The schema defines what's accepted. Anything else is ignored. This is table stak
 
 SSRF is when an attacker gets your server to make HTTP requests on their behalf. This is especially dangerous in cloud environments where the metadata endpoint (`169.254.169.254`) can hand out credentials.
 
-### What It Looks Like
+### What it looks like
 
 Your API has a feature: "Give us a URL, we'll fetch a preview." Legitimate use case. Attackers immediately point it at internal services.
 
@@ -214,13 +214,13 @@ curl -X POST https://api.example.com/v1/preview \
 
 Your server makes the request, and returns what it gets back. Now the attacker has cloud credentials or can probe your internal network.
 
-### The Fix
+### The fix
 
 This requires defense in depth:
 
 1. **Validate and allowlist URLs.** If you only need to fetch content from user-submitted URLs for a preview feature, allowlist the schemes (`https` only), block private IP ranges, and resolve DNS before making the request to check for rebinding attacks.
 
-2. **Use IMDSv2 in AWS** — it requires a PUT request with a token first, which SSRF attacks typically can't do.
+2. **Use IMDSv2 in AWS.** It requires a PUT request with a token first, which SSRF attacks typically can't do.
 
 3. **Network-level controls.** Your API servers should not be able to reach `169.254.169.254` or your internal database directly. Firewall rules and security groups are your friend here.
 
@@ -251,11 +251,11 @@ def is_safe_url(url: str) -> bool:
 
 ---
 
-## Tying It Together
+## Tying it together
 
-The OWASP API Security Top 10 covers more — injection, security misconfiguration, insufficient logging, and others — but these five are the ones I see exploited most in real environments. The pattern across all of them is the same: APIs are often built with the happy path in mind, and security is bolted on (or not) after the fact.
+The OWASP API Security Top 10 covers more (injection, security misconfiguration, insufficient logging, and others), but these five are the ones I see exploited most in real environments. They all have the same root cause. APIs are often built with the happy path in mind, and security is bolted on (or not) after the fact.
 
-The shift you need to make is building security into the design. When you're designing an endpoint, ask:
+The fix is to build security into the design. When you're designing an endpoint, ask:
 - Who is authorized to call this, and for what data?
 - What fields am I exposing in the response?
 - What fields am I accepting from the client?
@@ -263,6 +263,6 @@ The shift you need to make is building security into the design. When you're des
 
 None of these questions are hard. They just need to be part of the conversation from day one.
 
-**Your action item:** Pick one API you own. Run through these five categories against it this week. Document what you find. I'd bet you find at least one issue — not because you're bad at your job, but because this stuff is easy to miss under pressure.
+**Your action item:** Pick one API you own. Run through these five categories against it this week. Document what you find. I'd bet you find at least one issue. That's not because you're bad at your job. This stuff is easy to miss under pressure.
 
 Go build something secure.

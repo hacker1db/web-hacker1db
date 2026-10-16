@@ -3,7 +3,7 @@ title: "A Mentor's Guide to Why HR Doesn't Know What They Want"
 date: 2026-03-15
 thumbnail: "https://plus.unsplash.com/premium_photo-1663054308844-b521b7381fca?w=1200"
 author: hacker1db
-subtitle: "The disconnect between what HR writes in job postings and what engineering teams actually need — and how to navigate it."
+subtitle: "The disconnect between what HR writes in job postings and what engineering teams actually need, and how to work around it."
 tags:
   - "hiring"
   - "career"
@@ -18,21 +18,21 @@ draft: false
 
 # A Mentor's Guide to Why HR Doesn't Know What They Want
 
-I want to be clear upfront: I'm not writing this to bash HR professionals. Most of the HR folks I've worked with are sharp, well-intentioned people dealing with an impossible translation problem. The gap isn't usually about competence. It's about structural disconnect.
+I want to be clear upfront: I'm not writing this to bash HR professionals. Most of the HR folks I've worked with are sharp, well-intentioned people dealing with an impossible translation problem. The gap usually isn't about competence. It's structural.
 
 But I've watched too many qualified candidates self-select out of jobs they would have crushed because the posting said "5 years of Kubernetes experience" for a role where the team was still running docker-compose. I've watched hiring managers complain they can't find candidates while HR was filtering out everyone who didn't have three certifications and a CompSci degree.
 
-The system has a seam. If you're a candidate, you need to know how to read through it. If you're a mentor, you need to help people navigate it. If you're a hiring manager, you need to do something about it.
+The process has a gap in it. If you're a candidate, you need to know how to read past it. If you're a mentor, you need to help people get through it. If you're a hiring manager, you need to do something about it.
 
 Let's talk about all three.
 
-## Why Job Descriptions Are Wish Lists
+## Why job descriptions are wish lists
 
 Here's the origin story of most job postings.
 
-A hiring manager needs to fill a role. They send HR a vague description of what they need. HR looks at previous job descriptions in the system, maybe pulls in a template, maybe benchmarks against what competitors are posting. They add standard language about communication skills and team player and results-oriented. They look at what tools the team uses and list them all. They think about the ideal candidate — the most experienced, most credentialed, most experienced version of the role — and they write that person down.
+A hiring manager needs to fill a role. They send HR a vague description of what they need. HR looks at previous job descriptions in the system, maybe pulls in a template, maybe benchmarks against what competitors are posting. They add standard language about communication skills and team player and results-oriented. They look at what tools the team uses and list them all. They think about the ideal candidate — the most experienced, most credentialed version of the role — and they write that person down.
 
-What gets published is not "who we'd hire." It's "who we'd hire if we lived in a perfect world with unlimited budget and a magical candidate pool."
+What gets published describes "who we'd hire if we lived in a perfect world with unlimited budget and a magical candidate pool," which is a different person from who they'd actually hire.
 
 Then that posting goes live and sits between you and a real conversation.
 
@@ -44,9 +44,9 @@ A few specific patterns to watch for:
 
 **The impossible combination.** "Must have deep expertise in AWS, Azure, and GCP, plus Kubernetes, Terraform, Ansible, Chef, and Puppet, plus security compliance experience." No single human is a senior expert in all of that. This is a posting that reflects every problem the team has ever faced rather than a coherent role description.
 
-## How to Read Between the Lines
+## How to read between the lines
 
-When I mentor someone who's job searching, I teach them to look at job postings the way I look at security audit findings: the specific is less important than the underlying concern.
+When I mentor someone who's job searching, I teach them to look at job postings the way I look at security audit findings. The specific item matters less than the concern behind it.
 
 **Look at the "nice to have" vs "required" split.** Everything in the required section is negotiable. The nice to haves are the actual wish list. If you have 60-70% of the required skills, you are often a viable candidate. If you have a few of the nice-to-haves on top of that, you're in good shape.
 
@@ -56,7 +56,7 @@ When I mentor someone who's job searching, I teach them to look at job postings 
 
 **Google the actual team.** LinkedIn, GitHub, conference talks, blog posts. Find the people who currently work there. What's their background? What technologies do they actually write about? This tells you far more about the role than the job posting does.
 
-## What to Do With a "No" on the Checklist
+## What to do with a "no" on the checklist
 
 One of the things I tell every person I mentor: if you meet 70% of the requirements and you're genuinely excited about the role, apply. The worst outcome is no response. The best is a conversation where you get to make the case for yourself.
 
@@ -66,11 +66,11 @@ Cover letters are mostly ignored, but when they're read, they matter. If you're 
 
 That's infinitely better than hoping the recruiter doesn't notice. It shows self-awareness, it reframes the gap as a ramp rather than a wall, and it gives the reader something specific to evaluate.
 
-## How Mentors Can Actually Help
+## How mentors can actually help
 
 If you're mentoring someone through a job search, the job posting is your first teaching tool.
 
-**Decode it together.** Read through a posting side by side and identify which requirements are truly load-bearing vs. which ones are wish list noise. Help them see the difference between "we need someone who can do X" and "someone once put X on a template and it's been there ever since."
+**Decode it together.** Read through a posting side by side and identify which requirements are truly load-bearing vs. which ones are wish list noise. Show them the difference between "we need someone who can do X" and "someone once put X on a template and it's been there ever since."
 
 **Build the narrative.** The checklist items are prompts, not requirements. Help your mentee build a narrative that addresses the underlying concern each item represents. "5 years of AWS" means "we need someone who can own our cloud infrastructure." If they can make that case, the years are almost irrelevant.
 
@@ -78,7 +78,7 @@ If you're mentoring someone through a job search, the job posting is your first 
 
 **Normalize rejection.** The number of qualified candidates who are filtered out by automated screening before a human ever sees their resume is enormous. A rejection at the application stage often says nothing about the candidate's fit for the role. It says something about their resume's keyword density. That's a fixable problem.
 
-## How Hiring Managers Can Work Better With HR
+## How hiring managers can work better with HR
 
 This one's for the people on the other side of the table.
 
@@ -94,7 +94,7 @@ If you're frustrated that you can't find the right candidates, I want to offer a
 
 **Expand where you look.** If you need security-minded engineers and you're only sourcing from traditional job boards, you're missing the people posting about their home labs on GitHub, the ones contributing to open source security tools, the ones speaking at local BSides conferences. Meet people where they actually are.
 
-## The Skills That Actually Matter vs. What's Listed
+## The skills that actually matter vs. what's listed
 
 In over a decade of interviewing and hiring for engineering and DevSecOps roles, here's what I've learned actually predicts success in a role, regardless of what's on the posting:
 
@@ -106,11 +106,11 @@ In over a decade of interviewing and hiring for engineering and DevSecOps roles,
 
 **Ownership.** Do you see a problem and act on it, or do you wait to be assigned? This is visible in interviews if you know how to look for it. Ask about a time they went beyond their assigned scope and what motivated them.
 
-**Security awareness.** In a world where every engineer is also a security surface, some baseline awareness of how things go wrong is increasingly non-negotiable. Not expert-level, but not oblivious.
+**Security awareness.** Every engineer ships code that someone can attack, so I want some baseline awareness of how things go wrong. Not expert-level, just not oblivious.
 
 None of these are on most job postings. Almost all of them matter more than the specific framework version.
 
-## The Bigger Picture
+## The bigger picture
 
 The job posting is a flawed document, written by committee, filtered through compliance requirements, constrained by templates, and optimized for a perfect candidate who doesn't exist. It is not a precise specification of who you need to be.
 

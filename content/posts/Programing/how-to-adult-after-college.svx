@@ -22,7 +22,7 @@ Let me be the mentor I wish I had when I walked across that stage, diploma in ha
 
 This is the talk I give every new hire I onboard. Coffee's on me. Let's get into it.
 
-## Your First Paycheck Will Shock You (And Not in the Good Way)
+## Your first paycheck will shock you (and not in the good way)
 
 You got the offer letter. $80,000 a year. You did the math — that's like $6,600 a month. You're already mentally furnishing your apartment.
 
@@ -38,7 +38,7 @@ Here's what you actually need to do on day one of your new job, before you sign 
 
 **Build a $1,000 emergency fund first, then build to 3 months.** Before you buy the nice monitor setup for your home office, before the weekend trips, before the new wardrobe — build a cushion. The world will throw a flat tire, a vet bill, or a medical co-pay at you when you least expect it.
 
-## Setting Up Your First Apartment Without Losing Your Mind
+## Setting up your first apartment without losing your mind
 
 Moving into your own place is genuinely exciting. It's also a logistical nightmare if you've never done it. A few things nobody tells you:
 
@@ -50,7 +50,7 @@ Moving into your own place is genuinely exciting. It's also a logistical nightma
 
 **Your apartment is going to feel empty and weird at first.** That's normal. You don't have to fill it all at once. Buy furniture gradually. Facebook Marketplace and Craigslist are your friends for things like couches and dressers. Save the budget items for things you use every day.
 
-## Imposter Syndrome Is Real and It's Lying to You
+## Imposter syndrome is real and it's lying to you
 
 You will sit in your first standup and someone will use an acronym you don't know. You will be in a code review and feel like everyone can tell you don't belong. You will open a Jira board full of tickets that might as well be written in Klingon.
 
@@ -62,19 +62,19 @@ The cure for imposter syndrome isn't feeling more confident. It's doing the work
 
 Ask questions freely in your first 90 days. You have a window where nobody expects you to know everything. Use it aggressively. After six months, the window starts to close, so ask now while the asking is free.
 
-## Building Professional Habits That Actually Stick
+## Building professional habits that actually stick
 
 Your career is a long game. The habits you build in year one tend to calcify. Build good ones.
 
 **Own your calendar.** Block time for deep work. Guard it. If you let meetings colonize every hour of your day, you will end your career wondering where the time went.
 
-**Take notes. On everything.** Meetings, 1-on-1s, architecture decisions, things you learned debugging a weird issue at 2pm on a Tuesday. A searchable log of your own growth is priceless. It's also invaluable at review time when you need to remember what you actually did this year.
+**Take notes. On everything.** Meetings, 1-on-1s, architecture decisions, things you learned debugging a weird issue at 2pm on a Tuesday. A searchable log of what you've learned pays off constantly, and especially at review time when you need to remember what you actually did this year.
 
 **Under-promise and over-deliver.** In college, if you missed a deadline the consequence was a grade. At work, someone else's project is waiting on yours. Build your reputation as someone who says what they'll do and does what they say. It compounds.
 
 **Don't disappear when you're stuck.** When you hit a blocker, spend thirty minutes genuinely trying to solve it yourself. If you're still stuck, ask for help. The failure mode I see most in new grads is either asking immediately without trying (which gets annoying) or spending three days stuck and silent (which burns time). Find the middle.
 
-## Learn to Cook Three Things
+## Learn to cook three things
 
 I'm serious. Not because it's romantic or whatever. Because buying lunch every day costs you roughly $15-20 per meal in most cities, which is $300-400 a month, which is $3,600-4,800 a year. That's a Roth IRA contribution with money left over.
 
@@ -87,7 +87,7 @@ You don't need to be a chef. You need three or four reliable meals you can make 
 
 Meal prep Sunday is real. Even just making lunches for Monday-Wednesday gives you headspace during the week and saves real money.
 
-## Your First 1-on-1 With Your Boss
+## Your first 1-on-1 with your boss
 
 This meeting is an opportunity that most new grads fumble by treating it like a status update. Your manager is not asking "what did you do this week" — they're trying to figure out if you're okay, what you need, and what's blocking you.
 
@@ -100,16 +100,16 @@ Come prepared with:
 
 Your manager wants you to succeed. Most of the time, they genuinely do. Make it easy for them to help you by showing up engaged, honest, and curious.
 
-## The Real Talk
+## The real talk
 
 The honest version of this advice is that nobody has it figured out. The colleagues who look confident and put-together are running the same internal monologue you are. The senior engineers who seem to know everything are Googling things constantly and reading Stack Overflow like the rest of us.
 
 The advantage you have right now is hunger. You're new, you're motivated, and you haven't been worn down by organizational politics yet. Use that. Ask every question. Take every opportunity to learn. Show up for the team even when it's inconvenient.
 
-The people who make it in this industry aren't necessarily the smartest people in the room. They're the ones who stayed curious, stayed humble, and kept showing up.
+The people who do well in this industry usually aren't the smartest people in the room. They stayed curious and kept showing up.
 
 ---
 
-**Takeaway:** Pick one thing from this list and go do it today. Not all six. One. Open a high-yield savings account if you don't have one. Learn to make one meal. Put your 401k contribution on the calendar. Small moves, consistently executed, beat grand plans every time.
+**Takeaway:** Pick one thing from this list and go do it today. Not all six. One. Open a high-yield savings account if you don't have one. Learn to make one meal. Put your 401k contribution on the calendar.
 
 You've got this. And if you're ever stuck — find a mentor. Ask them the awkward questions. That's what we're here for.

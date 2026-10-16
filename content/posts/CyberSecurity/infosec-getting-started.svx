@@ -12,9 +12,9 @@ tags:
   - Getting started
 ---
 
-# The World Of Infosec "No Sugar Coating It!"
+# The world of infosec "No Sugar Coating It!"
 
-## <Center><Strong> Getting Started - If You Could Hire Me That Would Be Great! </Strong><Center>
+## <Center><Strong> Getting started - if you could hire me that would be great! </Strong><Center>
 
 So let's be honest, getting started is a bit of misnomer.
 why is that you ask well everyone wants to go directly into infosec and while that might be awesome and trust me
@@ -24,7 +24,7 @@ to be in love with the field otherwise you'll just end up burnt out! joining the
 I absolutely love infosec, I love that it is never the same each day has something new to offer, something new to learn
 but that being said you are always learning! - "The Day I stop learning is the day I die." - @hacker1db
 
-## So What Do You Need To Know:
+## So what do you need to know:
 
 So I could tell you that getting a degree and a cert will make you hireable but three main ingredients in getting
 started in Infosec:
@@ -54,7 +54,7 @@ foundation, you have nothing to build on.
   issues with different os types.
 - Gives you a platform to ask questions in person, this is super helpful when you are starting out.
 
-### I Can Hear It Now - _"But I Am Already In I.T"_
+### I can hear it now - _"But I Am Already In I.T"_
 
 Now if you are already in an I.T job which is where I found myself before I made the jump.
 

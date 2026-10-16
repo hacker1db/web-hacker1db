@@ -5,8 +5,11 @@ vi.mock('$env/dynamic/private', () => ({ env }));
 
 const { GET } = await import('./+server');
 const { getAllPostSlugs, getPostBySlug } = await import('$lib/posts');
+const { BLOG_MACHINE_ID, NEWSLETTER_MACHINE_ID, TEST_JWT_KEY, signM2MToken } = await import(
+	'$lib/server/m2mTestToken'
+);
 
-const TOKEN = 'test-newsletter-token';
+const TOKEN = signM2MToken();
 const ALLOWED_FIELDS = [
 	'slug',
 	'url',
@@ -29,7 +32,9 @@ async function call(query = '', authorization?: string): Promise<Response> {
 
 describe('GET /api/newsletter/posts', () => {
 	beforeEach(() => {
-		env.NEWSLETTER_POSTS_API_TOKEN = TOKEN;
+		env.CLERK_JWT_KEY = TEST_JWT_KEY;
+		env.NEWSLETTER_MACHINE_ID = NEWSLETTER_MACHINE_ID;
+		env.BLOG_MACHINE_ID = BLOG_MACHINE_ID;
 	});
 
 	it.each([
@@ -43,9 +48,9 @@ describe('GET /api/newsletter/posts', () => {
 		expect(await response.json()).toEqual({ error: 'Unauthorized' });
 	});
 
-	it('returns 401 when the secret is not configured', async () => {
-		delete env.NEWSLETTER_POSTS_API_TOKEN;
-		const response = await call('', 'Bearer ');
+	it('returns 401 for a valid token when the verification key is not configured', async () => {
+		delete env.CLERK_JWT_KEY;
+		const response = await call('', `Bearer ${TOKEN}`);
 		expect(response.status).toBe(401);
 	});
 

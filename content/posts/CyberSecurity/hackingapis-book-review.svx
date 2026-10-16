@@ -3,7 +3,7 @@ title: "HackingAPIs Book Review"
 date: 2026-03-15
 thumbnail: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=1200"
 author: hacker1db
-subtitle: "An honest review of 'Hacking APIs' by Corey Ball — who should read it, what you'll learn, and how it reshapes your approach to API security."
+subtitle: "An honest review of 'Hacking APIs' by Corey Ball: who should read it, what you'll learn, and how it changed the way I review APIs."
 tags:
   - "book-review"
   - "api-security"
@@ -17,17 +17,17 @@ toc: true
 draft: false
 ---
 
-# Hacking APIs by Corey Ball — An AppSec Engineer's Review
+# Hacking APIs by Corey Ball: an AppSec engineer's review
 
-I picked up "Hacking APIs: Breaking Web Application Programming Interfaces" by Corey Ball after seeing it recommended repeatedly in security circles. I was skeptical — there's a lot of security content that promises practitioners the world and delivers warmed-over OWASP summaries with Burp Suite screenshots.
+I picked up "Hacking APIs: Breaking Web Application Programming Interfaces" by Corey Ball after seeing it recommended repeatedly in security circles. I was skeptical. There's a lot of security content that promises practitioners the world and delivers warmed-over OWASP summaries with Burp Suite screenshots.
 
 This book is not that.
 
-I'll give you my honest take: what the book covers, who should read it, which exercises actually changed how I think about API security, and where it falls a little short. No sugar coating.
+Here's my honest take on what the book covers, who should read it, which exercises actually changed how I think about API security, and where it falls a little short. No sugar coating.
 
 ---
 
-## Who Is This Book For?
+## Who is this book for?
 
 Let me be direct about the audience before you spend money on it.
 
@@ -38,33 +38,33 @@ Let me be direct about the audience before you spend money on it.
 - You're an AppSec practitioner who needs to explain API vulnerabilities to developers with concrete examples.
 
 **This book is probably not for you if:**
-- You're a senior red teamer looking for cutting-edge exploitation techniques. The material is comprehensive but not bleeding edge.
+- You're a senior red teamer looking for cutting-edge exploitation techniques. The material is broad but not bleeding edge.
 - You have zero programming background. The book assumes you can read code and understand basic web concepts.
 - You're looking exclusively for defensive guidance. The book is offense-first by design.
 
-I'm in the AppSec camp, so I came at this from the "understand attack to improve defense" angle. That framing made the book extremely valuable for me.
+I'm in the AppSec camp, so I came at this from the "understand attack to improve defense" angle. That framing made the book very useful for me.
 
 ---
 
-## The Structure
+## The structure
 
-The book is organized in roughly three acts:
+The book is organized in roughly three parts:
 
-1. **Setting up your lab and learning the tools** — Kali Linux, Burp Suite, Postman, mitmproxy, and some specialized API security tools.
-2. **Reconnaissance and attack surface mapping** — how to find and understand APIs before you attack them.
-3. **Active exploitation** — working through the OWASP API Security Top 10 with hands-on labs.
+1. **Setting up your lab and learning the tools.** Kali Linux, Burp Suite, Postman, mitmproxy, and some specialized API security tools.
+2. **Reconnaissance and attack surface mapping.** How to find and understand APIs before you attack them.
+3. **Active exploitation.** Working through the OWASP API Security Top 10 with hands-on labs.
 
-There's also an appendix with additional resources and a lab environment setup guide that I found genuinely useful.
+There's also an appendix with additional resources and a lab environment setup guide that I found useful.
 
 ---
 
-## Key Chapters and What I Learned
+## Key chapters and what I learned
 
-### Chapter 3: API Reconnaissance
+### Chapter 3: API reconnaissance
 
 This chapter alone was worth the price of the book for me. Corey walks through how attackers map an API's attack surface before they ever send a malicious request. The methodology is systematic and something I now think about whenever I'm reviewing an API design.
 
-The key insight: attackers don't start by trying to break things. They start by *understanding the API as thoroughly as possible*. They read the documentation (if public), find exposed OpenAPI/Swagger specs, watch network traffic in the browser DevTools, and look for API keys or endpoints in JavaScript files.
+Attackers don't start by trying to break things. They start by *understanding the API as thoroughly as possible*. They read the documentation (if public), find exposed OpenAPI/Swagger specs, watch network traffic in the browser DevTools, and look for API keys or endpoints in JavaScript files.
 
 As a defender, this changed how I think about API documentation and discoverability. Is your Swagger UI accessible in production? Is your API spec returning internal field names that tell an attacker about your database schema? These are reconnaissance gifts.
 
@@ -72,13 +72,13 @@ The exercises had me enumerate a deliberately vulnerable API (the book provides 
 
 ### Chapter 5: Broken Object Level Authorization
 
-The BOLA chapter is the most thorough treatment of IDOR in an API context I've read. Corey distinguishes between different types of object references — sequential integers, UUIDs, predictable hashes — and shows how each changes the attack complexity without changing the underlying vulnerability.
+The BOLA chapter is the most thorough treatment of IDOR in an API context I've read. Corey distinguishes between different types of object references (sequential integers, UUIDs, predictable hashes) and shows how each changes the attack complexity without changing the underlying vulnerability.
 
-The exercise that stuck with me: he has you map every endpoint that takes an object identifier and systematically test each one for BOLA. The sheer volume of endpoints in even a simple API that are potentially vulnerable was a wake-up call. When I applied this methodology to an API I'd built, I found two endpoints I'd missed in code review.
+The exercise that stuck with me has you map every endpoint that takes an object identifier and test each one for BOLA. Even a simple API had a lot of potentially vulnerable endpoints, and that was a wake-up call. When I applied this methodology to an API I'd built, I found two endpoints I'd missed in code review.
 
-### Chapter 7: Mass Assignment
+### Chapter 7: Mass assignment
 
-The mass assignment chapter does something I haven't seen in other resources: it shows you how to *discover* what fields an object has even when the documentation doesn't tell you. By looking at what the API returns versus what it accepts, you can infer the full model.
+The mass assignment chapter does something I haven't seen in other resources. It shows you how to *discover* what fields an object has even when the documentation doesn't tell you. By looking at what the API returns versus what it accepts, you can infer the full model.
 
 ```bash
 # GET returns the full object with all fields
@@ -99,17 +99,17 @@ PATCH /api/v1/users/me
 }
 ```
 
-The technique of using the API's own responses to discover what fields you might be able to mass-assign is elegant and something I now look for in every API review.
+Using the API's own responses to find fields you might be able to mass-assign is a clever trick, and I now look for it in every API review.
 
 ### Chapter 9: Injection
 
-The injection chapter covers not just SQL injection in APIs but also NoSQL injection, GraphQL injection, and command injection through API parameters. The GraphQL content was particularly good — GraphQL introspection queries as a recon technique, and how overly permissive schemas enable query abuse.
+The injection chapter covers SQL injection in APIs, plus NoSQL injection, GraphQL injection, and command injection through API parameters. The GraphQL content was particularly good. It covers introspection queries as a recon technique and how overly permissive schemas enable query abuse.
 
-The thing Corey emphasizes that I now think about constantly: injection in APIs often looks different from classic web injection because of how data is structured. You're not just looking for `' OR 1=1` in a URL parameter — you're looking for it in JSON bodies, GraphQL variables, header values, and anywhere else user input flows.
+Corey makes a point I now think about constantly. Injection in APIs often looks different from classic web injection because of how data is structured. You're looking for `' OR 1=1` in JSON bodies, GraphQL variables, header values, and anywhere else user input flows, not only in a URL parameter.
 
-### Chapter 11: Unauthorized Password Change and Account Takeover
+### Chapter 11: Unauthorized password change and account takeover
 
-This chapter covers business logic attacks that enable account takeover: weak password reset flows, predictable tokens, race conditions on account operations. The race condition examples were the most interesting to me — sending concurrent requests to exploit a TOCTOU (time-of-check time-of-use) gap.
+This chapter covers business logic attacks that enable account takeover, such as weak password reset flows, predictable tokens, and race conditions on account operations. The race condition examples were the most interesting to me. They show sending concurrent requests to exploit a TOCTOU (time-of-check time-of-use) gap.
 
 ```bash
 # Race condition on account credit redemption
@@ -126,34 +126,34 @@ I tested this against an internal staging environment after reading this chapter
 
 ---
 
-## The Lab Environment
+## The lab environment
 
-The book comes with a virtual lab environment using deliberately vulnerable APIs — vAPI, crAPI (Completely Ridiculous API), and DVGA (Deliberately Vulnerable GraphQL Application). Setting them up took an afternoon, but the investment was worth it.
+The book comes with a virtual lab environment using deliberately vulnerable APIs: vAPI, crAPI (Completely Ridiculous API), and DVGA (Deliberately Vulnerable GraphQL Application). Setting them up took an afternoon, and it was worth it.
 
-Practicing against real (deliberately broken) APIs instead of just reading about vulnerabilities is how this knowledge actually sticks. I cannot overstate how much more I retained from the hands-on exercises compared to the explanatory text. The text explains the *why*; the labs make the *how* visceral.
+Practicing against real (deliberately broken) APIs instead of just reading about vulnerabilities is how this knowledge sticks. I retained far more from the hands-on exercises than from the explanatory text. The text explains the *why*, and the labs teach the *how*.
 
 If you buy the book and skip the labs, you're getting maybe 50% of the value.
 
 ---
 
-## Tool Coverage
+## Tool coverage
 
 The book covers:
 
-- **Burp Suite Community/Pro** — the core tool for intercepting and manipulating API traffic. The coverage is solid without being a full Burp tutorial.
-- **Postman** — for API documentation, request crafting, and collection-based testing.
-- **mitmproxy** — for traffic interception in lab environments.
-- **OWASP ZAP** — mentioned as an alternative to Burp.
-- **Arjun** — for HTTP parameter discovery. This one was new to me and immediately useful.
-- **Kiterunner** — for API endpoint brute-forcing using API-aware wordlists.
+- **Burp Suite Community/Pro**, the core tool for intercepting and manipulating API traffic. The coverage is solid without being a full Burp tutorial.
+- **Postman**, for API documentation, request crafting, and collection-based testing.
+- **mitmproxy**, for traffic interception in lab environments.
+- **OWASP ZAP**, mentioned as an alternative to Burp.
+- **Arjun**, for HTTP parameter discovery. This one was new to me and immediately useful.
+- **Kiterunner**, for API endpoint brute-forcing using API-aware wordlists.
 
-The Kiterunner section was a highlight. Standard directory brute-forcing tools like gobuster aren't great for APIs because they don't understand HTTP methods, content types, or authentication. Kiterunner is API-aware and significantly more effective. I've added it to my standard API assessment toolkit.
+The Kiterunner section was a highlight. Standard directory brute-forcing tools like gobuster aren't great for APIs because they don't understand HTTP methods, content types, or authentication. Kiterunner is API-aware and finds a lot more. I've added it to my standard API assessment toolkit.
 
 ---
 
-## Where the Book Falls Short
+## Where the book falls short
 
-In the spirit of being honest: the book has weaknesses.
+In the spirit of being honest, the book has weaknesses.
 
 **The defensive guidance is thin.** This is an offensive-first book, and the mitigation sections at the end of each chapter feel rushed. If you're primarily a developer looking for defensive implementation guidance, this book will give you the attack context but won't tell you much about how to fix things in code. Pair it with OWASP resources and your framework's security documentation.
 
@@ -163,25 +163,25 @@ In the spirit of being honest: the book has weaknesses.
 
 ---
 
-## How It Changed My Work
+## How it changed my work
 
-The biggest shift this book made in my day-to-day work is that I now think about API security from the attacker's reconnaissance process forward, not from the OWASP checklist backward.
+The biggest change in my day-to-day work is that I now think about API security starting from the attacker's reconnaissance process, not working backward from the OWASP checklist.
 
-When I review an API design or do a security review of a PR, I'm mentally walking through: what can an attacker discover about this API? What objects does it expose? What operations can they perform on those objects? Are there authorization checks at every data access? Is there any user-controlled input that flows into a downstream system?
+When I review an API design or do a security review of a PR, I walk through a few questions. What can an attacker discover about this API? What objects does it expose? What operations can they perform on those objects? Are there authorization checks at every data access? Is there any user-controlled input that flows into a downstream system?
 
-The book gave me a methodology, not just a list of things to check.
+The book gave me a methodology to follow instead of a checklist.
 
-**Bottom line:** Buy this book if you're serious about API security — offensive or defensive. Do the labs. Don't skip the recon chapters.
+**Bottom line:** Buy this book if you're serious about API security, offensive or defensive. Do the labs. Don't skip the recon chapters.
 
-**Rating: 4/5** — Solid, practical, highly recommended with the caveat that the defensive guidance needs supplementing.
+**Rating: 4/5.** Solid and practical. I recommend it, with the caveat that you'll need to supplement the defensive guidance.
 
 ---
 
-## Resources to Pair With It
+## Resources to pair with it
 
 - [OWASP API Security Top 10](https://owasp.org/www-project-api-security/)
 - [crAPI — Completely Ridiculous API](https://github.com/OWASP/crAPI) (free lab environment)
 - [PortSwigger Web Security Academy — API Testing](https://portswigger.net/web-security/api-testing)
 - [API Security in Action by Neil Madden](https://www.manning.com/books/api-security-in-action) (for deeper defensive implementation)
 
-Go read it, then break something — responsibly.
+Go read it, then break something (responsibly).

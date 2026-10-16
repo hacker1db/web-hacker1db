@@ -3,7 +3,7 @@ title: "Build a Secure Backend API with Azure App Service"
 date: 2026-03-15
 thumbnail: "https://images.unsplash.com/photo-1563630482997-07d8d7fbc9df?w=1200"
 author: hacker1db
-subtitle: "A step-by-step guide to deploying a genuinely secure API on Azure App Service — covering managed identity, Key Vault, network restrictions, Entra ID auth, TLS, and Application Insights."
+subtitle: "A step-by-step guide to deploying a secure API on Azure App Service, covering managed identity, Key Vault, network restrictions, Entra ID auth, TLS, and Application Insights."
 tags:
   - "azure"
   - "app-service"
@@ -29,17 +29,17 @@ I'll show both Azure CLI commands and Terraform because in my experience, you st
 
 ---
 
-## The Foundation: No Secrets in Your Application
+## The foundation: no secrets in your application
 
 Before we get to any specific Azure service, the most important principle for App Service security is this: **your application should have zero secrets in its configuration, code, or environment variables.**
 
 No connection strings. No API keys. No certificates stored as base64 blobs in app settings. Nothing.
 
-The mechanism that makes this possible is Managed Identity plus Azure Key Vault. Let's set that up first.
+Managed Identity plus Azure Key Vault makes this possible. Let's set that up first.
 
 ---
 
-## Managed Identity
+## Managed identity
 
 A managed identity gives your App Service a service principal in Microsoft Entra ID (formerly Azure AD) without you having to create or manage credentials. Azure handles the credential rotation. Your application gets an identity it can use to authenticate to other Azure services.
 
@@ -101,7 +101,7 @@ resource "azurerm_linux_web_app" "main" {
 
 ---
 
-## Key Vault Integration
+## Key Vault integration
 
 Now we create a Key Vault and grant the App Service's managed identity access to it.
 
@@ -155,7 +155,7 @@ resource "azurerm_role_assignment" "app_kv_secrets_user" {
 }
 ```
 
-### Accessing Secrets From Your Application
+### Accessing secrets from your application
 
 With managed identity, your application authenticates to Key Vault without any credentials:
 
@@ -188,11 +188,11 @@ The runtime resolves the reference at startup. Your app reads `os.environ["DATAB
 
 ---
 
-## Network Restrictions
+## Network restrictions
 
 By default, your App Service is reachable from the entire internet. That's almost certainly not what you want for a backend API.
 
-### Restrict Inbound Traffic
+### Restrict inbound traffic
 
 If your API sits behind an API Gateway, Azure Front Door, or Application Gateway, restrict App Service to only accept traffic from that upstream service.
 
@@ -215,7 +215,7 @@ az webapp config access-restriction add \
   --rule-name "DenyAll"
 ```
 
-### VNet Integration for Outbound Traffic
+### VNet integration for outbound traffic
 
 If your API needs to talk to resources in a private VNet (databases, other services), use VNet integration so outbound traffic stays on the private network:
 
@@ -283,7 +283,7 @@ Once enabled, App Service validates the bearer token on every request before it 
 
 ---
 
-## TLS Configuration
+## TLS configuration
 
 App Service provides a free managed TLS certificate for custom domains. Make sure you're using it correctly.
 
@@ -297,7 +297,7 @@ az webapp update \
   --https-only true
 ```
 
-### Minimum TLS Version
+### Minimum TLS version
 
 Don't accept TLS 1.0 or 1.1:
 
@@ -322,13 +322,13 @@ resource "azurerm_linux_web_app" "main" {
 }
 ```
 
-TLS 1.3 is available and preferred, but 1.2 as a minimum is the current industry standard minimum. Anything below is a compliance and security issue.
+TLS 1.3 is available and preferred, but 1.2 is the standard minimum today. Anything below that is a compliance and security issue.
 
 ---
 
 ## Logging with Application Insights
 
-You can't defend what you can't see. Application Insights gives you request telemetry, exception tracking, custom logging, and alerting.
+Application Insights gives you request telemetry, exception tracking, custom logging, and alerting.
 
 ### Enable Application Insights
 
@@ -353,7 +353,7 @@ az webapp config appsettings set \
   --settings APPLICATIONINSIGHTS_CONNECTION_STRING="$APPINSIGHTS_CONNECTION"
 ```
 
-### In Your Application
+### In your application
 
 ```python
 from opencensus.ext.azure.log_exporter import AzureLogHandler
@@ -371,7 +371,7 @@ from azure.monitor.opentelemetry import configure_azure_monitor
 configure_azure_monitor()
 ```
 
-### Log Diagnostic Settings
+### Log diagnostic settings
 
 Also configure App Service diagnostic logs to flow to your Log Analytics workspace:
 
@@ -398,7 +398,7 @@ Now every HTTP request, application log, and console output goes to Log Analytic
 
 ---
 
-## Putting It All Together: Security Checklist
+## Putting it all together: security checklist
 
 Before you call your App Service deployment production-ready, verify:
 
@@ -437,7 +437,7 @@ az webapp config appsettings set \
 
 ---
 
-## The Honest Caveat
+## The honest caveat
 
 App Service with all of this configured is significantly more secure than the defaults. But "secure App Service" is a component of a secure system, not a substitute for one. You still need:
 

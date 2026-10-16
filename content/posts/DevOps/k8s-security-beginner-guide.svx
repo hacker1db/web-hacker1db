@@ -25,15 +25,15 @@ But the good news is that the security fundamentals aren't as overwhelming as th
 
 ---
 
-## Why K8s Security Is Different
+## Why K8s security is different
 
-Before we dive in, it's worth understanding why Kubernetes security feels different from traditional application security. In K8s, the blast radius of a single misconfiguration is enormous. A compromised pod can potentially reach the Kubernetes API server, enumerate secrets across namespaces, move laterally to other workloads, or even escape to the underlying node. The attack surface is distributed by design — that's the whole point of the platform. Which means your security has to be layered the same way.
+First, a word on why Kubernetes security feels different from traditional application security. In K8s, the blast radius of a single misconfiguration is enormous. A compromised pod can potentially reach the Kubernetes API server, enumerate secrets across namespaces, move laterally to other workloads, or even escape to the underlying node. The attack surface is distributed by design (that's the whole point of the platform), so your security has to be layered the same way.
 
 Think of it as defense in depth, but the layers are: who can do what (RBAC), what pods are allowed to do (Pod Security Standards), what traffic is allowed (Network Policies), how secrets are handled, where images come from, and what can even get deployed in the first place (admission controllers). Let's go through each.
 
 ---
 
-## RBAC: Who Can Do What
+## RBAC: who can do what
 
 Role-Based Access Control is how Kubernetes decides whether a request is authorized. It sounds simple, but it trips people up constantly.
 
@@ -121,11 +121,11 @@ I know `readOnlyRootFilesystem: true` breaks some apps that write temp files. Mo
 
 ---
 
-## Network Policies: Default Deny, Then Open Up
+## Network Policies: default deny, then open up
 
 By default, every pod in your cluster can talk to every other pod. That's a flat network, and in a breach scenario it means lateral movement is trivial.
 
-Network Policies let you define ingress and egress rules at the pod level. The golden rule: start with a default-deny-all, then explicitly allow what's needed.
+Network Policies let you define ingress and egress rules at the pod level. Start with a default-deny-all, then explicitly allow what's needed.
 
 ```yaml
 # Default deny all ingress and egress in a namespace
@@ -169,7 +169,7 @@ One important caveat: Network Policies are enforced by your CNI plugin (Calico, 
 
 ---
 
-## Secrets Management (and Why etcd Encryption Matters)
+## Secrets management (and why etcd encryption matters)
 
 The built-in Kubernetes Secret object is base64-encoded, not encrypted. That's a fact that still surprises people. If someone can read your etcd backup or has access to the API with the right RBAC permissions, they can pull your secrets in plaintext.
 
@@ -215,7 +215,7 @@ This way your secrets live in a dedicated vault with audit logging, rotation sup
 
 ---
 
-## Image Scanning: Know What You're Running
+## Image scanning: know what you're running
 
 Every container image is a supply chain. The base image, every package installed, every dependency pulled in — all of it is attack surface. You need to know what you're running before it hits production.
 
@@ -245,7 +245,7 @@ docker push registry.internal.company.com/${IMAGE}
 
 ---
 
-## Admission Controllers: The Last Line of Defense
+## Admission controllers: the last line of defense
 
 Admission controllers are webhooks that intercept API requests before objects are persisted to etcd. They're your enforcement layer — the place where you say "no, you can't deploy that."
 
@@ -278,7 +278,7 @@ Start with `validationFailureAction: Audit` to understand the blast radius befor
 
 ---
 
-## Putting It Together: A Baseline Security Checklist
+## Putting it together: a baseline security checklist
 
 Here's what I'd call a minimum viable security posture for a K8s cluster:
 
@@ -294,12 +294,12 @@ Here's what I'd call a minimum viable security posture for a K8s cluster:
 
 ---
 
-## The Takeaway
+## The takeaway
 
-Kubernetes security is not something you do once and forget. It's a practice. The platform changes, your workloads change, the threat landscape changes. But if you get these six areas in reasonable shape, you're ahead of the majority of clusters I've audited.
+Kubernetes security isn't something you do once and forget. The platform changes, your workloads change, and attackers find new tricks. But if you get these six areas in reasonable shape, you're ahead of the majority of clusters I've audited.
 
 Start with RBAC and Pod Security Standards — those two alone eliminate a huge category of risk. Add Network Policies as you go, get your secrets into a real vault, scan your images, and put Kyverno in front of it all as a safety net.
 
-You don't need to boil the ocean. Pick the highest-impact control and implement it this week. Then pick the next one. Small, steady progress compounds.
+You don't need to boil the ocean. Pick the highest-impact control and implement it this week. Then pick the next one.
 
 If you're just starting out with a cluster, run `kubectl-score` or `kube-bench` against it today. You'll probably find things that surprise you, and that's fine — that's the beginning of the work.

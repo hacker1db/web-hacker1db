@@ -11,7 +11,12 @@ export const trailingSlash = 'never';
 const headers = { 'Cache-Control': 'private, no-store' };
 
 export const GET: RequestHandler = async ({ request, url }) => {
-	if (!isAuthorized(request.headers.get('authorization'), env.NEWSLETTER_POSTS_API_TOKEN)) {
+	const authorized = await isAuthorized(request.headers.get('authorization'), {
+		jwtKey: env.CLERK_JWT_KEY,
+		newsletterMachineId: env.NEWSLETTER_MACHINE_ID,
+		blogMachineId: env.BLOG_MACHINE_ID
+	});
+	if (!authorized) {
 		return json(
 			{ error: 'Unauthorized' },
 			{ status: 401, headers: { ...headers, 'WWW-Authenticate': 'Bearer' } }

@@ -26,7 +26,7 @@ This is not a "Obsidian is the one true path" post. It's also not a Notion defen
 
 ---
 
-## The Fundamental Difference
+## The fundamental difference
 
 Before you compare features, understand the philosophical gap:
 
@@ -38,7 +38,7 @@ These are different tools solving different problems. The fact that both get cal
 
 ---
 
-## Local-First vs Cloud
+## Local-first vs cloud
 
 This is the biggest practical difference and the one that matters most over a long time horizon.
 
@@ -55,7 +55,7 @@ For team documentation, project tracking, shared wikis — cloud makes total sen
 
 ---
 
-## Markdown vs Blocks
+## Markdown vs blocks
 
 Obsidian uses standard Markdown. If you know Markdown, you already know how to write in Obsidian. The files are portable, readable in any text editor, and play nicely with every dev tool that handles text.
 
@@ -72,7 +72,7 @@ For a developer who lives in the terminal and values text-based workflows, Markd
 
 ---
 
-## Plugins vs Integrations
+## Plugins vs integrations
 
 Obsidian has a massive community plugin ecosystem. At the time of writing, there are over 1,500 community plugins. Because your vault is local files, plugins can do a lot — run scripts, query your vault with SQL-like syntax via Dataview, draw diagrams, manage tasks, render code, integrate with external services, and more.
 
@@ -105,7 +105,7 @@ For teams, Notion's pricing is competitive with other collaborative tools. Obsid
 
 Obsidian: your notes are on your disk. Unless you use their Sync service (which is end-to-end encrypted) or connect a third-party sync, no data leaves your machine. For notes that contain sensitive information — security research, client details, personal health, anything you'd be uncomfortable with a company reading — local-first is the only acceptable answer.
 
-Notion: everything is on their servers. Their privacy policy is reasonable for a SaaS company, but your data is on their infrastructure. They've had minor security incidents in the past. I'm not saying Notion is unsafe, but I wouldn't put sensitive client data, security vulnerability research, or personally identifying information in Notion without thinking carefully about it.
+Notion: everything is on their servers. Their privacy policy is reasonable for a SaaS company, but your data is on their infrastructure. I'm not saying Notion is unsafe, but I wouldn't put sensitive client data, security vulnerability research, or personally identifying information in Notion without thinking carefully about it.
 
 **Winner for privacy:** Obsidian, unambiguously
 
@@ -125,7 +125,7 @@ If you're working with non-technical people who need to collaborate on docs, Not
 
 ---
 
-## When To Use Which
+## When to use which
 
 Use **Obsidian** when:
 - You want to own your data long-term
@@ -149,13 +149,13 @@ Use **both** when:
 
 ---
 
-## My Current Setup
+## My current setup
 
 I use Obsidian for everything personal: notes, research, drafts, career journaling, security research, book highlights via Readwise. It's my thinking layer.
 
 I use Notion for team-facing work: project documentation, shared runbooks, onboarding materials, things other people need to read and contribute to.
 
-The two don't overlap. If I write something in Obsidian that needs to become a team doc, I copy it to Notion manually. It's not seamless, but the mental model is clear enough that it doesn't cause confusion.
+The two don't overlap. If I write something in Obsidian that needs to become a team doc, I copy it to Notion manually. It's a manual step, but the split is clear enough that it doesn't cause confusion.
 
 ---
 

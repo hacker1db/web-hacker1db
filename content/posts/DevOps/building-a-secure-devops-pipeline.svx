@@ -21,11 +21,11 @@ draft: false
 
 # Building a Secure DevOps Pipeline
 
-I want to start with something that took me too long to internalize early in my career: **the pipeline is the best security control you have**. Not the firewall. Not the WAF. Not the quarterly pen test. The pipeline — because it's the one place where every change to your codebase and infrastructure must pass through, and it's the one place where you can enforce rules consistently without relying on humans to remember.
+I want to start with something that took me too long to internalize early in my career: **the pipeline is the best security control you have**. Better than the firewall, the WAF, or the quarterly pen test. Every change to your codebase and infrastructure has to pass through it, and it's where you can enforce rules consistently without relying on humans to remember.
 
 This post is a practical walkthrough. We're going to build out a security-integrated pipeline across the three most common CI/CD platforms: GitHub Actions, Azure DevOps, and GitLab CI. You'll see real YAML. You'll see how to plug in security tools at each stage. And I'll give you my honest take on where teams get this wrong.
 
-## The Security Pipeline Stages
+## The security pipeline stages
 
 Before we look at platform-specific YAML, let's agree on what we're building toward. A mature secure pipeline has these stages, roughly in order:
 
@@ -39,7 +39,7 @@ Before we look at platform-specific YAML, let's agree on what we're building tow
 
 Not every pipeline needs all of these from day one. But this is the target state. Let's build toward it.
 
-## Pre-Commit Hooks
+## Pre-commit hooks
 
 Before anything hits CI, you can catch a large class of issues on the developer's machine using pre-commit hooks. The `pre-commit` framework is my go-to for this.
 
@@ -75,7 +75,7 @@ Pre-commit hooks are not a substitute for CI checks. Developers can bypass them 
 
 ## GitHub Actions
 
-### Secret Scanning + SAST + SCA
+### Secret scanning + SAST + SCA
 
 Here's a GitHub Actions workflow that covers the core scanning stages:
 
@@ -163,9 +163,9 @@ jobs:
           soft_fail: false
 ```
 
-A few things worth noting here. First, I'm uploading results as SARIF to GitHub's Security tab — this gives you a central place to triage findings without leaving GitHub. Second, `soft_fail: false` on Checkov means a failed IaC check will fail the pipeline. You may want `soft_fail: true` initially while you're reducing your baseline findings.
+A couple of notes. First, I'm uploading results as SARIF to GitHub's Security tab, which gives you a central place to triage findings without leaving GitHub. Second, `soft_fail: false` on Checkov means a failed IaC check will fail the pipeline. You may want `soft_fail: true` initially while you're reducing your baseline findings.
 
-### Container Scanning
+### Container scanning
 
 ```yaml
   container-scan:
@@ -366,7 +366,7 @@ container-scan:
 
 GitLab's native SARIF report support means findings surface directly in merge request views, which is a nice experience for developers.
 
-## Common Mistakes I See
+## Common mistakes I see
 
 **Running everything serially.** SAST, SCA, and secret scanning can all run in parallel. If you're running them one after another, you're adding unnecessary time to every PR. Use pipeline parallelism aggressively.
 
@@ -378,12 +378,12 @@ GitLab's native SARIF report support means findings surface directly in merge re
 
 **Storing secrets in pipeline YAML.** Your CI/CD system has a secrets store. Use it. Never put API keys, tokens, or credentials in pipeline YAML files that live in version control.
 
-## Building the Right Foundation
+## Building the right foundation
 
 Start with secret scanning and SCA. Both are fast, low false-positive-rate, and immediately actionable. From there, layer in SAST with careful tuning. Then IaC and container scanning.
 
-The goal is a pipeline that developers trust — one that blocks real problems, generates minimal noise, and gives clear, actionable feedback when it does block. A pipeline that cries wolf will be bypassed or disabled. A pipeline that's precise and fair becomes a legitimate safety net that teams actually appreciate.
+The goal is a pipeline that developers trust: it blocks real problems, stays quiet otherwise, and explains clearly why when it does block. Developers will bypass or disable a pipeline that cries wolf.
 
 ---
 
-**Takeaway:** Security in CI/CD is not about adding friction — it's about moving the feedback loop left so developers catch security issues the same way they catch broken tests: immediately, with clear context, before anything ships. The YAML examples above are starting points. Adapt them to your stack, tune them to your noise tolerance, and treat them as living infrastructure that improves over time.
+**Takeaway:** Security in CI/CD means moving the feedback loop left so developers catch security issues the same way they catch broken tests: immediately, with clear context, before anything ships. The YAML examples above are starting points. Adapt them to your stack, tune them to your noise tolerance, and keep improving them over time.

@@ -28,7 +28,7 @@ No hype. Just the thinking and the tools.
 
 ---
 
-## The Philosophy: Why Automate
+## The philosophy: why automate
 
 The case for automation is usually framed as time savings. "Automating this task saves me 20 minutes a week." Over a year, that's 17 hours. True, but this undersells the real benefit.
 
@@ -42,7 +42,7 @@ The case for automation is usually framed as time savings. "Automating this task
 
 ---
 
-## Start Here: The Two-Minute Rule for Scripts
+## Start here: the two-minute rule for scripts
 
 When you find yourself typing the same sequence of commands more than once, write a script. Immediately. Don't wait until you've done it ten times. The friction of writing the script while the task is fresh is lower than the friction of doing the task manually forever.
 
@@ -83,9 +83,9 @@ main "$@"
 
 ---
 
-## Real Things I've Automated (And What They Saved)
+## Real things I've automated (and what they saved)
 
-### New Machine Setup
+### New machine setup
 
 Setting up a new machine used to take me half a day. Install tools, configure dotfiles, set up SSH keys, configure git, install language runtimes. Now it takes 20 minutes.
 
@@ -135,7 +135,7 @@ brew "semgrep"
 
 Every tool I install gets added to the Brewfile. New machine? `brew bundle`. Done.
 
-### Daily Security Report
+### Daily security report
 
 I run a scheduled script every morning that pulls together the security posture for the systems I'm responsible for. It queries AWS for new IAM changes, checks for new CVEs in our dependencies, and summarizes findings into a Markdown report that lands in my Obsidian inbox.
 
@@ -199,7 +199,7 @@ if __name__ == "__main__":
 
 This runs via cron at 7am. I open my Obsidian inbox and the digest is already there.
 
-### PR Security Review Checklist
+### PR security review checklist
 
 Every PR I review gets a checklist comment automatically generated based on what's in the diff. A GitHub Action detects the PR, runs a classifier on the changed files, and posts a pre-populated review comment:
 
@@ -248,7 +248,7 @@ jobs:
             });
 ```
 
-### Git Hygiene Automation
+### Git hygiene automation
 
 I have a script that runs after every `git clone` to set up pre-commit hooks, install the project's tools, and verify the environment:
 
@@ -274,7 +274,7 @@ log "Done. Environment ready."
 
 ---
 
-## Cron and Scheduled Automation
+## Cron and scheduled automation
 
 Not everything needs to be event-driven. Some automation just needs to run on a schedule.
 
@@ -298,7 +298,7 @@ The Obsidian vault backup is one I recommend to everyone. Your notes are worth b
 
 ---
 
-## Where Automation Fails
+## Where automation fails
 
 No sugar coating: automation has failure modes.
 
@@ -312,7 +312,7 @@ No sugar coating: automation has failure modes.
 
 ---
 
-## Getting Started
+## Getting started
 
 If you're not automating much today, here's where to start:
 

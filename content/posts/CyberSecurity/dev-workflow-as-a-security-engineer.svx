@@ -17,15 +17,15 @@ toc: true
 draft: false
 ---
 
-# Dev Workflow as a Security Engineer: What My Day Actually Looks Like
+# Dev workflow as a security engineer: What my day actually looks like
 
 There's a version of "security engineer workflow" content out there that's all threat models and compliance frameworks. That's real work, but it's not the whole picture. A significant chunk of my day is writing code, reviewing code, running tools, and plumbing systems together.
 
-This is what my actual workflow looks like — the terminal setup, the editors, the scanners, the Git habits, and how I handle the pivot from "writing code" to "something is on fire." No polish, just what actually happens.
+This is what my actual workflow looks like: the terminal setup, the editors, the scanners, the Git habits, and how I switch from "writing code" to "something is on fire." No polish, just what actually happens.
 
 ---
 
-## The Terminal Is Home
+## The terminal is home
 
 Everything starts in the terminal. I run `zsh` with a fairly minimal config — syntax highlighting, autosuggestions, and a prompt that shows me git status, current directory, and exit codes at a glance. I use `tmux` for session management.
 
@@ -62,7 +62,7 @@ bind l select-pane -R
 
 ---
 
-## Tools I Actually Use
+## Tools I actually use
 
 ### Editors
 
@@ -70,7 +70,7 @@ For config files, scripts, quick edits, and any work on a remote machine: **Neov
 
 The IdeaVim plugin in Rider gives me Vim keybindings so the context switch is cheap. SonarLint in Rider catches security issues while I type — injection patterns, hardcoded secrets, weak crypto usage. Having that feedback loop in the editor rather than waiting for a CI scanner matters.
 
-### Scanning Tools
+### Scanning tools
 
 My standard toolkit for code-level security work:
 
@@ -104,7 +104,7 @@ repos:
 
 Pre-commit catches the obvious stuff before it ever leaves my machine. CI catches what pre-commit misses at scale.
 
-### CLI Tools I Reach For Daily
+### CLI tools I reach for daily
 
 ```bash
 jq          # JSON wrangling — every API response, log file, config
@@ -119,7 +119,7 @@ terraform   # IaC, everything goes through this
 
 ---
 
-## How I Review Code
+## How I review code
 
 Code review is where most security findings happen in practice, not in automated scans. Automated scans catch known patterns. Code review catches logic flaws.
 
@@ -143,15 +143,15 @@ gh pr checkout 1234
 # Try the edge cases the tests don't cover
 ```
 
-Reading a diff on GitHub is fine for small changes. For anything touching auth flows, data access, or external integrations, I want to run it. The diff lies through omission — you need to see the surrounding context.
+Reading a diff on GitHub is fine for small changes. For anything touching auth flows, data access, or external integrations, I want to run it. A diff leaves out the surrounding code, and you need that context.
 
-**Step 4: Think about abuse cases.** Not just "does this work correctly?" but "how could an adversary abuse this?" Mass assignment, IDOR, privilege escalation, race conditions — these don't show up in tests unless someone specifically wrote tests for them.
+**Step 4: Think about abuse cases.** Ask "how could an attacker abuse this?" as well as "does this work correctly?" Mass assignment, IDOR, privilege escalation, race conditions — these don't show up in tests unless someone specifically wrote tests for them.
 
 **Step 5: Leave specific, actionable comments.** Not "this could be a security issue." Instead: "This endpoint doesn't validate that the `userId` in the request body matches the authenticated user — an attacker could modify another user's data by changing this value."
 
 ---
 
-## How I Write Security Automation
+## How I write security automation
 
 A big part of security engineering is building tools and automation, not just using them. Most of what I automate falls into a few categories:
 
@@ -194,9 +194,9 @@ if __name__ == "__main__":
 
 ---
 
-## My Git Workflow
+## My Git workflow
 
-I'm opinionated about Git hygiene. Clean commits matter for security incident response — when something goes wrong, you need to be able to read the git log and understand what changed and why.
+I'm opinionated about Git hygiene. Clean commits matter for security incident response. When something goes wrong, you need to be able to read the git log and understand what changed and why.
 
 ```bash
 # My standard commit flow
@@ -224,7 +224,7 @@ Why does this matter for security? Because when you're triaging an incident and 
 
 ---
 
-## Incident Response From a Tooling Perspective
+## Incident response from a tooling perspective
 
 When something fires, the workflow changes. I have a separate tmux session I call `ir` that I spin up when we're in incident response mode.
 
@@ -242,13 +242,13 @@ cat application.log | jq 'select(.level == "ERROR")' | jq -r '[.timestamp, .mess
 git log --since="2 hours ago" --all --oneline
 ```
 
-I keep a running notes file during incidents — timestamped observations, commands run, findings, hypotheses. This goes into Obsidian later as a post-incident note. The habit of writing as you investigate makes the post-incident review much easier and catches things you'd otherwise miss.
+I keep a running notes file during incidents with timestamped observations, commands run, findings, and hypotheses. This goes into Obsidian later as a post-incident note. The habit of writing as you investigate makes the post-incident review much easier and catches things you'd otherwise miss.
 
 ---
 
-## A Note on Context Switching
+## A note on context switching
 
-Security engineering involves a lot of context switching — from code review to incident response to automation work to documentation to team coordination. The tooling helps, but the real discipline is managing your attention.
+Security engineering involves a lot of context switching between code review, incident response, automation work, documentation, and team coordination. The tooling helps, but the real discipline is managing your attention.
 
 I block morning time for deep work (code review, writing automation). Afternoons for meetings and coordination. I keep a `Today` note in Obsidian that I update throughout the day, which acts as a working memory buffer so I can context switch without losing track of where I was.
 
@@ -256,8 +256,8 @@ I block morning time for deep work (code review, writing automation). Afternoons
 
 ## Takeaway
 
-The security engineer's dev workflow is less exotic than people expect. It's mostly the same tools every developer uses, with a few additions (scanners, secret detectors, automation) and a mindset layer that asks "how could this be abused?" before asking "does this work?"
+The security engineer's dev workflow is less exotic than people expect. It's mostly the same tools every developer uses, with a few additions (scanners, secret detectors, automation) and the habit of asking "how could this be abused?" before asking "does this work?"
 
-The habits that compound over time: `git add -p`, SonarLint in the IDE, pre-commit hooks, tmux sessions that survive terminal closes, and writing things down as you work.
+The habits that pay off over time: `git add -p`, SonarLint in the IDE, pre-commit hooks, tmux sessions that survive terminal closes, and writing things down as you work.
 
-None of this is glamorous. It's just the infrastructure of doing the job well.
+None of this is glamorous. It's the boring setup that lets me do the job well.

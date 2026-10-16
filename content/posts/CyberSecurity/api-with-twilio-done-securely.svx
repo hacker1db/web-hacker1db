@@ -27,7 +27,7 @@ I'll contrast the "tutorial version" with the "production version" throughout, b
 
 ---
 
-## The Setup: What We're Building
+## The setup: what we're building
 
 A simple Node.js service that:
 1. Accepts a POST request with a message payload
@@ -39,9 +39,9 @@ Nothing exotic. This pattern is in dozens of production systems.
 
 ---
 
-## Step 1: API Key Management — Never Credentials in Code
+## Step 1: API key management — never credentials in code
 
-### The Tutorial Version (Don't Do This)
+### The tutorial version (don't do this)
 
 ```javascript
 // tutorial-version.js — what you see in most quickstarts
@@ -60,7 +60,7 @@ client.messages.create({
 
 If that code touches git, your credentials are now in git history forever. Even if you delete the file. Even if you rotate the key. The commit is there, and tools like trufflehog will find it.
 
-### The Production Version
+### The production version
 
 Use environment variables, loaded at runtime from a secrets manager. In Node.js:
 
@@ -120,7 +120,7 @@ aws secretsmanager get-secret-value \
 
 Or better, use a platform integration like AWS Lambda environment variables sourced from Secrets Manager, or Kubernetes External Secrets Operator pulling from your vault.
 
-### Use API Keys, Not Auth Tokens
+### Use API keys, not auth tokens
 
 Twilio supports API Keys (separate from the main Auth Token), and you should use them. API Keys can be scoped and rotated independently without touching your Account SID. If a key is compromised, you rotate just that key.
 
@@ -137,11 +137,11 @@ Create API Keys in the Twilio Console under Settings > API Keys. Give each key a
 
 ---
 
-## Step 2: Webhook Validation — Verify That Twilio Is Talking to You
+## Step 2: Webhook validation — verify that Twilio is talking to you
 
 When Twilio sends a delivery status update to your webhook endpoint, how do you know it's actually from Twilio and not from someone who discovered your webhook URL?
 
-### The Tutorial Version (Insecure)
+### The tutorial version (insecure)
 
 ```javascript
 // tutorial-webhook.js — no validation
@@ -154,7 +154,7 @@ app.post('/webhook/sms-status', (req, res) => {
 
 Anyone who knows your webhook URL can POST fake delivery statuses, manipulate your application state, or probe your endpoint.
 
-### The Production Version — Request Signature Validation
+### The production version — request signature validation
 
 Twilio signs every webhook request using your Auth Token. The signature is in the `X-Twilio-Signature` header. Validate it:
 
@@ -216,7 +216,7 @@ One gotcha: the URL in the signature validation must match exactly what Twilio u
 
 ---
 
-## Step 3: Rate Limiting — Don't Let This Become a Bill Attack
+## Step 3: Rate limiting — don't let this become a bill attack
 
 Twilio charges per message. An unprotected endpoint that accepts a phone number and sends an SMS is one HTTP request away from someone running up your bill or using your service to spam phone numbers.
 
@@ -273,7 +273,7 @@ if (sentToday >= MAX_DAILY_SMS_PER_NUMBER) {
 
 ---
 
-## Step 4: Input Sanitization — Validate Phone Numbers
+## Step 4: Input sanitization — validate phone numbers
 
 Don't trust user-provided phone numbers. Validate the format before sending.
 
@@ -324,7 +324,7 @@ function sanitizeMessageBody(body) {
 
 ---
 
-## Putting It Together: The Secure SMS Service
+## Putting it together: the secure SMS service
 
 ```javascript
 // services/smsService.js
@@ -383,7 +383,7 @@ module.exports = { sendSms };
 
 ---
 
-## The Comparison: Insecure vs. Secure
+## The comparison: insecure vs. secure
 
 | Concern | Tutorial Version | Production Version |
 |---------|-----------------|-------------------|
@@ -396,7 +396,7 @@ module.exports = { sendSms };
 
 ---
 
-## The Takeaway
+## The takeaway
 
 Integrating Twilio isn't hard. Integrating it securely isn't much harder — it's mostly discipline about a handful of well-understood controls. The tutorial version of every API integration is optimized for time-to-working-demo, not time-to-secure-production.
 

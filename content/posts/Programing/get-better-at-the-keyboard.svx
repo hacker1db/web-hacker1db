@@ -3,7 +3,7 @@ title: "Get Better at the Keyboard: The Investment That Compounds Every Day"
 date: 2026-03-15
 thumbnail: "https://plus.unsplash.com/premium_photo-1771254265971-12f3a173c0c1?w=1200"
 author: hacker1db
-subtitle: "Your hands touch the keyboard thousands of times a day — investing in that skill compounds over a career. Touch typing, vim motions, mechanical keyboards, ergonomics, and the resources that actually helped."
+subtitle: "Your hands touch the keyboard thousands of times a day, so getting better at it pays off for your whole career. Touch typing, vim motions, mechanical keyboards, ergonomics, and the resources that actually helped."
 tags:
   - "keyboard"
   - "productivity"
@@ -21,21 +21,21 @@ draft: false
 
 Here's a rough calculation: if you type for 6 hours a day, 5 days a week, 48 weeks a year, you're at the keyboard for around 1,440 hours annually. Over a 30-year career, that's 43,000 hours.
 
-Every fraction of a percent improvement in how effectively you use those hours compounds into real time. More importantly, every source of friction you eliminate from your interaction with the keyboard reduces cognitive load — which means more mental capacity for the actual thinking work.
+Even a small improvement in how well you use those hours adds up to real time. More importantly, every bit of friction you remove from typing frees up attention for the actual thinking.
 
 I've spent years optimizing this. Here's what's actually made a difference.
 
 ---
 
-## Touch Typing: The Foundation
+## Touch typing: the foundation
 
-If you're a developer who looks at the keyboard while typing, this is the highest-leverage thing you can change. I'm not going to sugarcoat it: if you don't touch type, you have a handicap that limits how fast you can translate thought into text, and that friction affects your work every single day.
+If you're a developer who looks at the keyboard while typing, this is the most valuable thing you can change. I'm not going to sugarcoat it: if you don't touch type, you have a handicap that limits how fast you can translate thought into text, and that friction affects your work every single day.
 
-Touch typing is not about speed, though speed comes with it. It's about **removing the visual interrupt.** When you have to look at the keyboard, you break eye contact with the screen. You break your focus. You interrupt the flow of thought-to-code. That interruption is a small tax on every keystroke, and it adds up.
+Touch typing is not about speed, though speed comes with it. It's about **removing the visual interrupt.** When you have to look at the keyboard, your eyes leave the screen and your train of thought breaks. That interruption is a small tax on every keystroke, and it adds up.
 
 Learning to touch type as an adult feels awkward and slow. For the first few weeks, you're slower than you were hunting and pecking. This is normal. Push through it.
 
-### Resources That Actually Help
+### Resources that actually help
 
 **Keybr.com** — this is the one I recommend without reservation. It doesn't start with the standard QWERTY lesson layout. It introduces letters adaptively based on where you're struggling, so you're always working just above your current skill level. It measures your accuracy and speed per key and identifies weaknesses. This is how I went from a wobbly 45 WPM typist to a consistent 80+ WPM.
 
@@ -47,9 +47,9 @@ My honest timeline: I spent 20 minutes a day on Keybr for about 3 months before 
 
 ---
 
-## Vim Motions: The Biggest Multiplier
+## Vim motions: the biggest multiplier
 
-After touch typing, Vim motions are the most impactful keyboard investment for a developer. I've written about Neovim before, but I want to be specific about the motion system here because it's often misunderstood.
+After touch typing, Vim motions are the keyboard skill that pays off most for a developer. I've written about Neovim before, but I want to be specific about the motion system here because it's often misunderstood.
 
 Vim motions are not shortcuts in the conventional sense. They're a **composable language for editing text.**
 
@@ -62,7 +62,7 @@ The structure is: `[count] [operator] [motion]`
 
 Once you internalize this grammar, you can compose operations you've never explicitly learned. `d` is delete, `c` is change, `y` is yank. `w` is word, `p` is paragraph, `"` is inside quotes. Combine them in any order.
 
-### The Learning Curve Is Real But Finite
+### The learning curve is real but finite
 
 The Vim motion learning curve is steep at the start but finite. There's a ceiling: learn the roughly 20-30 most common operators and motions, and you have 90% of the value. You don't need to learn every obscure command.
 
@@ -74,20 +74,20 @@ The Vim motion learning curve is steep at the start but finite. There's a ceilin
 
 **Practical Vim by Drew Neil** — the book I recommend for going deeper. Not required for most developers, but excellent if you want to understand the full model.
 
-### You Don't Have to Use Neovim
+### You don't have to use Neovim
 
-This is important: **you can use Vim motions without using Vim.** Every major editor has a Vim keybinding mode:
+**You can use Vim motions without using Vim.** Every major editor has a Vim keybinding mode:
 
 - VS Code: `vscodevim` extension
 - JetBrains: `IdeaVim` plugin (excellent, configurable)
 - Emacs: `evil-mode`
 - Obsidian: built-in Vim mode
 
-The investment in Vim motions transfers across every editor you use for the rest of your career. That's the compounding.
+What you learn with Vim motions carries over to every editor you use for the rest of your career.
 
 ---
 
-## Keyboard Shortcuts: Your Editor's Native Language
+## Keyboard shortcuts: your editor's native language
 
 Beyond Vim motions, each tool you use daily has its own keyboard shortcut system. Every time you reach for the mouse for something you do ten times a day, you're paying a small tax.
 
@@ -127,17 +127,17 @@ Ctrl+Cmd+Space — emoji picker (useful for quick visual communication)
 
 ---
 
-## Mechanical Keyboards: Not Just Aesthetics
+## Mechanical keyboards: more than aesthetics
 
 I'm going to be honest: I was dismissive of the mechanical keyboard hobby for years. It seemed like an expensive thing to have opinions about.
 
-Then I got a mechanical keyboard and understood what the fuss was about. It's not primarily aesthetics. It's **feedback and consistency.**
+Then I got a mechanical keyboard and understood what the fuss was about. The appeal is mostly **feedback and consistency**, not looks.
 
 Standard laptop keyboards and membrane keyboards have mushy, inconsistent key feel. You're never quite sure when a keypress registered. Mechanical keyboards have a defined actuation point, consistent feel, and (depending on the switch) tactile feedback at exactly the moment the key registers.
 
-The result: you make fewer typos. Your fingers learn exactly how much force is needed. The consistency reduces the micro-corrections your brain makes constantly on a mushy keyboard.
+You make fewer typos. Your fingers learn exactly how much force is needed. The consistency reduces the micro-corrections your brain makes constantly on a mushy keyboard.
 
-### What Actually Matters When Choosing
+### What actually matters when choosing
 
 **Switch type:** The three main categories:
 - **Linear** (Cherry MX Red, Gateron Yellow) — smooth travel, no bump. Good for gaming, fast typing. Low fatigue.
@@ -152,7 +152,7 @@ My current setup: Keychron Q2 with Gateron brown switches. Programmable, aluminu
 
 ---
 
-## Ergonomics: The Long Game
+## Ergonomics: the long game
 
 This is the part nobody wants to talk about because it's not as fun as switch comparisons, but it matters more.
 
@@ -170,33 +170,33 @@ Key adjustments I've made:
 
 ---
 
-## My Personal Journey
+## How I got here
 
-I started typing properly (by home-row standards) around 2019. Before that I was a reasonably fast hunt-and-peck typist who'd spent years "getting by." My real Vim journey started around 2020 when I got tired of VS Code being slow on large files and finally committed to learning Neovim properly.
+I started typing properly (by home-row standards) around 2019. Before that I was a reasonably fast hunt-and-peck typist who'd spent years "getting by." I got serious about Vim around 2020 when I got tired of VS Code being slow on large files and finally committed to learning Neovim properly.
 
 The honest timeline:
 - Touch typing: 3 months to functional, 6 months to comfortable
 - Vim basics: 2 weeks to functional, 3 months to natural
 - Vim motions as default: about 1 year before they truly replaced mouse habits
 
-None of this is fast. All of it is worth it.
+None of this was fast, but all of it was worth it.
 
 ---
 
-## Where to Start
+## Where to start
 
 If you take one thing from this post, make it this: **start with touch typing if you don't already.** Go to Keybr.com, spend 20 minutes a day for a month, and you'll have a foundation that everything else builds on.
 
 After that: pick one editor, install the Vim plugin, and commit to using motions for one month. It will be frustrating. That frustration is the friction of change, not evidence that it's the wrong approach.
 
-Your hands are at the keyboard for tens of thousands of hours over your career. That investment compounds. Make it intentionally.
+Your hands are at the keyboard for tens of thousands of hours over your career. Be deliberate about how you use them.
 
 ---
 
 ## Takeaway
 
-The keyboard is your primary interface with your work. Treating it like an afterthought costs you more than you realize — not just in speed, but in cognitive load, physical health, and the quality of the thought-to-code translation.
+The keyboard is your primary interface with your work. Treating it like an afterthought costs you speed and focus, and eventually it can cost you your wrists.
 
 Touch type. Learn Vim motions. Use keyboard shortcuts. Get a decent keyboard. Protect your wrists. Do it now, not after you've already developed bad habits.
 
-The time you spend learning will return to you for the rest of your career, compounded daily.
+The time you spend learning pays you back every working day for the rest of your career.

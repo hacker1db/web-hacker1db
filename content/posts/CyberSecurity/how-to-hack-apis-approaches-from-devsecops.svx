@@ -27,11 +27,11 @@ All testing should be done against systems you own or have explicit written perm
 
 ---
 
-## Phase 1: Reconnaissance — Know Before You Probe
+## Phase 1: Reconnaissance — know before you probe
 
 Attackers don't start by throwing exploits. They start by understanding the target. Methodical reconnaissance is what separates a skilled attacker from someone who just runs a scanner and calls it a day.
 
-### Passive Recon
+### Passive recon
 
 Before touching the API directly, an attacker looks for everything that's publicly available.
 
@@ -68,7 +68,7 @@ site:github.com "target.com" "api_key"
 
 As a defender, this tells you to: never expose Swagger in production, never hardcode API endpoints in client-side code if they're internal, and scan your own repos for secrets.
 
-### Active Recon
+### Active recon
 
 Once you're ready to interact with the target directly, the goal is to build a complete map of the API.
 
@@ -93,11 +93,11 @@ As a defender: this phase reveals what an attacker can learn about your API from
 
 ---
 
-## Phase 2: Authentication Testing
+## Phase 2: Authentication testing
 
 Once you have an endpoint map, authentication is the first major attack surface. The goal is to find ways to bypass or abuse the auth system.
 
-### Token Analysis
+### Token analysis
 
 JWTs are everywhere. Most are implemented correctly. Some are not.
 
@@ -135,7 +135,7 @@ print(forged_token)
 
 Send this token to the API. If it accepts it, the server isn't validating the algorithm.
 
-### Auth Bypass on Specific Endpoints
+### Auth bypass on specific endpoints
 
 Some APIs apply authentication middleware globally but have endpoints that opt out — health checks, documentation, or legacy routes.
 
@@ -153,11 +153,11 @@ As a defender: route your authentication middleware through an allowlist-of-publ
 
 ---
 
-## Phase 3: Authorization Testing
+## Phase 3: Authorization testing
 
 You're authenticated. Now you test whether the API properly restricts what you can do and what data you can access.
 
-### BOLA / IDOR Testing
+### BOLA / IDOR testing
 
 Create two accounts. Authenticate as user A. Get an object ID from user A's session. Authenticate as user B. Try to access that object ID.
 
@@ -174,7 +174,7 @@ curl -H "Authorization: Bearer $TOKEN_B" \
 
 If user B gets the document, you have a BOLA vulnerability. Test this for every endpoint that takes an object identifier.
 
-### Privilege Escalation
+### Privilege escalation
 
 Try to access admin endpoints with a regular user token. Try to perform operations that should require elevated privileges.
 
@@ -189,11 +189,11 @@ curl -X DELETE -H "Authorization: Bearer $REGULAR_USER_TOKEN" \
 
 ---
 
-## Phase 4: Injection Testing
+## Phase 4: Injection testing
 
 API parameters are injection vectors. SQL injection through JSON bodies is just as real as through URL parameters.
 
-### SQL Injection in JSON Bodies
+### SQL injection in JSON bodies
 
 ```bash
 # Classic SQL injection payloads in JSON
@@ -210,7 +210,7 @@ curl -X POST https://api.target.com/v1/users/lookup \
 
 If the second request takes noticeably longer than 5 seconds to respond, you have a time-based blind SQL injection vulnerability.
 
-### NoSQL Injection
+### NoSQL injection
 
 MongoDB and other NoSQL databases have their own injection patterns:
 
@@ -223,7 +223,7 @@ curl -X POST https://api.target.com/v1/login \
 # This exploits MongoDB comparison operators to bypass authentication
 ```
 
-### GraphQL Injection and Abuse
+### GraphQL injection and abuse
 
 GraphQL introspection is a recon gift:
 
@@ -238,11 +238,11 @@ Disable introspection in production. If you can't, at least require authenticati
 
 ---
 
-## Phase 5: Business Logic Abuse
+## Phase 5: Business logic abuse
 
 This is the hardest category to test systematically and the most impactful when you find something. Business logic vulnerabilities aren't about technical exploitation — they're about abusing the intended functionality in unintended ways.
 
-### Race Conditions
+### Race conditions
 
 Operations that should be atomic sometimes aren't. Sending concurrent requests can exploit the gap.
 
@@ -269,7 +269,7 @@ async def race_condition_test():
 asyncio.run(race_condition_test())
 ```
 
-### Parameter Pollution and Manipulation
+### Parameter pollution and manipulation
 
 APIs often have parameters that affect pricing, permissions, or quantities. Try manipulating them.
 
@@ -285,7 +285,7 @@ curl -X POST https://api.target.com/v1/checkout \
 
 ---
 
-## How Offense Makes You a Better Defender
+## How offense makes you a better defender
 
 After spending time with these techniques, a few things changed in how I build and review APIs:
 

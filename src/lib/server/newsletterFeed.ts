@@ -1,4 +1,4 @@
-import { createHash, timingSafeEqual } from 'node:crypto';
+import { verifyJwt } from '@clerk/backend/jwt';
 import type { Post } from '$lib/types';
 
 export const DEFAULT_FEED_LIMIT = 20;
@@ -16,19 +16,32 @@ export interface NewsletterFeedPost {
 	excerpt?: string;
 }
 
-function digest(value: string): Buffer {
-	return createHash('sha256').update(value).digest();
+export interface M2MAuthConfig {
+	/** Clerk instance public key (PEM), so JWT M2M tokens verify locally without a network call. */
+	jwtKey?: string;
+	newsletterMachineId?: string;
+	blogMachineId?: string;
 }
 
 /**
- * Validates an `Authorization: Bearer <token>` header against the expected secret.
- * Both sides are hashed first so the comparison is constant-time regardless of length.
+ * Validates an `Authorization: Bearer <Clerk M2M JWT>` header entirely locally.
+ * `verifyJwt` proves signature and expiry; the caller machine (subject) and the
+ * target machine (scope) are checked here. `m2m.verify` is avoided because it calls
+ * Clerk's API for any token that is not an M2M JWT.
  */
-export function isAuthorized(header: string | null, expectedToken: string | undefined): boolean {
-	if (!expectedToken || !header) return false;
+export async function isAuthorized(header: string | null, config: M2MAuthConfig): Promise<boolean> {
+	const { jwtKey, newsletterMachineId, blogMachineId } = config;
+	if (!header || !jwtKey || !newsletterMachineId || !blogMachineId) return false;
 	const match = /^Bearer ([^\s]+)$/.exec(header);
 	if (!match) return false;
-	return timingSafeEqual(digest(match[1]), digest(expectedToken));
+	try {
+		const payload = await verifyJwt(match[1], { key: jwtKey });
+		const scopes =
+			typeof payload.scopes === 'string' ? payload.scopes.split(' ') : [payload.aud ?? []].flat();
+		return payload.sub === newsletterMachineId && scopes.includes(blogMachineId);
+	} catch {
+		return false;
+	}
 }
 
 /** Returns the requested limit, the default when absent, or null when invalid. */

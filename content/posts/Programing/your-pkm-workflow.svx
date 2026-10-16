@@ -25,7 +25,7 @@ Over the past few years I've built a knowledge management workflow that actually
 
 Here's how it works.
 
-## The Philosophy: Capture Everything, Organize Later
+## The philosophy: capture everything, organize later
 
 Before I get into the tools, the philosophy matters. The goal of a PKM system is not to have a beautiful, perfectly organized vault. The goal is to reduce friction between having an idea or encountering useful information and being able to retrieve and act on it later.
 
@@ -35,9 +35,9 @@ My system has four stages: **Capture, Organize, Connect, Create.**
 
 ---
 
-## The Tools
+## The tools
 
-### Readwise + Reader: The Intake Pipe
+### Readwise + Reader: the intake pipe
 
 Everything I read flows through Readwise Reader first. Articles, PDFs, newsletters, web pages — if I'm reading it intentionally, it goes into Reader. The killer feature is that highlights sync automatically to Readwise, which then pushes everything into Obsidian via the official Readwise plugin.
 
@@ -54,7 +54,7 @@ The Readwise plugin creates one file per source with YAML frontmatter, the highl
 
 **What I don't love:** The auto-generated notes are raw. They need processing. But that's a feature, not a bug — it forces me to revisit and actually think about what I captured.
 
-### Obsidian: The Thinking Layer
+### Obsidian: the thinking layer
 
 Obsidian is where I actually *think*. It's not a capture tool for me — that's Reader. Obsidian is where I take the raw captured material and turn it into something useful.
 
@@ -99,7 +99,7 @@ status: seedling
 
 The `status` field goes from `seedling` (raw capture) to `growing` (actively developing) to `evergreen` (stable reference note). I don't obsess over this taxonomy, but it helps me know at a glance how mature a note is.
 
-### Todoist: The Action Layer
+### Todoist: the action layer
 
 Here's where a lot of PKM systems fall apart: they're great at storing knowledge but terrible at translating that into *action*. I keep Obsidian and Todoist separate on purpose.
 
@@ -116,7 +116,7 @@ Todoist gives me:
 
 My weekly review process connects the two: I review my Todoist projects, then open the related Obsidian areas and see if there are notes to process, links to make, or things to capture.
 
-### Neovim: The Creation Layer
+### Neovim: the creation layer
 
 When I'm writing anything longer than a quick note — blog posts, documentation, reports, READMEs — I switch to Neovim. Not because Obsidian's editor is bad (it's fine), but because Neovim is where I'm fastest and most comfortable writing.
 
@@ -127,7 +127,7 @@ I have a simple workflow:
 3. Use `zen-mode.nvim` for distraction-free writing
 4. Push back to Obsidian when done (they share the same vault directory)
 
-The key insight here: **Obsidian and Neovim work on the same files.** The vault is just a folder of Markdown files on disk. I can open any Obsidian note in Neovim, edit it, save it, and Obsidian reflects the changes immediately. No sync needed, no export/import dance.
+The important part is that **Obsidian and Neovim work on the same files.** The vault is just a folder of Markdown files on disk. I can open any Obsidian note in Neovim, edit it, save it, and Obsidian reflects the changes immediately. No sync needed, no export/import dance.
 
 My Neovim writing setup:
 
@@ -140,7 +140,7 @@ My Neovim writing setup:
 
 ---
 
-## How Information Flows
+## How information flows
 
 Let me trace a real example. I'm reading a paper on supply chain security in Reader on my phone during lunch.
 
@@ -154,7 +154,7 @@ The whole flow happens naturally. Nothing gets lost in a browser tab graveyard.
 
 ---
 
-## What Doesn't Work (Honest Assessment)
+## What doesn't work (honest assessment)
 
 No sugar coating: my system has weak spots.
 
@@ -168,7 +168,7 @@ No sugar coating: my system has weak spots.
 
 ---
 
-## Getting Started
+## Getting started
 
 If you want to build something similar:
 
@@ -183,7 +183,7 @@ The tools are secondary to the habit. A $0 system you use every day beats a $50/
 
 ## Takeaway
 
-PKM is not about having the perfect system. It's about reducing the tax on your brain so you can think about the things that actually matter. My workflow took years to refine and it still has rough edges.
+PKM doesn't require a perfect system. The point is to reduce the tax on your brain so you can think about the things that matter. My workflow took years to refine and it still has rough edges.
 
 But compared to 47 open tabs and a sticky note graveyard? This is miles better. Start somewhere, iterate, and don't let perfect be the enemy of functional.
 

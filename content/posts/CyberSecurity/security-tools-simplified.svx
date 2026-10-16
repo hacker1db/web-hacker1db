@@ -24,7 +24,7 @@ Let me paint you a picture. You're a developer or an ops engineer and someone fr
 
 No judgment. I've been there. I've also been the person sending those messages, and I'll be honest — sometimes the security world does itself no favors with the alphabet soup. So let's cut through it. Plain English, no vendor slides, no buzzwords for their own sake. Just what these tools do, when you actually need them, and when you're being oversold.
 
-## The Core Categories
+## The core categories
 
 Before we go tool-by-tool, here's the honest organizing principle: most security tools exist to find problems either in your **code**, your **running application**, or your **infrastructure**. That's it. Every acronym maps back to one of those three buckets.
 
@@ -58,7 +58,7 @@ The tradeoff is time and environment. DAST needs a running app. Running a full D
 
 ### SCA — Software Composition Analysis
 
-This one is increasingly critical and is frankly the tool category that most teams should start with if they're starting from zero.
+This is the tool category most teams should start with if they're starting from zero.
 
 SCA tools look at your dependencies — the open-source libraries and packages your application pulls in. They check those dependencies against vulnerability databases (NVD, OSV, GitHub Advisory Database) and tell you: "Hey, you're using lodash 4.17.15 and there's a known prototype pollution vulnerability in it."
 
@@ -80,11 +80,11 @@ These tools work by calling cloud provider APIs, comparing your configuration ag
 
 **Good tools to know:** Wiz, Prisma Cloud, AWS Security Hub, Microsoft Defender for Cloud, Lacework, Orca Security.
 
-**When you need it:** The moment you have anything in a cloud environment. Misconfigurations are the number one cause of cloud data breaches. CSPM is table stakes.
+**When you need it:** The moment you have anything in a cloud environment. CSPM is table stakes.
 
 **When to watch out:** Alert fatigue is real with CSPM. A fresh scan of a cloud environment with no security baseline will produce hundreds of findings. Prioritize by severity and business impact. Fix the publicly exposed storage and open admin ports before you chase down every informational finding.
 
-### IaC Scanning — Infrastructure as Code Security
+### IaC scanning — infrastructure as code security
 
 If CSPM scans your live cloud environment, IaC scanning checks your Terraform, CloudFormation, Helm charts, Kubernetes manifests, and Bicep files before they're ever deployed. Shift-left for infrastructure.
 
@@ -94,7 +94,7 @@ The idea is the same as SAST but for infrastructure code: find the misconfigurat
 
 **When you need it:** If you manage infrastructure as code (and you should be), IaC scanning belongs in your pipeline right next to your SAST and SCA scans.
 
-### Container Scanning
+### Container scanning
 
 Container images are like dependency bundles. Your Dockerfile might pull a base image that includes OS packages with known vulnerabilities. Container scanning tools check the layers of your images for those vulnerabilities.
 
@@ -102,9 +102,9 @@ Container images are like dependency bundles. Your Dockerfile might pull a base 
 
 **When you need it:** If you're building container images. Scan in CI before pushing to your registry, and scan again in the registry to catch newly disclosed vulnerabilities in images you've already shipped.
 
-## The Practical Takeaway
+## The practical takeaway
 
-Here's the honest truth: you don't need to buy every tool in every category to have a solid security posture. Start with what gives you the most signal for the least noise.
+You don't need to buy every tool in every category to have a solid security posture. Start with what gives you the most signal for the least noise.
 
 My recommended starting order for a team with nothing:
 

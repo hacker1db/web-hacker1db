@@ -27,7 +27,7 @@ Let me walk you through how security fits into the platform engineering model, a
 
 ---
 
-## What Platform Engineering Actually Means
+## What platform engineering actually means
 
 Platform engineering is the practice of building internal developer platforms (IDPs) — the tooling, automation, and abstractions that let product teams self-serve their infrastructure and deployment needs without becoming ops experts. Think: "you need a Postgres database? Fill out this form and it provisions in 5 minutes with backups, monitoring, and encryption configured correctly."
 
@@ -37,7 +37,7 @@ From a security perspective, this is huge. If the platform team bakes security c
 
 ---
 
-## Golden Paths: Making Security the Default Route
+## Golden paths: making security the default route
 
 The "golden path" is the opinionated, paved route that the platform provides. Use our CI pipeline template and you get image scanning, SAST, and dependency checking included. Use our Terraform module for RDS and you get encryption at rest, automated backups, and security group rules that follow least privilege. Step off the golden path and you're on your own.
 
@@ -116,7 +116,7 @@ Teams get a database. They can't accidentally make it public-facing or unencrypt
 
 ---
 
-## Developer Self-Service with Guardrails
+## Developer self-service with guardrails
 
 Self-service is the point of a platform. But "self-service without guardrails" is just "developers doing whatever they want," which is a different problem. The art is in building guardrails that prevent the dangerous stuff without friction-ing the useful stuff.
 
@@ -130,7 +130,7 @@ A few patterns that work well:
 
 ---
 
-## Policy-as-Code: OPA and Kyverno
+## Policy-as-code: OPA and Kyverno
 
 Guardrails in the pipeline catch issues early. Guardrails at the cluster level catch what slips through. This is where OPA Gatekeeper and Kyverno come in.
 
@@ -191,7 +191,7 @@ The important thing about policy-as-code is that the policies live in version co
 
 ---
 
-## Secure Defaults Over Security Reviews
+## Secure defaults over security reviews
 
 This is the mindset shift I want to leave you with. The traditional security model is: developers build things, then security reviews them and finds problems. This doesn't scale. One security team cannot review every PR across dozens of product teams.
 
@@ -234,7 +234,7 @@ Zero friction for the developer. Vault does the right thing under the hood.
 
 ---
 
-## Internal Developer Platforms: The Security Control Plane
+## Internal developer platforms: the security control plane
 
 An IDP like Backstage or Port isn't just a developer portal — it's your security control plane. From a single interface you can surface:
 
@@ -247,7 +247,7 @@ When security visibility is embedded in the tools developers already use every d
 
 ---
 
-## Where to Start
+## Where to start
 
 If you're building a platform from scratch, or trying to add security to an existing one, here's the order I'd tackle it:
 
@@ -261,7 +261,7 @@ Don't try to do it all at once. Pick the highest-impact item, build it well, get
 
 ---
 
-## The Takeaway
+## The takeaway
 
 Platform engineering is the most scalable security strategy available to us right now. Security through developer experience beats security through policy enforcement every time. When the platform makes the secure path the easy path, you don't have to chase developers — they just do the right thing because it's the path of least resistance.
 

@@ -35,7 +35,7 @@ tags:
 - Functions
 - File I/O
 
-## More Advanced but valuable
+## More advanced but valuable
 
 - class's
 - inheritance
