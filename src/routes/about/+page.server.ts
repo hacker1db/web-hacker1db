@@ -3,6 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
+import { sanitizePostHtml } from '$lib/post-html';
 
 export async function load() {
 	try {
@@ -17,7 +18,7 @@ export async function load() {
 		const { data, content } = matter(fileContents);
 
 		const processedContent = await remark().use(html, { sanitize: false }).process(content);
-		const contentHtml = processedContent.toString();
+		const contentHtml = sanitizePostHtml(processedContent.toString());
 
 		return {
 			aboutData: data,
