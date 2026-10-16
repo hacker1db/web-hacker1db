@@ -188,10 +188,9 @@ The migration includes comprehensive support for Hugo shortcodes:
 2. Import your repository in [Vercel](https://vercel.com)
 3. Deploy automatically with zero configuration
 
-GitHub Actions runs type checks, ESLint, unit tests, a build, and SonarQube Cloud analysis on each pull request. It also deploys same-repository pull requests to the Vercel Preview environment and posts the URL on the PR. Configure these GitHub repository settings first:
+GitHub Actions runs type checks, ESLint, unit tests, a build, and SonarQube Cloud analysis on each pull request. It also deploys same-repository pull requests to the Vercel Preview environment and posts the URL on the PR. Configure these GitHub repository secrets first:
 
-- Variables: `SONAR_ORGANIZATION`, `SONAR_PROJECT_KEY` from your SonarQube Cloud project.
-- Secrets: `SONAR_TOKEN` and `VERCEL_TOKEN`. The workflows include the public Vercel team and project IDs for `zerobitdev/web-hacker1db`.
+- `SONAR_TOKEN` for the `hacker1db-dev` SonarQube Cloud organization and `VERCEL_TOKEN` with access to `zerobitdev/web-hacker1db`. The project IDs are in the repository configuration.
 
 Forked pull requests still run the local checks, but the SonarQube scan and Vercel deployment are skipped because GitHub does not provide these secrets to forked PR workflows. If the Vercel Git integration is also enabled, it may create a second preview deployment for the same PR.
 
