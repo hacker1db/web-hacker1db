@@ -13,7 +13,7 @@ Personal technical blog built with SvelteKit, deployed to Vercel. Covers cyberse
 | Markdown | mdsvex (`.svx` files), gray-matter |
 | Syntax Highlighting | Shiki |
 | Deployment | Vercel (`@sveltejs/adapter-vercel`, Node 22) |
-| Package Manager | pnpm / bun |
+| Package Manager | pnpm |
 
 Path aliases: `$lib` → `src/lib/`, `$components` → `src/components/`
 
@@ -129,10 +129,11 @@ pnpm dev          # Start dev server
 pnpm build        # Production build
 pnpm check        # svelte-kit sync + svelte-check (type checking)
 pnpm lint         # ESLint
+pnpm test         # Unit tests
 pnpm deploy       # vercel --prod
 ```
 
-Run `pnpm check` and `pnpm lint` before considering any change complete. There are no automated tests; manually verify affected routes in the browser.
+Run `pnpm check`, `pnpm lint`, and `pnpm test` before considering any change complete. Manually verify affected routes in the browser.
 
 ---
 
