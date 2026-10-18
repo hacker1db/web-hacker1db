@@ -88,6 +88,10 @@
 			is built from a reviewed snapshot of <code>{data.sourceRevision.slice(0, 7)}</code>, exported
 			{data.generatedAt}.
 		</p>
+		<p class="lede">
+			MIT licensed and provided as-is: no support or warranty. I maintain them on a best-effort
+			basis, so use them at your own risk.
+		</p>
 	</section>
 </div>
 
