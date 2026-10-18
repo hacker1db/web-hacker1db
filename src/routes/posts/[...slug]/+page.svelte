@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { format } from 'date-fns';
 	import CodeBlock from '$components/CodeBlock.svelte';
+	import TopVideo from '$components/TopVideo.svelte';
 
 	let { data } = $props();
 	let post = $derived(data.post);
@@ -27,7 +28,8 @@
 		post.slug.includes('/') ? post.slug.split('/')[0] : ''
 	);
 
-	let hasMedia = $derived(Boolean(post.data.thumbnail || post.data.youtube));
+	// a video renders full width above the prose; the thumbnail stays beside the title only without one
+	let showThumbnail = $derived(Boolean(post.data.thumbnail && !post.data.youtube));
 </script>
 
 <svelte:head>
@@ -48,8 +50,8 @@
 	</a>
 
 	<article>
-		<!-- Header: meta left, media right -->
-		<div class="post-header">
+		<!-- Header: meta left, thumbnail right -->
+		<div class="post-header" class:single={!showThumbnail}>
 			<!-- Left: title and metadata -->
 			<div class="post-meta">
 				<div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
@@ -87,30 +89,20 @@
 				{/if}
 			</div>
 
-			<!-- Right: thumbnail or video -->
-			{#if hasMedia}
+			{#if showThumbnail && post.data.thumbnail}
 				<div class="post-media">
-					{#if post.data.youtube}
-						<div class="video-container">
-							<iframe
-								src="https://www.youtube.com/embed/{post.data.youtube}"
-								title={post.data.title}
-								frameborder="0"
-								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-								allowfullscreen
-								style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 0.75rem;"
-							></iframe>
-						</div>
-					{:else if post.data.thumbnail}
-						<img
-							src={post.data.thumbnail.replace('w=600&h=350', 'w=800&h=500')}
-							alt={post.data.title}
-							class="post-thumbnail"
-						/>
-					{/if}
+					<img
+						src={post.data.thumbnail.replace('w=600&h=350', 'w=800&h=500')}
+						alt={post.data.title}
+						class="post-thumbnail"
+					/>
 				</div>
 			{/if}
 		</div>
+
+		{#if post.data.youtube}
+			<TopVideo videoId={post.data.youtube} title={post.data.title} />
+		{/if}
 
 		<!-- Article Content -->
 		<div class="prose" style="max-width: none; text-align: left;">
@@ -201,12 +193,9 @@
 		aspect-ratio: 16 / 10;
 	}
 
-	.video-container {
-		position: relative;
-		width: 100%;
-		padding-bottom: 56.25%;
-		border-radius: 0.75rem;
-		overflow: hidden;
+	.post-header.single {
+		grid-template-columns: 1fr;
+		margin-bottom: 2rem;
 	}
 
 	.post-meta {
