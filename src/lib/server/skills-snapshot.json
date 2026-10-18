@@ -1,0 +1,123 @@
+{
+	"exportVersion": 1,
+	"sourceRepo": "hacker1db/skills",
+	"sourceRevision": "fa39b50b97d7223617247c83fd9a0500f4b57521",
+	"generatedAt": "2026-10-18",
+	"sample": true,
+	"skills": [
+		{
+			"id": "review",
+			"title": "Review a change",
+			"summary": "Catch correctness and maintainability issues before you commit.",
+			"category": "Engineering",
+			"sourcePath": "claude/skills/review/SKILL.md",
+			"invocation": "user",
+			"whenToUse": "You have a staged change and want another pass before committing, while the context is still fresh.",
+			"prerequisites": ["A git repository with staged changes"],
+			"inputs": ["The staged diff"],
+			"outputs": ["Prioritized findings with file and line references"],
+			"examplePrompt": "/review Review my staged changes for correctness and maintainability.",
+			"verify": ["Each finding points at a real line in the diff", "You can explain why each fix you apply is needed"],
+			"related": ["security-review", "commit-msg"]
+		},
+		{
+			"id": "security-review",
+			"title": "Security review",
+			"summary": "Inspect staged changes for secrets, injection and unsafe defaults.",
+			"category": "Security",
+			"sourcePath": "claude/skills/security-review/SKILL.md",
+			"invocation": "user",
+			"whenToUse": "Before committing a change that touches input handling, auth, configuration or dependencies.",
+			"prerequisites": ["A git repository with staged changes"],
+			"inputs": ["The staged diff"],
+			"outputs": ["Security findings ranked by severity"],
+			"examplePrompt": "/security-review Check my staged changes for security issues.",
+			"verify": ["No secrets remain in the staged diff", "Each finding is resolved or consciously accepted"],
+			"related": ["review"]
+		},
+		{
+			"id": "commit-msg",
+			"title": "Write the commit message",
+			"summary": "Turn a staged diff into a clear conventional commit message.",
+			"category": "Engineering",
+			"sourcePath": "claude/skills/commit-msg/SKILL.md",
+			"invocation": "user",
+			"whenToUse": "Your change is reviewed, fixed and restaged, and you want a message that explains why.",
+			"prerequisites": ["A final staged diff"],
+			"inputs": ["The staged diff"],
+			"outputs": ["A conventional commit message (it does not create the commit)"],
+			"examplePrompt": "/commit-msg",
+			"verify": ["The message describes the final diff, not an earlier draft"],
+			"related": ["review"]
+		},
+		{
+			"id": "grill-me",
+			"title": "Grill an idea",
+			"summary": "Stress-test an idea with pointed questions before you build it.",
+			"category": "Productivity",
+			"sourcePath": "claude/skills/grill-me/SKILL.md",
+			"invocation": "user",
+			"whenToUse": "You have a plan or design and want its gaps found before any code is written.",
+			"prerequisites": [],
+			"inputs": ["A short description of the idea or plan"],
+			"outputs": ["Resolved decisions and open questions"],
+			"examplePrompt": "/grill-me I want to publish my skills as a catalog on my blog.",
+			"verify": ["Every open question has an owner or a decision"]
+		},
+		{
+			"id": "search-notes",
+			"title": "Search your notes",
+			"summary": "Find the evidence in your notes and reading highlights.",
+			"category": "Reading",
+			"sourcePath": "claude/skills/search-notes/SKILL.md",
+			"invocation": "user",
+			"whenToUse": "You are about to write something and want to start from what you already read and noted.",
+			"prerequisites": ["A configured notes vault or Readwise account"],
+			"inputs": ["A topic or question"],
+			"outputs": ["Cited findings from your notes and highlights"],
+			"examplePrompt": "/search-notes What have I saved about software supply chain attacks?",
+			"verify": ["Each finding links back to a note or highlight you can open"],
+			"related": ["unslop"]
+		},
+		{
+			"id": "unslop",
+			"title": "Unslop a draft",
+			"summary": "Edit a draft while keeping its facts, structure and voice.",
+			"category": "Productivity",
+			"sourcePath": "claude/skills/unslop/SKILL.md",
+			"invocation": "user",
+			"whenToUse": "A draft reads as generic or padded and you want it tightened without losing facts or citations.",
+			"prerequisites": [],
+			"inputs": ["A draft"],
+			"outputs": ["Revised prose"],
+			"examplePrompt": "/unslop Tighten this draft without changing any facts.",
+			"verify": ["Facts, numbers and citations match the original draft"],
+			"related": ["search-notes"]
+		}
+	],
+	"workflows": [
+		{
+			"id": "safer-commit",
+			"title": "Review a change, then commit it",
+			"goal": "Review a change",
+			"steps": [
+				{ "skillId": "review", "produces": "Correctness findings" },
+				{ "skillId": "security-review", "produces": "Security findings" },
+				{ "manual": "Resolve findings, rerun checks, restage", "produces": "Final staged diff" },
+				{ "skillId": "commit-msg", "produces": "Commit message" }
+			],
+			"note": "Both reviews read the same staged diff, not each other's report. With nothing staged, the reviewers stop."
+		},
+		{
+			"id": "write-from-evidence",
+			"title": "Write from evidence",
+			"goal": "Write from evidence",
+			"steps": [
+				{ "skillId": "search-notes", "produces": "Cited evidence" },
+				{ "manual": "Draft for your audience", "produces": "Draft" },
+				{ "skillId": "unslop", "produces": "Revised prose" }
+			],
+			"note": "Keep the citations from the first step through the final edit."
+		}
+	]
+}

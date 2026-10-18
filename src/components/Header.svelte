@@ -9,6 +9,7 @@
 		{ href: '/posts/', label: 'Posts' },
 		{ href: '/series/', label: 'Series' },
 		{ href: '/tags/', label: 'Tags' },
+		{ href: '/skills/', label: 'Skills' },
 		{ href: '/about/', label: 'About' }
 	];
 </script>
