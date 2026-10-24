@@ -11,6 +11,7 @@ export interface PostMatter {
 	hideSubtitleInCard?: boolean;
 	thumbnail?: string;
 	youtube?: string;
+	transcriptUrl?: string;
 }
 
 export interface Post {
@@ -68,6 +69,7 @@ export interface Skill {
 	category: string;
 	sourcePath: string;
 	invocation: 'user' | 'model';
+	published?: true;
 	whenToUse: string;
 	prerequisites: string[];
 	inputs: string[];

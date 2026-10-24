@@ -1,4 +1,5 @@
 import type { PostMatter } from './types';
+import { isYouTubeId } from './video';
 
 interface FrontmatterData {
 	title?: string;
@@ -44,6 +45,7 @@ export function processShortcodes(content: string, frontmatter: PostMatter): str
 	processedContent = processedContent.replace(
 		/\{\{<\s*youtube\s+([^\s>]+)\s*>\}\}/g,
 		(_match, videoId: string) => {
+			if (isYouTubeId(videoId) && videoId === frontmatter.youtube) return '';
 			return `
 <div style="position: relative; width: 100%; height: 0; padding-bottom: 56.25%; margin: 2rem 0;">
   <iframe
@@ -160,7 +162,8 @@ export function processFrontmatter(data: FrontmatterData, content?: string): Pos
 		category: data.category || '',
 		hideSubtitleInCard: Boolean(data.hideSubtitleInCard || hasSubtitleParam),
 		thumbnail: data.thumbnail as string || '',
-		youtube: data.youtube as string || ''
+		youtube: data.youtube as string || '',
+		transcriptUrl: typeof data.transcriptUrl === 'string' ? data.transcriptUrl : undefined
 	};
 
 	return processed;

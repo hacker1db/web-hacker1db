@@ -18,7 +18,7 @@
 	style="background-color: #1a1d21; border-bottom: 1px solid #374151; padding: 1rem 0;"
 >
 	<div
-		style="max-width: 1024px; margin: 0 auto; padding: 0 1rem; display: flex; align-items: center; justify-content: space-between;"
+		class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-4"
 	>
 		<a
 			href={siteConfig.logo.logoHomeLink}
@@ -28,12 +28,12 @@
 			<span class="terminal-cursor" style="color: {siteConfig.logo.logoCursorColor}"></span>
 		</a>
 
-		<div style="display: flex; align-items: center; gap: 1.5rem;">
-			<nav style="display: flex; gap: 1.5rem;">
-				{#each navLinks as link}
+		<div class="flex min-w-0 flex-wrap items-center gap-4">
+			<nav class="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+				{#each navLinks as link (link.href)}
 					<a
 						href={link.href}
-						style="color: {page.url.pathname === link.href ? '#6FC1FF' : '#d1d5db'}; text-decoration: none; transition: color 0.2s ease;"
+						style="color: {(link.href === '/' ? page.url.pathname === '/' : page.url.pathname.startsWith(link.href)) ? '#6FC1FF' : '#d1d5db'}; text-decoration: none; transition: color 0.2s ease;"
 					>
 						{link.label}
 					</a>

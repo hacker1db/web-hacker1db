@@ -1,127 +1,36 @@
 <script lang="ts">
-	import { isYouTubeId } from '$lib/video';
+	import { isTranscriptUrl, isYouTubeId } from '$lib/video';
 
-	let { videoId, title, transcriptUrl }: { videoId: string; title: string; transcriptUrl?: string } =
-		$props();
-
-	let playing = $state(false);
-	let valid = $derived(isYouTubeId(videoId));
+	let { videoId, title, transcriptUrl }: { videoId: string; title: string; transcriptUrl?: string } = $props();
+	let playingId = $state<string | null>(null);
 </script>
 
-{#if valid}
-	<figure class="top-video">
-		<div class="frame">
-			{#if playing}
-				<!-- autoplay only after the reader clicks play; nothing loads from YouTube before that -->
+{#if isYouTubeId(videoId)}
+	<figure class="mb-10 overflow-hidden rounded-xl border border-gray-700 bg-[#13161a]">
+		<div class="relative aspect-video">
+			{#if playingId === videoId}
 				<iframe
-					src="https://www.youtube.com/embed/{videoId}?autoplay=1&rel=0"
+					src="https://www.youtube.com/embed/{videoId}?rel=0"
 					{title}
-					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+					class="absolute inset-0 h-full w-full border-0"
+					allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 					allowfullscreen
 				></iframe>
 			{:else}
-				<button type="button" class="poster" onclick={() => (playing = true)}>
-					<img src="https://i.ytimg.com/vi/{videoId}/hqdefault.jpg" alt="" loading="lazy" />
-					<span class="play" aria-hidden="true">▶</span>
-					<span class="sr-only">Play video: {title}</span>
+				<button type="button" class="group absolute inset-0 grid h-full w-full place-items-center bg-[#13161a] focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-[#6fc1ff]" onclick={() => (playingId = videoId)}>
+					<span class="absolute inset-x-0 bottom-4 px-6 text-center font-mono text-gray-400" aria-hidden="true">{title}</span>
+					<span class="relative grid size-16 place-items-center rounded-full bg-[#6fc1ff] text-2xl text-[#14212b] group-hover:bg-sky-200" aria-hidden="true">▶</span>
+					<span class="sr-only">Load video: {title}</span>
 				</button>
 			{/if}
 		</div>
-		<figcaption>
-			<a href="https://www.youtube.com/watch?v={videoId}" target="_blank" rel="noopener noreferrer">
-				Watch on YouTube ↗
-			</a>
-			{#if transcriptUrl}
-				<a href={transcriptUrl} target="_blank" rel="noopener noreferrer">Transcript ↗</a>
+		<figcaption class="flex flex-wrap justify-between gap-4 border-t border-gray-700 px-4 py-3 text-sm text-[#6fc1ff]">
+			<a class="hover:underline focus-visible:underline" href="https://www.youtube.com/watch?v={videoId}" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a>
+			{#if isTranscriptUrl(transcriptUrl)}
+				<a class="hover:underline focus-visible:underline" href={transcriptUrl} target="_blank" rel="noopener noreferrer">Transcript ↗</a>
+			{:else}
+				<span class="text-gray-400">Captions available in the player when provided</span>
 			{/if}
 		</figcaption>
 	</figure>
 {/if}
-
-<style>
-	.top-video {
-		margin: 0 0 2.5rem;
-		border: 1px solid #374151;
-		border-radius: 0.75rem;
-		overflow: hidden;
-		background: #13161a;
-	}
-
-	.frame {
-		position: relative;
-		aspect-ratio: 16 / 9;
-	}
-
-	iframe,
-	.poster,
-	.poster img {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		border: 0;
-	}
-
-	.poster {
-		padding: 0;
-		background: #13161a;
-		cursor: pointer;
-		display: grid;
-		place-items: center;
-	}
-
-	.poster img {
-		object-fit: cover;
-		opacity: 0.75;
-	}
-
-	.play {
-		position: relative;
-		width: 4rem;
-		height: 4rem;
-		border-radius: 9999px;
-		background: #6fc1ff;
-		color: #14212b;
-		display: grid;
-		place-items: center;
-		font-size: 1.5rem;
-	}
-
-	.poster:hover img,
-	.poster:focus-visible img {
-		opacity: 1;
-	}
-
-	.poster:focus-visible {
-		outline: 2px solid #6fc1ff;
-		outline-offset: -4px;
-	}
-
-	figcaption {
-		display: flex;
-		justify-content: space-between;
-		gap: 1rem;
-		padding: 0.6rem 1rem;
-		border-top: 1px solid #374151;
-		font-size: 0.8rem;
-	}
-
-	figcaption a {
-		color: #6fc1ff;
-		text-decoration: none;
-	}
-
-	figcaption a:hover,
-	figcaption a:focus-visible {
-		text-decoration: underline;
-	}
-
-	.sr-only {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		overflow: hidden;
-		clip: rect(0 0 0 0);
-		white-space: nowrap;
-	}
-</style>

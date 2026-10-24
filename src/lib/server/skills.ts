@@ -1,11 +1,10 @@
 import type { Skill, SkillsSnapshot, SkillVideo, SkillWorkflow } from '$lib/types';
-import { isYouTubeId } from '$lib/video';
+import { isTranscriptUrl, isYouTubeId } from '$lib/video';
 import raw from './skills-snapshot.json';
 
 // Generated from hacker1db/skills; validated here so a bad export fails the build instead of shipping an empty or broken catalog.
 
 const SKILL_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const TRANSCRIPT_HOSTS = ['www.youtube.com', 'hacker1db.dev'];
 
 type Obj = Record<string, unknown>;
 
@@ -38,16 +37,8 @@ function video(value: unknown, path: string): SkillVideo {
 	if (v.provider !== 'youtube') fail(`${path}.provider`, 'only youtube is supported');
 	if (!isYouTubeId(v.videoId)) fail(`${path}.videoId`, 'not a YouTube video ID');
 	text(v.title, `${path}.title`);
-	if (v.transcriptUrl !== undefined) {
-		let url: URL;
-		try {
-			url = new URL(text(v.transcriptUrl, `${path}.transcriptUrl`));
-		} catch {
-			fail(`${path}.transcriptUrl`, 'not a URL');
-		}
-		if (url.protocol !== 'https:' || !TRANSCRIPT_HOSTS.includes(url.hostname)) {
-			fail(`${path}.transcriptUrl`, 'host not allowed');
-		}
+	if (v.transcriptUrl !== undefined && !isTranscriptUrl(v.transcriptUrl)) {
+		fail(`${path}.transcriptUrl`, 'expected an approved HTTPS transcript URL');
 	}
 	return v as unknown as SkillVideo;
 }
@@ -55,9 +46,11 @@ function video(value: unknown, path: string): SkillVideo {
 export function validateSnapshot(input: unknown): SkillsSnapshot {
 	const s = object(input, 'snapshot', ['exportVersion', 'sourceRepo', 'sourceRevision', 'generatedAt', 'skills', 'workflows'], ['sample', 'featuredVideo']);
 	if (s.exportVersion !== 1) fail('exportVersion', 'unsupported version');
-	text(s.sourceRepo, 'sourceRepo');
+	if (s.sourceRepo !== 'hacker1db/skills') fail('sourceRepo', 'expected hacker1db/skills');
 	if (typeof s.sourceRevision !== 'string' || !/^[0-9a-f]{40}$/.test(s.sourceRevision)) fail('sourceRevision', 'expected a full commit SHA');
-	text(s.generatedAt, 'generatedAt');
+	const date = text(s.generatedAt, 'generatedAt');
+	if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !Number.isFinite(Date.parse(date)) ||
+		new Date(date).toISOString().slice(0, 10) !== date) fail('generatedAt', 'expected a valid YYYY-MM-DD date');
 	if (s.sample !== undefined && typeof s.sample !== 'boolean') fail('sample', 'expected a boolean');
 	if (s.featuredVideo !== undefined) video(s.featuredVideo, 'featuredVideo');
 	if (!Array.isArray(s.skills) || !Array.isArray(s.workflows)) fail('snapshot', 'skills and workflows must be lists');
@@ -67,15 +60,20 @@ export function validateSnapshot(input: unknown): SkillsSnapshot {
 		const p = `skills[${i}]`;
 		const k = object(value, p,
 			['id', 'title', 'summary', 'category', 'sourcePath', 'invocation', 'whenToUse', 'prerequisites', 'inputs', 'outputs', 'examplePrompt', 'verify'],
-			['video', 'related']);
+			['video', 'related', 'published']);
+		if (s.sample !== true && k.published !== true) fail(`${p}.published`, 'public exports require explicit published: true');
+		if (k.published !== undefined && k.published !== true) fail(`${p}.published`, 'unpublished skills must be excluded from the export');
 		if (typeof k.id !== 'string' || !SKILL_ID.test(k.id)) fail(`${p}.id`, 'expected a lowercase kebab-case ID');
 		if (ids.has(k.id)) fail(`${p}.id`, `duplicate ID "${k.id}"`);
 		ids.add(k.id);
 		for (const key of ['title', 'summary', 'category', 'whenToUse', 'examplePrompt']) text(k[key], `${p}.${key}`);
 		const source = text(k.sourcePath, `${p}.sourcePath`);
-		if (source.startsWith('/') || source.split('/').includes('..')) fail(`${p}.sourcePath`, 'must be a relative path inside the source repo');
+		if (!/^(?:[A-Za-z0-9_-]+\/)+SKILL\.md$/.test(source)) fail(`${p}.sourcePath`, 'must be a relative path inside the source repo');
 		if (k.invocation !== 'user' && k.invocation !== 'model') fail(`${p}.invocation`, 'expected user or model');
 		for (const key of ['prerequisites', 'inputs', 'outputs', 'verify']) texts(k[key], `${p}.${key}`);
+		for (const key of ['inputs', 'outputs', 'verify']) {
+			if (!(k[key] as string[]).length) fail(`${p}.${key}`, 'expected at least one item');
+		}
 		if (k.video !== undefined) video(k.video, `${p}.video`);
 		if (k.related !== undefined) texts(k.related, `${p}.related`);
 	}

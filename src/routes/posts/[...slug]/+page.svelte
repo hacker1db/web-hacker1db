@@ -2,6 +2,7 @@
 	import { format } from 'date-fns';
 	import CodeBlock from '$components/CodeBlock.svelte';
 	import TopVideo from '$components/TopVideo.svelte';
+	import { isYouTubeId } from '$lib/video';
 
 	let { data } = $props();
 	let post = $derived(data.post);
@@ -29,7 +30,8 @@
 	);
 
 	// a video renders full width above the prose; the thumbnail stays beside the title only without one
-	let showThumbnail = $derived(Boolean(post.data.thumbnail && !post.data.youtube));
+	let hasVideo = $derived(isYouTubeId(post.data.youtube));
+	let showThumbnail = $derived(Boolean(post.data.thumbnail && !hasVideo));
 </script>
 
 <svelte:head>
@@ -100,8 +102,8 @@
 			{/if}
 		</div>
 
-		{#if post.data.youtube}
-			<TopVideo videoId={post.data.youtube} title={post.data.title} />
+		{#if hasVideo && post.data.youtube}
+			<TopVideo videoId={post.data.youtube} title={post.data.title} transcriptUrl={post.data.transcriptUrl} />
 		{/if}
 
 		<!-- Article Content -->
