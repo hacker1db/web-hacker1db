@@ -63,6 +63,7 @@ export interface SkillVideo {
 }
 
 export interface Skill {
+	previewInstructions?: string;
 	id: string;
 	title: string;
 	summary: string;

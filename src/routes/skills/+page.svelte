@@ -20,13 +20,16 @@
 </script>
 
 <svelte:head>
+	{#if data.privatePreview}<meta name="robots" content="noindex, nofollow, noarchive" />{/if}
 	<title>Skills - Hacker1db.dev</title>
 	<meta name="description" content="The AI skills I use for engineering, security and learning, and how they connect." />
 	<link rel="canonical" href="https://hacker1db.dev/skills/" />
 </svelte:head>
 
 <div class="mx-auto max-w-[920px] px-6 pb-12 font-mono">
-	{#if data.sample}
+	{#if data.privatePreview}
+		<p class="mb-8 rounded-md border border-amber-300/40 bg-amber-300/10 px-3 py-2 font-mono text-sm text-amber-100" role="note">Private local preview · actual skills from your checkout · not published.</p>
+	{:else if data.sample}
 		<p class="mb-8 rounded-md border border-dashed border-gray-700 px-3 py-2 text-xs text-gray-400" role="note">Preview · sample content until the public skills export is published.</p>
 	{/if}
 
@@ -81,6 +84,9 @@
 		</section>
 	{/if}
 
+	{#if data.privatePreview}
+		<p class="mt-10 text-sm text-gray-400">Reading your local checkout at commit {data.sourceRevision.slice(0, 7)}, including current working files. Public installation and publishing remain disabled.</p>
+	{:else}
 	<section aria-labelledby="install-heading">
 		<h2 class="mt-10 mb-4 text-2xl text-[#e0e0e0]" id="install-heading">Install and update</h2>
 		<p class="mb-8 max-w-2xl leading-relaxed text-gray-400">
@@ -93,4 +99,5 @@
 			basis, so use them at your own risk.
 		</p>
 	</section>
+	{/if}
 </div>

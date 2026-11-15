@@ -22,3 +22,19 @@ Blog posts keep their existing `youtube: VIDEO_ID` frontmatter. An optional `tra
 Skill entries use `video: { provider: "youtube", videoId: "VIDEO_ID", title: "Accessible video title", transcriptUrl: "https://hacker1db.dev/transcripts/example/" }`. Catalog videos use the same shape under `featuredVideo`. Omit optional fields entirely when unused.
 
 The shared player starts as a local placeholder. It makes no thumbnail/player request to YouTube before the reader clicks Load video. The loaded iframe has no autoplay parameter or permission. Readers then use the native player controls, or the watch link. Transcript links are validated for every context, including blog frontmatter. Check playback and captions against a real video before release.
+
+## Private local preview (no publication)
+
+To inspect actual skills before publishing, point the development server at an existing local checkout of the private repository. No exported JSON, GitHub token, repository visibility change or publication flags are needed.
+
+Create an **ignored** `.env.development.local` file in the blog checkout:
+
+```sh
+PRIVATE_SKILLS_PREVIEW_DIR=/absolute/path/to/private/skills/checkout
+```
+
+Run `pnpm dev --port 4179` and open `http://127.0.0.1:4179/skills/`. The server reads `skills/**/SKILL.md` on each refresh, including working-tree edits. It displays real frontmatter names/descriptions and the actual instructions as escaped plain text, without executing them or loading linked assets. Categories use source frontmatter when present and otherwise say Private skills. Editorial inputs/outputs and workflows are not invented. No private snapshot is written into the blog repository.
+
+Private mode is restricted to loopback-bound Vite development. It rejects non-local hosts, hosted/CI environments, Vite production builds, Vite preview servers and CLI overrides that expose the dev server. Pages are no-store/noindex and development analytics are disabled. Private details are sent to the local browser only; do not share its contents or use a public tunnel. Delete or unset the local variable and restart dev to return to the committed sample catalog.
+
+Normal production builds do not load `.env.development.local` and continue to use only the committed public/sample snapshot. Explicitly passing `PRIVATE_SKILLS_PREVIEW_DIR` into a production build fails before loading skills. Keep private instructions out of screenshots, plan uploads, Git commits and published exports.

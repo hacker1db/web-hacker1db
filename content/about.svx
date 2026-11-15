@@ -12,6 +12,14 @@ Hey, I'm David (Hacker1db), an AppSec engineer, software engineer, and someone w
 
 I'm a builder and a breaker. I build secure platforms and break the ones that aren't. I love diving deep into hard topics like cloud security, application security, and platform engineering, then coming back to the surface to share what I've found in a way that actually makes sense. By night (and early morning, and lunch break) you'll probably find me on a disc golf course, in the gym, or writing about the things I'm learning.
 
+## What I'm Exploring
+
+My current interests include WeHackHealth, the “not cult,” building hacking bots, and AI software factories. I'm exploring how to build and secure systems at agentic scale.
+
+- **Projects:** Explore what I'm building on [GitHub](https://github.com/hacker1db?tab=repositories).
+- **Skills:** Browse the [skills catalog preview](/skills/) for examples of workflows I'm developing.
+- **Related posts:** [Automate Everything](/posts/DevOps/automate-everything/) and [Security for Developers](/posts/CyberSecurity/security-for-developers-essential-knowledge-every-developer-should-have/).
+
 ## What I'm About
 
 **Security as a craft.** Application security, cloud security architecture, platform engineering, and building secure defaults that actually stick. I care about making security accessible to the teams who ship the code.
@@ -30,7 +38,7 @@ I'm a builder and a breaker. I build secure platforms and break the ones that ar
 
 ## Why This Blog
 
-I started hacker1db.dev because I wanted a space to write honestly about DevSecOps, career growth, and life without the corporate polish or AI generated filler. Expect practical security guidance, lessons from the trenches, and the occasional reflection on what it means to build a life with intention.
+I started hacker1db.dev because I wanted a space to write honestly about DevSecOps, career growth, and life. I use AI to learn, build, and get more out of my day. Like any tool, AI is only as good as the person driving it. The judgment, experience, and responsibility for what I share are mine. Expect practical security guidance, lessons from the trenches, and the occasional reflection on what it means to build a life with intention.
 
 My word for 2026 is **Grounded**, deeply rooted in faith, identity, and purpose so that external noise doesn't shift the foundation.
 

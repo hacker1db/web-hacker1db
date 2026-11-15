@@ -7,7 +7,7 @@
 	import SearchModal from '$components/SearchModal.svelte';
 	import { siteConfig } from '$lib/config';
 
-	inject({ mode: dev ? 'development' : 'production' });
+	if (!dev) inject({ mode: 'production' });
 
 	let { children, data } = $props();
 	let searchOpen = $state(false);

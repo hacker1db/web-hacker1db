@@ -19,6 +19,7 @@
 </script>
 
 <svelte:head>
+	{#if data.privatePreview}<meta name="robots" content="noindex, nofollow, noarchive" />{/if}
 	<title>/{skill.id} - Skills - Hacker1db.dev</title>
 	<meta name="description" content={skill.summary} />
 	<link rel="canonical" href="https://hacker1db.dev/skills/{skill.id}/" />
@@ -27,7 +28,9 @@
 <article class="mx-auto max-w-[760px] px-6 pb-12">
 	<a href="/skills/" class="mb-8 inline-block text-sm text-[#6fc1ff] hover:underline">&larr; All skills</a>
 
-	{#if data.sample}
+	{#if data.privatePreview}
+		<p class="mb-8 rounded-md border border-amber-300/40 bg-amber-300/10 px-3 py-2 font-mono text-sm text-amber-100" role="note">Private local preview · actual skills from your checkout · not published.</p>
+	{:else if data.sample}
 		<p class="mb-8 rounded-md border border-dashed border-gray-700 px-3 py-2 font-mono text-xs text-gray-400" role="note">Preview · sample content until the public skills export is published.</p>
 	{/if}
 
@@ -39,6 +42,13 @@
 		<TopVideo videoId={skill.video.videoId} title={skill.video.title} transcriptUrl={skill.video.transcriptUrl} />
 	{/if}
 
+	{#if data.privatePreview}
+		<section aria-labelledby="private-instructions">
+			<h2 id="private-instructions" class="mt-8 mb-3 font-mono text-xl text-[#e0e0e0]">Actual skill instructions</h2>
+			<p class="mb-4 text-sm text-gray-400">Read from your current checkout on each refresh. Displayed as text; nothing here is executed.</p>
+			<pre class="whitespace-pre-wrap wrap-anywhere rounded-md border border-gray-700 bg-[#121519] p-5 font-mono text-sm leading-relaxed text-gray-200">{skill.previewInstructions}</pre>
+		</section>
+	{:else}
 	<div class="leading-relaxed text-[#c5cbd3]">
 		<h2 class="mt-8 mb-3 font-mono text-xl text-[#e0e0e0]">When to reach for it</h2>
 		<p>{skill.whenToUse}</p>
@@ -94,4 +104,5 @@
 			snapshot <code>{data.sourceRevision.slice(0, 7)}</code>, exported {data.generatedAt}.
 		</p>
 	</div>
+	{/if}
 </article>
