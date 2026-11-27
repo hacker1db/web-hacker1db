@@ -4,17 +4,23 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+
 jobs:
   preview:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
     - name: Setup Bun
-      uses: oven-sh/setup-bun@v2
+      uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
       with:
-        bun-version: latest
+        bun-version: 1.4.4
 
     - name: Install dependencies
       run: bun install --frozen-lockfile
@@ -23,7 +29,7 @@ jobs:
       run: bun run build
 
     - name: Install Vercel CLI
-      run: bun add -g vercel
+      run: bun add -g vercel@65.15.0
 
     - name: Deploy Preview to Vercel
       id: vercel-deployment
@@ -36,7 +42,7 @@ jobs:
         echo "preview-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
     - name: Comment PR with preview URL
       if: github.event_name == 'pull_request'
-      uses: actions/github-script@v7
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
       with:
         script: |
           const { data: comments } = await github.rest.issues.listComments({
