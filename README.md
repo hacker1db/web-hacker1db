@@ -76,8 +76,7 @@ A modern, fast blog built with SvelteKit, TypeScript, and MDsveX. Previously bui
 ├── content/                    # Additional content assets
 ├── static/                     # Static assets (images, fonts)
 ├── package.json                # Dependencies and scripts
-├── svelte.config.js            # SvelteKit + MDsveX configuration
-├── vite.config.ts              # Vite configuration
+├── vite.config.ts              # Vite, SvelteKit, and MDsveX configuration
 └── tsconfig.json               # TypeScript configuration
 ```
 

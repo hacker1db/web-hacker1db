@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.css';
-	import { dev } from '$app/environment';
+	import { dev } from '$app/env';
 	import { inject } from '@vercel/analytics';
 	import Header from '$components/Header.svelte';
 	import Footer from '$components/Footer.svelte';

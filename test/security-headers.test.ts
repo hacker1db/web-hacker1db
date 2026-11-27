@@ -34,8 +34,8 @@ test('header CSP does not restrict scripts, so the per-page meta hashes still wo
 });
 
 test('SvelteKit still emits the hashed script CSP in each page', () => {
-	const config = readFileSync(new URL('../svelte.config.js', import.meta.url), 'utf8');
+	const config = readFileSync(new URL('../vite.config.ts', import.meta.url), 'utf8');
 	assert.match(config, /csp:\s*\{\s*mode:\s*'auto'/);
-	assert.match(config, /'script-src':\s*\["'self'"\]/);
-	assert.match(config, /'object-src':\s*\["'none'"\]/);
+	assert.match(config, /'script-src':\s*\['self'\]/);
+	assert.match(config, /'object-src':\s*\['none'\]/);
 });
